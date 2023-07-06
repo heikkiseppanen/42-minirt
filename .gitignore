@@ -1,0 +1,7 @@
+
+obj/
+.cache/
+.ccls-cache/
+compile_commands.json
+*dSYM
+libft.a
