@@ -5,8 +5,23 @@ NAME := qub3D
 SRCDIR := ./src
 OBJDIR := ./obj
 
+APP_DIR := app
+APP_SRC :=\
+	app.c \
+
+WINDOW_DIR := window
+WINDOW_SRC :=\
+	window.c \
+
+INPUT_DIR := input
+INPUT_SRC :=\
+	input.c \
+
 SRC :=\
 	main.c \
+	$(APP_SRC:%=$(APP_DIR)/%) \
+	$(WINDOW_SRC:%=$(WINDOW_DIR)/%) \
+	$(INPUT_SRC:%=$(INPUT_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)
@@ -15,11 +30,13 @@ ARCH := $(shell uname)
 
 # MiniLibX
 
-MLX_DIR := ./lib/minilibx-opengl
-MLX_AR := $(MLX_DIR)/libmlx.a
 ifeq ($(ARCH), Linux)
+	MLX_DIR := ./lib/minilibx-linux
+	MLX_AR := $(MLX_DIR)/libmlx.a
 	MLX_LD := -lXext -lX11 -L$(MLX_DIR) -lmlx 
 else
+	MLX_DIR := /usr/local/include
+	MLX_AR := /usr/local/lib/libmlx.a
 	MLX_LD := -lmlx -framework OpenGL -framework AppKit
 endif
 
@@ -32,7 +49,7 @@ FT_LD := -L ./lib/libft -lft
 # Compilation and linking
 
 CC := cc
-INCLUDE := -I$(MLX_DIR) -I$(FT_DIR) -I$(SRCDIR)
+INCLUDE := -I$(MLX_DIR) -I$(FT_DIR) -I$(FT_DIR)/include -I$(SRCDIR)
 CFLAGS := -march=native -O2 -Wall -Werror -Wextra $(INCLUDE)
 LDFLAGS := -lm $(MLX_LD) $(FT_LD) 
 
