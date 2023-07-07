@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:28 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 19:08:30 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/07 09:49:18 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ int	main(int argc, char **argv)
 	{
 		app_terminate(&qub3d, 1);
 	}
-	mlx_loop(qub3d.window.mlx_handle);
+	mlx_loop(qub3d.window.handle);
 	return (1);
 }

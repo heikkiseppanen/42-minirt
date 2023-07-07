@@ -1,6 +1,6 @@
 # Meta
 
-NAME := qub3D
+NAME := minirt
 
 SRCDIR := ./src
 OBJDIR := ./obj
@@ -50,12 +50,16 @@ FT_LD := -L ./lib/libft -lft
 
 CC := cc
 INCLUDE := -I$(MLX_DIR) -I$(FT_DIR) -I$(FT_DIR)/include -I$(SRCDIR)
-CFLAGS := -march=native -O2 -Wall -Werror -Wextra $(INCLUDE)
+CFLAGS := -Wall -Werror -Wextra $(INCLUDE)
 LDFLAGS := -lm $(MLX_LD) $(FT_LD) 
 
 # Rules
 
 all: $(NAME)
+
+debug: CFLAGS+= -g -fsanitize=address,undefined
+debug: LDFLAGS+= -g -fsanitize=address,undefined
+debug: $(NAME)
 
 $(NAME): $(MLX_AR) $(FT_AR) $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
@@ -75,14 +79,14 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 clean:
 	/bin/rm -rf $(OBJDIR)
-ifeq ($ARCH, Linux)
-	make clean -C $(MLX_DIR)
-endif
 
 fclean: clean
 	make fclean -C $(FT_DIR)
 	/bin/rm -f $(NAME)
+ifeq ($ARCH, Linux)
+	make clean -C $(MLX_DIR)
+endif
 
 re: fclean all
 
-.PHONY: all so clean fclean re
+.PHONY: all clean fclean re debug

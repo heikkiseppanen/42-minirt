@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:09:22 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 19:09:35 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/07 10:39:58 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@
 #include <stdlib.h>
 #include <mlx.h>
 
-static int	frame_init(t_frame *empty, const t_window *context)
+static int	framebuf_init(t_framebuf *empty, const t_window *context)
 {
 	int	bits;
 	int	width;
 	int	endian;
 
-	*empty = (t_frame){};
+	*empty = (t_framebuf){};
 	empty->width = context->width;
 	empty->height = context->height;
-	empty->data = mlx_get_data_addr(context->mlx_image, &bits, &width, &endian);
-	if (!empty->data)
+	empty->color = mlx_get_data_addr(context->image, &bits, &width, &endian);
+	if (!empty->color)
 		return (0);
-	empty->depth_buffer = malloc(empty->width * empty->height * sizeof(float));
-	if (!empty->depth_buffer)
+	empty->depth = malloc(empty->width * empty->height * sizeof(*empty->depth));
+	if (!empty->depth)
 		return (0);
 	empty->color_bytes = bits / 8;
 	empty->endian = endian;
@@ -38,51 +38,51 @@ static int	frame_init(t_frame *empty, const t_window *context)
 
 int	window_init(t_window *empty, int width, int height, char *title)
 {
-	empty->mlx_handle = mlx_init();
-	if (!empty->mlx_handle)
+	empty->handle = mlx_init();
+	if (!empty->handle)
 		return (0);
-	empty->mlx_window = mlx_new_window(empty->mlx_handle, width, height, title);
-	if (!empty->mlx_window)
+	empty->window = mlx_new_window(empty->handle, width, height, title);
+	if (!empty->window)
 		return (0);
-	empty->mlx_image = mlx_new_image(empty->mlx_handle, width, height);
-	if (!empty->mlx_image)
+	empty->image = mlx_new_image(empty->handle, width, height);
+	if (!empty->image)
 		return (0);
 	empty->width = width;
 	empty->height = height;
-	if (!frame_init(&empty->framebuffer, empty))
+	if (!framebuf_init(&empty->framebuffer, empty))
 		return (0);
 	return (1);
 }
 
-void	frame_clear(t_frame *buf, unsigned int color)
+void	framebuf_clear(t_framebuf *buf, unsigned int color)
 {
-	unsigned int	*color_it;
-	unsigned int	*color_end;
-	float			*depth_it;
-	float			*depth_end;
+	unsigned int	*color_buffer;
+	unsigned int	size;
+	unsigned int	i;
 
-	color_it = (unsigned int *)buf->data;
-	color_end = color_it + buf->width * buf->height;
-	depth_it = buf->depth_buffer;
-	depth_end = depth_it + buf->width * buf->height;
-	while (color_it != color_end)
-		*color_it++ = color;
-	while (depth_it != depth_end)
-		*depth_it++ = 1.0;
+	color_buffer = (unsigned int *)buf->color;
+	size = buf->width * buf->height;
+	i = 0;
+	while (i < size)
+	{
+		color_buffer[i] = color;
+		buf->depth[i] = 1.0;
+		++i;
+	}
 }
 
 void	window_swap_buf(t_window *win)
 {
 	mlx_put_image_to_window(
-		win->mlx_handle,
-		win->mlx_window,
-		win->mlx_image, 0, 0);
+		win->handle,
+		win->window,
+		win->image, 0, 0);
 }
 
 void	window_del(t_window *win)
 {
-	mlx_destroy_image(win->mlx_handle, win->mlx_image);
-	mlx_destroy_window(win->mlx_handle, win->mlx_window);
-	free(win->framebuffer.depth_buffer);
+	mlx_destroy_image(win->handle, win->image);
+	mlx_destroy_window(win->handle, win->window);
+	free(win->framebuffer.depth);
 	*win = (t_window){};
 }
