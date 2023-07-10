@@ -78,6 +78,8 @@ LIST_SRC :=\
 MATH_DIR := math
 MATH_SRC :=\
 	math.c \
+	max.c \
+	min.c \
 	float2.c \
 	float2_transform.c \
 	float2_rotation.c \
