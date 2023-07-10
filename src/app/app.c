@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/07 15:46:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:00:53 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int	app_terminate(t_app *instance, int exit_code)
 #define ARGB_RED 0x00FF0000
 #define ARGB_GREEN 0x00FF0000
 #define ARGB_BLUE 0x000000FF
-#define ARGB_NORD 0x002E3440
+#define ARGB_NORD_RED 0x00BF616A
+#define ARGB_NORD_BLUE 0x002E3440
 
 typedef unsigned int t_argb32;
 
@@ -59,26 +60,31 @@ typedef struct s_ray
 
 //t_argb32	ray_cast(t_ray *ray, jj
 
-float	ray_sphere_intersect(const t_ray *ray, t_float3 position, float radius)
+float	ray_sphere_intersect(const t_ray *ray, t_float3 center, float radius)
 {
-	const t_float3 sphere_to_ray = ft_float3_sub(ray->origin, position);
-	const float distance = ft_float3_len(sphere_to_ray);
-	float d;
+	const t_float3 oc = ft_float3_sub(ray->origin, center);
+	const float a = ft_float3_dot(ray->direction, ray->direction);
+	const float b = ft_float3_dot(oc, ray->direction);
+	const float c = ft_float3_dot(oc, oc) - (radius * radius);
+	float f;
 
-	d = ft_float3_dot(ray->direction, sphere_to_ray); 
-	d = d * d;
-	d -= (distance * distance) - (radius * radius); 
-	if (d < 0)
+	f = (b * b) - (a * c);
+	if (f < 0)
 	{
 		return -1.0f;
 	}
-	return 1.0f;
+	d = 
+	{
+		return ((-b - sqrtf(d)) / a);
+	}
 }
 
 void framebuf_put_pixel(t_framebuf *output, t_float3 position, t_argb32 color)
 {
-	const size_t offset = (int)position.x + (int)position.y * output->width;
+	size_t offset;
 
+	offset = ((int)position.x + (int)position.y * output->width);
+	offset *= sizeof(color);
 	*((unsigned int *)(output->color + offset)) = color;
 }
 
@@ -89,31 +95,62 @@ int	app_loop(t_app *app)
 
 	/* Clear framebuf */
 
-	framebuf_clear(&window->framebuffer, ARGB_NORD);
+	//framebuf_clear(&window->framebuffer, ARGB_NORD);
 
 	/* Draw */
 
-	float fov = M_PI;
-	t_ray ray = {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}};
-	t_float3 pos = {0.0f, 0.0f, 5.0f};
-	float rad = 1.0f;
+	//float fov = M_PI;
+	t_float3 pos[] = {
+		{-0.5f, 0.0f, -1.0f},
+		{0.5f, 0.0f, -1.0f},
+	};
+	float rad = 0.5f;
+	t_framebuf *out = &window->framebuffer;
+	//const float aspect = (float)out->width / (float)out->height;
 
-	t_framebuf *render_target = &window->framebuffer;
-	int x = 0;
+
+	//while (y < out->height)
+	//{
+	//	if (y & 1)
+	//	{
+	//		int x = 0;
+
+	//		while (x < out->width)
+	//		{
+	//			framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, ARGB_RED);
+	//			++x;
+	//		}
+	//	}
+	//	++y;
+	//}
 	int y = 0;
-	while (y < render_target->height)
+	while (y < out->height)
 	{
-		while (x < render_target->width)
+		int x = 0;
+		while (x < out->width)
 		{
+			t_float3 p;
+			p.x = ((float)x + 0.5f) / (float)out->width * 2 - 1;
+			p.y = ((float)y + 0.5f) / (float)out->height * 2 - 1;
+			p.z = -1.0f;
+			p = ft_float3_normalize(p);
 
+			t_ray ray = {{}, p};
+
+			if (ray_sphere_intersect(&ray, pos, rad) < 0)
+			{
+				ft_printf("put nord %i %i\n", x, y);
+				framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, ARGB_NORD_BLUE);
+			}
+			else 
+			{
+				ft_printf("put red %i %i\n", x, y);
+				framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, ARGB_NORD_RED);
+			}
+
+			++x;
 		}
-	}
-
-	float ray_scalar = ray_sphere_intersect(&ray, pos, rad);
-
-	if (ray_scalar < 0)
-	{
-
+		++y;
 	}
 
 	window_swap_buf(window);
