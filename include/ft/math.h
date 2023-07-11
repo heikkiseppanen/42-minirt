@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 09:59:59 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 10:13:57 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/11 09:30:44 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ typedef struct s_float4x4
 	t_float4	c;
 	t_float4	d;
 }	t_float4x4;
+
+float		ft_minf(float a, float b);
+float		ft_maxf(float a, float b);
 
 float		ft_lerp(float start, float end, float factor);
 float		ft_clamp(float value, float min, float max);
