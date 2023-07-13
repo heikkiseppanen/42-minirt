@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/11 12:35:30 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/13 13:22:19 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,31 +88,74 @@ void framebuf_put_pixel(t_framebuf *output, t_float3 position, t_argb32 color)
 {
 	size_t offset;
 
+	position.y = output->height - position.y - 1;
 	offset = ((int)position.x + (int)position.y * output->width);
 	offset *= sizeof(color);
 	*((unsigned int *)(output->color + offset)) = color;
 }
 
+typedef struct s_camera
+{
+	float		fov;
+	float		aspect;
+	float		near;
+	float		far;
+	t_float3	x;
+	t_float3	y;
+	t_float3	z;
+}	t_camera;
+
+t_camera	camera_create(float fov, float aspect_ratio, float near, float far)
+{
+	return (t_camera){fov, aspect_ratio, near, far, {}, {}, {}};
+	
+}
+
+void	camera_update(t_camera *camera, t_float3 position, t_float3 target)
+{
+	camera->z = ft_float3_sub(position, target);
+	camera->z = ft_float3_normalize(camera->z);
+	camera->y = (t_float3){0.0, 1.0, 0.0};
+	camera->x = ft_float3_cross(camera->y, camera->z);
+	camera->x = ft_float3_normalize(camera->x);
+	camera->y = ft_float3_cross(camera->z, camera->x);
+}
 
 int	app_loop(t_app *app)
 {
 	t_window *const	window = &app->window;
-
-	/* Clear framebuf */
-
-	//framebuf_clear(&window->framebuffer, ARGB_NORD);
-
-	/* Draw */
-
-	//float fov = M_PI;
-	static t_float3 pos[] = {
-		{-0.25f, 0.0f, 0.0f},
-		{0.25f, 0.0f, 0.0f},
-		{0.0f, -0.25f, 0.0f},
-	};
-	float rad = 0.5f;
 	t_framebuf *out = &window->framebuffer;
 	const float aspect = (float)out->width / (float)out->height;
+
+	static t_float3 cam_pos = {0.0f, 0.0f, 2.0f};
+	static t_float3 cam_target = {};
+	static t_camera camera;
+
+	static t_float3 sphere_pos[] = {
+		{0.2f, 0.0f, 0.0f},
+		{-0.2f, 0.0f, 0.0f},
+		{0.0f, -0.2f, 0.0f},
+	};
+	float rad = 0.5f;
+
+	static int init = 1;
+	if (init)
+	{
+		camera = camera_create(90.0f, aspect, 0.1f, 100.0f);
+		init = 0;
+	}
+
+	cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * 0.01f);
+	camera_update(&camera, cam_pos, cam_target);
+	app->input.mouse_movement = (t_float2){};
+
+	t_float4x4 view = ft_float4x4_view(cam_pos, camera.x, camera.y, camera.z);
+
+	t_float3 sphere_view_coord[3];
+	for (int i = 0; i < 3; ++i)
+	{
+		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
+	}
 
 	int y = 0;
 	while (y < out->height)
@@ -123,23 +166,23 @@ int	app_loop(t_app *app)
 			t_float3 p;
 			p.x = ((float)x + 0.5f) / (float)out->width * 2 - 1;
 			p.y = ((float)y + 0.5f) / (float)out->height * 2 - 1;
-			p.x *= aspect;
+			p.x *= camera.aspect;
 			p.z = -1.0f;
 			p = ft_float3_normalize(p);
 
-			t_ray ray = {{0,0,2.0f}, p};
+			t_ray ray = {{}, p};
 			
 			float mul = 500.0f;
 			t_argb32 col = 0;
 			for (int i = 0; i < 3; ++i)
 			{
-				float m = ray_sphere_intersect(&ray, pos[i], rad);
+				float m = ray_sphere_intersect(&ray, sphere_view_coord[i], rad);
 				if (m > 0 && m <= mul)
 				{
 					mul = m;
 					t_float3 hit = ft_float3_scalar(ray.direction, m);
 					hit = ft_float3_add(ray.origin, hit); 
-					hit = ft_float3_sub(hit, pos[i]);
+					hit = ft_float3_sub(hit, sphere_view_coord[i]);
 					hit = ft_float3_normalize(hit);
 					hit.x = (hit.x + 1) * 0.5f;
 					hit.y = (hit.y + 1) * 0.5f;
@@ -148,7 +191,7 @@ int	app_loop(t_app *app)
 				}
 			}
 
-			framebuf_put_pixel(out, (t_float3){x, out->height - y, 0.0f}, col);
+			framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, col);
 
 			++x;
 		}
