@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 14:27:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 17:06:47 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/13 13:50:27 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ typedef struct s_input
 }	t_input;
 
 void	input_init(t_input *empty, void *mlx_window);
+
+//void	input_key_pressed(t_input *empty, enum e_key key);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/13 13:22:19 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/13 13:56:25 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,16 +127,17 @@ int	app_loop(t_app *app)
 	t_framebuf *out = &window->framebuffer;
 	const float aspect = (float)out->width / (float)out->height;
 
-	static t_float3 cam_pos = {0.0f, 0.0f, 2.0f};
+	static t_float3 cam_pos = {0.0f, 1.0f, 2.0f};
 	static t_float3 cam_target = {};
 	static t_camera camera;
 
 	static t_float3 sphere_pos[] = {
-		{0.2f, 0.0f, 0.0f},
-		{-0.2f, 0.0f, 0.0f},
-		{0.0f, -0.2f, 0.0f},
+		{0.5f, 0.0f, 0.0f},
+		{-0.5f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 0.5f},
+		{0.0f, 0.0f, -0.5f},
 	};
-	float rad = 0.5f;
+	float rad = 0.2f;
 
 	static int init = 1;
 	if (init)
@@ -151,8 +152,8 @@ int	app_loop(t_app *app)
 
 	t_float4x4 view = ft_float4x4_view(cam_pos, camera.x, camera.y, camera.z);
 
-	t_float3 sphere_view_coord[3];
-	for (int i = 0; i < 3; ++i)
+	t_float3 sphere_view_coord[4];
+	for (int i = 0; i < 4; ++i)
 	{
 		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
 	}
@@ -174,7 +175,7 @@ int	app_loop(t_app *app)
 			
 			float mul = 500.0f;
 			t_argb32 col = 0;
-			for (int i = 0; i < 3; ++i)
+			for (int i = 0; i < 4; ++i)
 			{
 				float m = ray_sphere_intersect(&ray, sphere_view_coord[i], rad);
 				if (m > 0 && m <= mul)
