@@ -6,13 +6,13 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 13:52:21 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/10 13:53:45 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 08:38:49 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft/math.h"
 
-float ft_minf(float a, float b)
+float	ft_minf(float a, float b)
 {
 	if (a < b)
 		return (a);
