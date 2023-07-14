@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/13 13:56:25 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 08:54:04 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,12 +127,12 @@ int	app_loop(t_app *app)
 	t_framebuf *out = &window->framebuffer;
 	const float aspect = (float)out->width / (float)out->height;
 
-	static t_float3 cam_pos = {0.0f, 1.0f, 2.0f};
+	static t_float3 cam_pos = {0.0f, 1.0f, 0.1f};
 	static t_float3 cam_target = {};
 	static t_camera camera;
 
 	static t_float3 sphere_pos[] = {
-		{0.5f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f},
 		{-0.5f, 0.0f, 0.0f},
 		{0.0f, 0.0f, 0.5f},
 		{0.0f, 0.0f, -0.5f},
@@ -146,7 +146,11 @@ int	app_loop(t_app *app)
 		init = 0;
 	}
 
-	cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * 0.01f);
+	if (app->input.left_button)
+	{
+		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * 0.01f);
+		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * 0.01f);
+	}
 	camera_update(&camera, cam_pos, cam_target);
 	app->input.mouse_movement = (t_float2){};
 
