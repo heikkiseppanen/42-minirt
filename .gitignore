@@ -1,0 +1,30 @@
+# Prerequisites
+*.d
+
+# Object files
+obj/
+*.o
+*.obj
+
+# Libraries
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.so
+*.so.*
+
+minirt
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# MacOS
+**/.DS_Store
+
+# Lsp dependencies
+.ccls-cache/
+compile_commands.json
+.cache/
