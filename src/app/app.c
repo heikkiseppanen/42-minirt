@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 08:54:04 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 13:30:30 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,15 @@ int	app_loop(t_app *app)
 		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * 0.01f);
 		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * 0.01f);
 	}
+	if (app->input.right_button)
+	{
+		t_float3 offset_x = ft_float3_scalar(camera.x, app->input.mouse_movement.x * 0.005f);
+		t_float3 offset_y = ft_float3_scalar(camera.y, -app->input.mouse_movement.y * 0.005f);
+		t_float3 total = ft_float3_add(offset_x, offset_y);
+
+		cam_pos = ft_float3_add(cam_pos, total);
+		cam_target = ft_float3_add(cam_target, total);
+	}
 	camera_update(&camera, cam_pos, cam_target);
 	app->input.mouse_movement = (t_float2){};
 
@@ -161,6 +170,17 @@ int	app_loop(t_app *app)
 	{
 		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
 	}
+	t_float3 sphere_col[] = {
+		{1.0f, 0.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f},
+	};
+
+	t_float3 light_dir = {1.0f, 0.0f, -1.0f};
+	light_dir = ft_float3_normalize(light_dir);
+	t_float3 light_color = {1.0f, 1.0f, 1.0f};
+	float light_intensity = 2.0f;
 
 	int y = 0;
 	while (y < out->height)
@@ -177,26 +197,50 @@ int	app_loop(t_app *app)
 
 			t_ray ray = {{}, p};
 			
+			int hit_index = -1;
 			float mul = 500.0f;
-			t_argb32 col = 0;
 			for (int i = 0; i < 4; ++i)
 			{
 				float m = ray_sphere_intersect(&ray, sphere_view_coord[i], rad);
 				if (m > 0 && m <= mul)
 				{
+					hit_index = i;
 					mul = m;
-					t_float3 hit = ft_float3_scalar(ray.direction, m);
-					hit = ft_float3_add(ray.origin, hit); 
-					hit = ft_float3_sub(hit, sphere_view_coord[i]);
-					hit = ft_float3_normalize(hit);
-					hit.x = (hit.x + 1) * 0.5f;
-					hit.y = (hit.y + 1) * 0.5f;
-					hit.z = (hit.z + 1) * 0.5f;
-					col = (int)(hit.x * 255.0f) << 16 | (int)(hit.y * 255.0f) << 8 | (int)(hit.z * 255.0f);
 				}
 			}
 
-			framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, col);
+			t_argb32 final_color = 0;
+			if (hit_index != -1)
+			{
+				t_float3 normal = ft_float3_scalar(ray.direction, mul);
+				normal = ft_float3_add(ray.origin, normal); 
+				normal = ft_float3_sub(normal, sphere_view_coord[hit_index]);
+				normal = ft_float3_normalize(normal);
+
+				t_float3 albedo = ft_float3_scalar(sphere_col[hit_index], 1 / M_PI);
+				t_float3 light = ft_float3_scalar(light_color, light_intensity);
+				float lambert = ft_float3_dot(normal, ft_float3_scalar(light_dir, -1.0f));
+				lambert = ft_maxf(0.0f, lambert);
+
+				t_float3 diff_color; 
+				diff_color.x = albedo.x * light.x;
+				diff_color.y = albedo.y * light.y;
+				diff_color.z = albedo.z * light.z;
+
+				diff_color = ft_float3_scalar(diff_color, lambert);
+
+				final_color =
+					(unsigned int)(255.0f * diff_color.x) << 16 |
+					(unsigned int)(255.0f * diff_color.y) << 8 |
+					(unsigned int)(255.0f * diff_color.z);
+			}
+			
+			//hit.x = (hit.x + 1) * 0.5f;
+			//hit.y = (hit.y + 1) * 0.5f;
+			//hit.z = (hit.z + 1) * 0.5f;
+			//col = (int)(hit.x * 255.0f) << 16 | (int)(hit.y * 255.0f) << 8 | (int)(hit.z * 255.0f);
+
+			framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, final_color);
 
 			++x;
 		}

@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 14:27:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 08:53:19 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 09:06:26 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct s_input
 {
 	char		exit;
 	char		left_button;
+	char		right_button;
 	t_float2	mouse_position;
 	t_float2	mouse_movement;
 }	t_input;
