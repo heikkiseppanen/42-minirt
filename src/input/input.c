@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 19:08:18 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 09:14:54 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ static int	mousedown_hook(int button, int x, int y, t_input *input)
 	(void)x;
 	(void)y;
 	(void)input;
+	if (button == MOUSE_LEFT)
+	{
+		input->left_button = 1;
+	}
+	else if (button == MOUSE_RIGHT)
+	{
+		input->right_button = 1;
+	}
 	ft_printf("mouse down %i\n", button);
 	return (1);
 }
@@ -55,6 +63,14 @@ static int	mouseup_hook(int button, int x, int y, t_input *input)
 	(void)x;
 	(void)y;
 	(void)input;
+	if (button == MOUSE_LEFT)
+	{
+		input->left_button = 0;
+	}
+	if (button == MOUSE_RIGHT)
+	{
+		input->right_button = 0;
+	}
 	ft_printf("mouse up %i\n", button);
 	return (1);
 }

@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   float2_rotation.c                                  :+:      :+:    :+:   */
+/*   min.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
+/*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/06 10:24:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 08:38:32 by hseppane         ###   ########.fr       */
+/*   Created: 2023/07/10 13:52:21 by hseppane          #+#    #+#             */
+/*   Updated: 2023/07/14 08:38:49 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft/math.h"
 
-t_float2	ft_float2_rot(t_float2 l, float rad)
+float	ft_minf(float a, float b)
 {
-	const float	dcos = cosf(rad);
-	const float	dsin = sinf(rad);
-	t_float2	result;
-
-	result.x = (l.x * dcos) - (l.y * dsin);
-	result.y = (l.x * dsin) + (l.y * dcos);
-	return (result);
+	if (a < b)
+		return (a);
+	return (b);
 }

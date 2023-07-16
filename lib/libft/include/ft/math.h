@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 09:59:59 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 10:13:57 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 08:34:39 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ typedef struct s_float4x4
 	t_float4	d;
 }	t_float4x4;
 
+float		ft_minf(float a, float b);
+float		ft_maxf(float a, float b);
+
 float		ft_lerp(float start, float end, float factor);
 float		ft_clamp(float value, float min, float max);
 float		ft_rad(float deg);
@@ -70,6 +73,9 @@ t_float3	ft_float3_transform(const t_float4x4 *l, t_float3 r);
 t_float3	ft_float3_rot_x(t_float3 l, float rad);
 t_float3	ft_float3_rot_y(t_float3 l, float rad);
 t_float3	ft_float3_rot_z(t_float3 l, float rad);
+
+// Rotates l around unit-vector axis by rad
+t_float3	ft_float3_rot_axis(t_float3 l, t_float3 axis, float rad);
 
 float		ft_float3_dot(t_float3 l, t_float3 r);
 float		ft_float3_len(t_float3 vector);
