@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 09:38:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/05 11:32:39 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:57:54 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_next_line(int fd)
 
 	if (read(fd, 0, 0) < 0)
 		return (NULL);
-	if (fd != last_fd && !buf_init(&buf, BUFFER_SIZE, sizeof(char)))
+	if (fd != last_fd && !ft_buf_init(&buf, BUFFER_SIZE, sizeof(char)))
 		return (NULL);
 	last_fd = fd;
 	str = NULL;
@@ -72,11 +72,11 @@ char	*get_next_line(int fd)
 		str = buf_get_line(&buf);
 		if (str)
 			return (str);
-		read_size = buf_read(&buf, fd, BUFFER_SIZE);
+		read_size = ft_buf_read(&buf, fd, BUFFER_SIZE);
 	}
 	if (buf.size)
 		str = buf_to_str(&buf);
 	last_fd = -1;
-	buf_del(&buf);
+	ft_buf_del(&buf);
 	return (str);
 }

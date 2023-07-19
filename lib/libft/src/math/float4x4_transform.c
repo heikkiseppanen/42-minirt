@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 11:09:05 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 09:15:51 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:17:57 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,14 @@ t_float4x4	ft_float4x4_scaling(t_float3 scale)
 	scaling.c = (t_float4){0.0, 0.0, scale.z, 0.0};
 	scaling.d = (t_float4){0.0, 0.0, 0.0, 1.0};
 	return (scaling);
+}
+
+t_float4x4	ft_float4x4_transpose(t_float4x4 *mat)
+{
+	return (t_float4x4) {
+		{mat->a.x, mat->b.x, mat->c.x, mat->d.x},
+		{mat->a.y, mat->b.y, mat->c.y, mat->d.y},
+		{mat->a.z, mat->b.z, mat->c.z, mat->d.z},
+		{mat->a.w, mat->b.w, mat->c.w, mat->d.w},
+	};
 }
