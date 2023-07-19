@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 10:10:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/05 10:39:02 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:57:54 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "ft/cstr.h"
 
-int	buf_init(t_buf *buf, size_t size, size_t type_size)
+int	ft_buf_init(t_buf *buf, size_t size, size_t type_size)
 {
 	if (!buf || !size || !type_size)
 		return (0);
@@ -28,14 +28,14 @@ int	buf_init(t_buf *buf, size_t size, size_t type_size)
 	return (1);
 }
 
-void	buf_del(t_buf *buf)
+void	ft_buf_del(t_buf *buf)
 {
 	if (buf->data)
 		free(buf->data);
 	*buf = (t_buf){};
 }
 
-int	buf_resize(t_buf *buf, size_t new_cap)
+int	ft_buf_resize(t_buf *buf, size_t new_cap)
 {
 	unsigned char	*new_data;
 
@@ -61,13 +61,13 @@ int	buf_resize(t_buf *buf, size_t new_cap)
 	return (1);
 }
 
-int	buf_pushback(t_buf *buf, void *type_data, size_t count)
+int	ft_buf_pushback(t_buf *buf, void *type_data, size_t count)
 {
 	void	*dst;
 
 	while (buf->size + count > buf->cap)
 	{
-		if (!buf_resize(buf, 2 * buf->cap))
+		if (!ft_buf_resize(buf, 2 * buf->cap))
 			return (0);
 	}
 	dst = (unsigned char *)buf->data + (buf->size * buf->stride);
@@ -76,7 +76,7 @@ int	buf_pushback(t_buf *buf, void *type_data, size_t count)
 	return (1);
 }
 
-ssize_t	buf_read(t_buf *buf, int fd, size_t bytes)
+ssize_t	ft_buf_read(t_buf *buf, int fd, size_t bytes)
 {
 	size_t			byte_cap;
 	size_t			byte_size;
@@ -87,7 +87,7 @@ ssize_t	buf_read(t_buf *buf, int fd, size_t bytes)
 	byte_cap = buf->cap * buf->stride;
 	while (byte_size + bytes > byte_cap)
 	{
-		if (buf_resize(buf, 2 * buf->cap))
+		if (ft_buf_resize(buf, 2 * buf->cap))
 		{
 			byte_size = buf->size * buf->stride;
 			byte_cap = buf->cap * buf->stride;

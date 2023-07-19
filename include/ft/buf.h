@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 10:15:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/05 08:33:00 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:57:54 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ typedef struct s_buf
 	size_t	cap;
 }			t_buf;
 
-int		buf_init(t_buf *arr, size_t size, size_t type_size);
-void	buf_del(t_buf *arr);
-int		buf_resize(t_buf *arr, size_t new_cap);
-int		buf_pushback(t_buf *arr, void *type_data, size_t count);
-ssize_t	buf_read(t_buf *arr, int fd, size_t bytes);
+int		ft_buf_init(t_buf *arr, size_t size, size_t type_size);
+void	ft_buf_del(t_buf *arr);
+int		ft_buf_resize(t_buf *arr, size_t new_cap);
+int		ft_buf_pushback(t_buf *arr, void *type_data, size_t count);
+ssize_t	ft_buf_read(t_buf *arr, int fd, size_t bytes);
 
 #endif

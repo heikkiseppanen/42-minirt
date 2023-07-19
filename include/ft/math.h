@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 09:59:59 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 08:34:39 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:38:07 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ t_float4x4	ft_float4x4_view(t_float3 pos, t_float3 x, t_float3 y, t_float3 z);
 t_float4x4	ft_float4x4_translation(t_float3 pos);
 t_float4x4	ft_float4x4_rotation(t_float3 rot);
 t_float4x4	ft_float4x4_scaling(t_float3 scale);
+t_float4x4	ft_float4x4_transpose(t_float4x4 *mat);
 
 #endif
