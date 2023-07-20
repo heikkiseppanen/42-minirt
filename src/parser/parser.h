@@ -2,6 +2,7 @@
 # define PARSER_H
 
 #include <ft/math.h>
+#include <minirt.h>
 
 typedef struct s_ambient
 {
@@ -56,6 +57,9 @@ typedef struct s_scene
 	t_cylinder	*cylinder;
 }	t_scene;
 
-t_scene	*scene_parser(char **argv);
+t_err	scene_parser(const char *file);
+void	string_to_float3(char *line, t_float3 *data);
+
+
 
 #endif
