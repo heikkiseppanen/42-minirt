@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "app/app.h"
+#include "parser/parser.h"
 
 #include <ft/io.h>
 #include <MLX42/MLX42.h>
