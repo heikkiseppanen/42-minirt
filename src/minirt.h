@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:20:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/20 12:37:41 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/20 12:41:31 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef char t_bool;
 
 typedef char t_err;
 
-# define RT_SUCCESS 1,
-# define RT_FAILURE 0,
+# define RT_SUCCESS 1
+# define RT_FAILURE 0
 
 #endif
