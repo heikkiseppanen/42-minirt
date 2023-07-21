@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 10:10:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/20 13:23:02 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/21 10:04:24 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_buf_pushback(t_buf *buf, void *type_data, size_t count)
 	return (1);
 }
 
-void	*ft_buf_get(t_buf *buf, size_t i)
+void	*ft_buf_get(const t_buf *buf, size_t i)
 {
 	return (buf->data + (i * buf->stride));
 }
