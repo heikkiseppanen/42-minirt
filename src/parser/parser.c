@@ -6,10 +6,39 @@
 #include <minirt.h>
 #include <fcntl.h>
 
-void	string_to_float3(char *line, t_float3 *data)
+t_err	valid_string_float3 (char *line)
 {
-	while (ft_isspace(*line))
-		line++;
+	int	i;
+	int	decimal;
+	int parameters;
+
+	i = 0;
+	decimal = 0;
+	parameters = 0;
+	
+	while (line[i] && !ft_isspace(line[i])) 
+	{
+		if (!ft_isdigit(line[i]))
+			return (RT_FAILURE);
+		while (line[i] != ',')
+		{
+			if (line[i] == '.')
+				decimal++;
+			if ((!ft_isdigit(line[i]) && line[i] != '.') || decimal > 1)
+				return (RT_FAILURE);
+			i++;
+		}
+		decimal--;
+		parameters++;
+		i++;
+	}
+	if (parameters != 3)
+		return (RT_FAILURE);
+	return (RT_SUCCESS);
+}
+
+t_err	string_to_float3(char *line, t_float3 *data)
+{
 	data->x = ft_atof(line);
 	while (*line != ',')
 		line++;
@@ -21,24 +50,26 @@ void	string_to_float3(char *line, t_float3 *data)
 	data->z = ft_atof(line);
 	while (!ft_isspace (*line))
 		line++;
+	return (RT_SUCCESS);
 }
 
 t_err	handle_line(char *line)
 {
 	while (ft_isspace(*line))
 		line++;
-	if (!ft_strncmp(line, "A", 1))
-		printf("A\n");
-	if (!ft_strncmp(line, "C", 1))
-		printf("C\n");
-	if (!ft_strncmp(line, "L", 1))
-		printf("L\n");
-	if (!ft_strncmp(line, "sp", 2))
-		printf("sp\n");
-	if (!ft_strncmp(line, "pl", 2))
-		printf("pl\n");
-	if (!ft_strncmp(line, "cy", 2))
-		printf("cy\n");
+
+	// if (!ft_strncmp(line, "A", 1))
+	// 	printf("A\n");
+	// if (!ft_strncmp(line, "C", 1))
+	// 	printf("C\n");
+	// if (!ft_strncmp(line, "L", 1))
+	// 	printf("L\n");
+	// if (!ft_strncmp(line, "sp", 2))
+	// 	printf("sp\n");
+	// if (!ft_strncmp(line, "pl", 2))
+	// 	printf("pl\n");
+	// if (!ft_strncmp(line, "cy", 2))
+	// 	printf("cy\n");
 	return (RT_SUCCESS);
 }
 
