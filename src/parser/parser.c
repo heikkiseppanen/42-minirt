@@ -25,11 +25,20 @@ void	string_to_float3(char *line, t_float3 *data)
 
 t_err	handle_line(char *line)
 {
-	while (line)
-	{
-		if (ft_isspace(*line))
-			line++;
-	}
+	while (ft_isspace(*line))
+		line++;
+	if (!ft_strncmp(line, "A", 1))
+		printf("A\n");
+	if (!ft_strncmp(line, "C", 1))
+		printf("C\n");
+	if (!ft_strncmp(line, "L", 1))
+		printf("L\n");
+	if (!ft_strncmp(line, "sp", 2))
+		printf("sp\n");
+	if (!ft_strncmp(line, "pl", 2))
+		printf("pl\n");
+	if (!ft_strncmp(line, "cy", 2))
+		printf("cy\n");
 	return (RT_SUCCESS);
 }
 
@@ -46,10 +55,12 @@ t_err	scene_parser(const char *file)
 		line = get_next_line(file_fd);
 		if (!line)
 			break;
-		if (handle_line(line))
+		if (!handle_line(line))
 			return (RT_FAILURE);
 		free (line);
 	}
 	close (file_fd);
 	return (RT_SUCCESS);
 }
+ 
+ 

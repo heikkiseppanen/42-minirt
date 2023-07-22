@@ -59,7 +59,4 @@ typedef struct s_scene
 
 t_err	scene_parser(const char *file);
 void	string_to_float3(char *line, t_float3 *data);
-
-
-
 #endif
