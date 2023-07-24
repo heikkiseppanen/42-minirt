@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 13:50:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:42:46 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #include "scene/ecs.h"
 #include "parser/parser.h"
+#include "window/window.h"
+#include "renderer/color.h"
 
 #include <ft/cstr.h>
 #include <ft/io.h>
@@ -63,9 +65,6 @@ void	app_close_hook(void *param)
 #define ARGB_NORD_RED 0xBF616AFF
 #define ARGB_NORD_GREEN 0xA3BE8CFF
 #define ARGB_NORD_BLUE 0x2E3440FF
-
-typedef unsigned int t_argb32;
-
 typedef struct s_ray
 {
 	t_float3 origin;
@@ -157,16 +156,16 @@ void	app_loop_hook(void *param)
 		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
 	}
 	t_float3 sphere_col[] = {
-		{1.0f, 0.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f},
+		argb32_to_color(ARGB_RED),
+		argb32_to_color(ARGB_GREEN),
+		argb32_to_color(ARGB_BLUE),
 		{1.0f, 1.0f, 1.0f},
 	};
 
 	t_float3 light_dir = {1.0f, 0.0f, -1.0f};
 	light_dir = ft_float3_normalize(light_dir);
 	t_float3 light_color = {1.0f, 1.0f, 1.0f};
-	float light_intensity = 2.0f;
+	float light_intensity = 1.0f;
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -208,17 +207,15 @@ void	app_loop_hook(void *param)
 				float lambert = ft_float3_dot(normal, ft_float3_scalar(light_dir, -1.0f));
 				lambert = ft_maxf(0.0f, lambert);
 
-				t_float3 diff_color; 
-				diff_color.x = albedo.x * light.x;
-				diff_color.y = albedo.y * light.y;
-				diff_color.z = albedo.z * light.z;
+				t_float3 diff_color = ft_float3_dot(albedo, light); 
+				//diff_color.x = albedo.x * light.x;
+				//diff_color.y = albedo.y * light.y;
+				//diff_color.z = albedo.z * light.z;
 
 				diff_color = ft_float3_scalar(diff_color, lambert);
+				diff_color = ft_float3_scalar(diff_color, 2.2f);
 
-				final_color =
-					(unsigned int)(255.0f * diff_color.x) << 24 |
-					(unsigned int)(255.0f * diff_color.y) << 16 |
-					(unsigned int)(255.0f * diff_color.z) << 8 | 0xFF;
+				final_color = color_to_argb32(diff_color);
 			}
 			
 			//hit.x = (hit.x + 1) * 0.5f;

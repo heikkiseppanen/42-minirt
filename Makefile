@@ -29,6 +29,9 @@ PARSER_SRC :=\
 	parser_utils.c \
 	deserialize/deserialize_geometry.c \
 	deserialize/deserialize_camera_light.c \
+RENDERER_DIR := renderer
+RENDERER_SRC :=\
+	color.c \
 
 SRC :=\
 	main.c \
@@ -37,6 +40,7 @@ SRC :=\
 	$(INPUT_SRC:%=$(INPUT_DIR)/%) \
 	$(SCENE_SRC:%=$(SCENE_DIR)/%) \
 	$(PARSER_SRC:%=$(PARSER_DIR)/%) \
+	$(RENDERER_SRC:%=$(RENDERER_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)
