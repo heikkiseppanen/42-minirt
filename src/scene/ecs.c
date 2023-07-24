@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:52:41 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/21 14:26:27 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:22:50 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ static size_t	get_component_size(t_ecs_type type)
 {
 	static size_t	size_table[] = {
 		sizeof(t_ecs_list),
-		sizeof(t_float3),
-		sizeof(t_float3),
+		sizeof(t_transform),
+		sizeof(t_camera),
+		sizeof(t_light),
+		sizeof(t_geometry),
+		sizeof(t_material),
 	};
 
 	return (size_table[type]);
@@ -31,7 +34,7 @@ t_err	ecs_init(t_ecs *e)
 
 	*e = (t_ecs){};
 	type = 0;
-	while (type < ECS_CAMERA)
+	while (type < ECS_TYPE_COUNT)
 	{
 		if (!ft_buf_init(&e->components[type], 1, get_component_size(type)))
 		{
@@ -63,7 +66,7 @@ t_id	ecs_entity_create(t_ecs *e)
 	{
 		return (0);
 	}
-	return ++e->accumulator;
+	return (++e->id_accumulator);
 }
 
 t_err	ecs_add_component(t_ecs* e, t_id entity, void *data, t_ecs_type type)

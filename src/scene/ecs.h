@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/21 13:25:49 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:21:34 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,65 @@
 # include "minirt.h"
 
 # include <ft/buf.h>
+# include <ft/math.h>
 
 typedef unsigned int t_id;
 
 typedef enum e_ecs_type
 {
 	ECS_LIST = 0,
-	ECS_POSITION,
-	ECS_ROTATION,
+	ECS_TRANSFORM,
 	ECS_CAMERA,
 	ECS_LIGHT,
 	ECS_GEOMETRY,
+	ECS_MATERIAL,
 	ECS_TYPE_COUNT
 }	t_ecs_type;
+
+// PLACEHOLDER COMPONENTS
 
 typedef struct s_ecs_list
 {
 	t_id	reference[ECS_TYPE_COUNT];
 }	t_ecs_list;
 
+typedef struct s_transform
+{
+	t_float3	position;
+}	t_transform;
+
+typedef struct s_camera
+{
+	float		fov;
+	float		near;
+	float		far;
+	t_float3	x;
+	t_float3	y;
+	t_float3	z;
+}	t_camera;
+
+typedef struct s_light
+{
+}	t_light;
+
+typedef struct s_sphere
+{
+	float	diameter;
+}	t_sphere;
+
+typedef struct s_geometry
+{
+	t_sphere	sphere;
+}	t_geometry;
+
+typedef struct s_material
+{
+	t_float3	color;
+}	t_material;
+
 typedef struct s_ecs
 {
-	t_id	accumulator;
+	t_id	id_accumulator;
 	t_buf	components[ECS_TYPE_COUNT];
 }	t_ecs;
 
