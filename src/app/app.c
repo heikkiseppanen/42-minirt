@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 14:43:47 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:44:05 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	app_loop_hook(void *param)
 		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
 	}
 	t_float3 sphere_col[] = {
-		ft_float3_scalar(argb32_to_color(ARGB_RED), 0.18),
+		ft_float3_scalar(argb32_to_color(ARGB_RED), 1.00),
 		ft_float3_scalar(argb32_to_color(ARGB_GREEN), 0.18),
 		ft_float3_scalar(argb32_to_color(ARGB_BLUE), 0.18),
 		ft_float3_scalar((t_color){1.0f, 1.0f, 1.0f}, 0.18),
@@ -165,7 +165,7 @@ void	app_loop_hook(void *param)
 	t_float3 light_dir = {1.0f, 0.0f, -1.0f};
 	light_dir = ft_float3_normalize(light_dir);
 	t_float3 light_color = {1.0f, 1.0f, 1.0f};
-	float light_intensity = 3.0f;
+	float light_intensity = 1.0f;
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -209,18 +209,14 @@ void	app_loop_hook(void *param)
 				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
 				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
 
-				t_color amb_light = (t_color){0.2f, 0.2f, 0.2f};
+				t_color amb_light = (t_color){0.1f, 0.1f, 0.1f};
 				 
 				t_color light_total = ft_float3_add(dir_color, amb_light);
 
-				light_total.x = light_total.x;
-				light_total.y = light_total.y;
-				light_total.z = light_total.z;
-
 				t_float3 diff_color; 
-				diff_color.x = ft_clamp(diffuse.x * (light_total.x), 0.0f, 1.0f);
-				diff_color.y = ft_clamp(diffuse.y * (light_total.y), 0.0f, 1.0f);
-				diff_color.z = ft_clamp(diffuse.z * (light_total.z), 0.0f, 1.0f);
+				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1 / 2.2f), 0.0f, 1.0f);
+				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1 / 2.2f), 0.0f, 1.0f);
+				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1 / 2.2f), 0.0f, 1.0f);
 
 //				diff_color = ft_float3_scalar(diff_color, 2.2f);
 
