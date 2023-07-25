@@ -14,9 +14,10 @@ t_err	parse_error(char **split_line)
 
 t_err	parse_sphere(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
+	t_id		entity;
 	t_float3	point;
 	t_float3	color;
-	float		radius;
+	__attribute__((unused)) float		radius;
 
 	if (array_2d_length(split_line) != 4)
 		return (parse_error(split_line));
@@ -27,16 +28,17 @@ t_err	parse_sphere(__attribute__((unused)) t_ecs *ecs, char **split_line)
 	radius = ft_atof(split_line[2]);
 	if (!string_to_float3(split_line[3], &color))
 		return (parse_error(split_line));
-
-	printf("sphere\npoint: %f %f %f\n", point.x, point.y, point.z);
-	printf("color: %f %f %f\n", color.x, color.y, color.z);
-	printf("float: %f\n\n", radius);
-
+	entity = ecs_entity_create(ecs);
+	if (!entity)
+		return (parse_error(split_line));
+	ecs_add_component(ecs, entity, &point, ECS_TRANSFORM);
+	
 	return (RT_SUCCESS);
 }
 
 t_err	parse_plane(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
+	t_id		entity;
 	t_float3	point;
 	t_float3	color;
 	t_float3	normal;
@@ -49,20 +51,23 @@ t_err	parse_plane(__attribute__((unused)) t_ecs *ecs, char **split_line)
 		return (parse_error(split_line));
 	if (!string_to_float3(split_line[3], &color))
 		return (parse_error(split_line));
+	entity = ecs_entity_create(ecs);
+	if (!entity)
+		return (parse_error(split_line));
+	ecs_add_component(ecs, entity, &point, ECS_TRANSFORM);
 
-	printf("plane\npoint: %f %f %f\n", point.x, point.y, point.z);
-	printf("color: %f %f %f\n", color.x, color.y, color.z);
-	printf("normal: %f %f %f\n\n", normal.x, normal.y, normal.z);
+
 	return (RT_SUCCESS);
 }
 
 t_err	parse_cylinder(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
+	t_id		entity;
 	t_float3	point;
 	t_float3	color;
 	t_float3	normal;
-	float		diameter;
-	float		height;
+	__attribute__((unused))float		diameter;
+	__attribute__((unused))float		height;
 
 	if (array_2d_length(split_line) != 6)
 		return (parse_error(split_line));
@@ -78,12 +83,12 @@ t_err	parse_cylinder(__attribute__((unused)) t_ecs *ecs, char **split_line)
 	height = ft_atof(split_line[4]);
 	if (!string_to_float3(split_line[5], &color))
 		return (parse_error(split_line));
+	entity = ecs_entity_create(ecs);
+	if (!entity)
+		return (parse_error(split_line));
+	ecs_add_component(ecs, entity, &point, ECS_TRANSFORM);
 
-	printf("cylinder\npoint: %f %f %f\n", point.x, point.y, point.z);
-	printf("color: %f %f %f\n", color.x, color.y, color.z);
-	printf("normal: %f %f %f\n", normal.x, normal.y, normal.z);
-	printf("diameter: %f\n",diameter);
-	printf("height: %f\n\n",height);
+
 	return (RT_SUCCESS);
 }
 
