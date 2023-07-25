@@ -15,10 +15,6 @@ APP_DIR := app
 APP_SRC :=\
 	app.c \
 
-WINDOW_DIR := window
-WINDOW_SRC :=\
-	window.c \
-
 INPUT_DIR := input
 INPUT_SRC :=\
 	input.c \
@@ -44,7 +40,7 @@ MLX_AR := $(MLX_DIR)/build/libmlx42.a
 MLX_LD := -L $(MLX_DIR)/build -lmlx42
 
 ifeq ($(ARCH), Linux)
-	MLX_LD += -ldl -lglfw3 -pthread -lm
+	MLX_LD += -ldl -lglfw -pthread -lm
 else ifeq ($(ARCH), Windows)
 	MLX_LD += -lglfw3 -lopengl32 -lgdi32
 else ifeq ($(ARCH), Darwin)
@@ -60,7 +56,7 @@ FT_LD := -L ./lib/libft -lft
 # Compilation and linking
 
 CC := cc
-INCLUDE := -I$(MLX_DIR)/include -I$(FT_DIR) -I$(FT_DIR)/include -I$(SRCDIR)
+INCLUDE := -I$(MLX_DIR)/include/ -I$(FT_DIR) -I$(FT_DIR)/include -I$(SRCDIR)
 CFLAGS := -Wall -Werror -Wextra $(INCLUDE)
 LDFLAGS := -lm $(MLX_LD) $(FT_LD) 
 
@@ -86,7 +82,7 @@ $(FT_AR):
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c  
 	@$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
-	@$(CC) $(CFLAGS) -MMD -c $< -o $@ 
+	$(CC) $(CFLAGS) -MMD -c $< -o $@ 
 
 clean:
 	@/bin/rm -rf $(OBJDIR)
