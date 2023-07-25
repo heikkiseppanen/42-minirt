@@ -18,6 +18,7 @@
 #include <MLX42/MLX42.h>
 
 #include <ft/std.h>
+
 int	main(int argc, char **argv)
 {
 	t_app	miniRT;

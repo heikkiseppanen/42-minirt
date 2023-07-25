@@ -6,70 +6,79 @@
 #include <minirt.h>
 #include <fcntl.h>
 
-t_err	valid_string_float3 (char *line)
+void	ft_free_array(char **arr)
 {
 	int	i;
-	int	decimal;
-	int parameters;
 
 	i = 0;
-	decimal = 0;
-	parameters = 0;
-	
-	while (line[i] && !ft_isspace(line[i])) 
+	while (*arr != NULL)
 	{
-		if (!ft_isdigit(line[i]))
-			return (RT_FAILURE);
-		while (line[i] != ',')
-		{
-			if (line[i] == '.')
-				decimal++;
-			if ((!ft_isdigit(line[i]) && line[i] != '.') || decimal > 1)
-				return (RT_FAILURE);
-			i++;
-		}
-		decimal--;
-		parameters++;
+		free(*arr++);
 		i++;
 	}
-	if (parameters != 3)
-		return (RT_FAILURE);
+	free(arr - i);
+}
+
+t_err	parse_error(char **split_line)
+{
+	ft_free_array(split_line);
+	printf("Line error\n");
+	return (RT_FAILURE);
+}
+
+int		array_2d_length(char **array_2d)
+{
+	int	i;
+
+	i = 0;
+	while (array_2d[i])
+		i++;
+	return (i);
+}
+
+
+t_err	parse_sphere(char **split_line)
+{
+	if (array_2d_length(split_line) != 4)
+		return (parse_error(split_line));
 	return (RT_SUCCESS);
 }
 
-t_err	string_to_float3(char *line, t_float3 *data)
+t_err	parse_plane(char **split_line)
 {
-	data->x = ft_atof(line);
-	while (*line != ',')
-		line++;
-	line++;
-	data->y = ft_atof(line);
-	while (*line != ',')
-		line++;
-	line++;
-	data->z = ft_atof(line);
-	while (!ft_isspace (*line))
-		line++;
+	if (array_2d_length(split_line) != 4)
+		return (parse_error(split_line));
+	return (RT_SUCCESS);
+}
+
+t_err	parse_cylinder(char **split_line)
+{
+	if (array_2d_length(split_line) != 6)
+		return (parse_error(split_line));
 	return (RT_SUCCESS);
 }
 
 t_err	handle_line(char *line)
 {
-	while (ft_isspace(*line))
-		line++;
+	char **split_line;
 
-	// if (!ft_strncmp(line, "A", 1))
-	// 	printf("A\n");
-	// if (!ft_strncmp(line, "C", 1))
-	// 	printf("C\n");
-	// if (!ft_strncmp(line, "L", 1))
-	// 	printf("L\n");
-	// if (!ft_strncmp(line, "sp", 2))
-	// 	printf("sp\n");
-	// if (!ft_strncmp(line, "pl", 2))
-	// 	printf("pl\n");
-	// if (!ft_strncmp(line, "cy", 2))
-	// 	printf("cy\n");
+	split_line = ft_split(line, ' ');
+	if (!ft_strncmp(split_line[0], "A", 1))
+		printf("A\n");
+	else if (!ft_strncmp(split_line[0], "C", 1))
+		printf("C\n");
+	else if (!ft_strncmp(split_line[0], "L", 1))
+		printf("L\n");
+	else if (!ft_strncmp(split_line[0], "sp", 2))
+		return (parse_sphere(split_line));
+	else if (!ft_strncmp(split_line[0], "pl", 2))
+		return (parse_plane(split_line));
+	else if (!ft_strncmp(split_line[0], "cy", 2))
+		return (parse_cylinder(split_line));
+	else if (*split_line[0] != '\n')
+		return (parse_error(split_line));
+	ft_free_array(split_line);
+
 	return (RT_SUCCESS);
 }
 
