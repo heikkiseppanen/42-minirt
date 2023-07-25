@@ -26,6 +26,7 @@ SCENE_SRC :=\
 PARSER_DIR := parser
 PARSER_SRC :=\
 	parser.c \
+	parser_utils.c \
 
 SRC :=\
 	main.c \

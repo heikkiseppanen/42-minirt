@@ -1,23 +1,9 @@
-
 #include <ft/cstr.h>
 #include <ft/io.h>
 #include <ft/std.h>
 #include <parser/parser.h>
 #include <minirt.h>
 #include <fcntl.h>
-
-void	ft_free_array(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (*arr != NULL)
-	{
-		free(*arr++);
-		i++;
-	}
-	free(arr - i);
-}
 
 t_err	parse_error(char **split_line)
 {
@@ -26,43 +12,88 @@ t_err	parse_error(char **split_line)
 	return (RT_FAILURE);
 }
 
-int		array_2d_length(char **array_2d)
+t_err	parse_sphere(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
-	int	i;
+	t_float3	point;
+	t_float3	color;
+	float		radius;
 
-	i = 0;
-	while (array_2d[i])
-		i++;
-	return (i);
-}
-
-
-t_err	parse_sphere(char **split_line)
-{
 	if (array_2d_length(split_line) != 4)
 		return (parse_error(split_line));
+	if (!string_to_float3(split_line[1], &point))
+		return (parse_error(split_line));
+	if (!ft_is_float(split_line[2]))
+		return (parse_error(split_line));
+	radius = ft_atof(split_line[2]);
+	if (!string_to_float3(split_line[3], &color))
+		return (parse_error(split_line));
+
+	printf("sphere\npoint: %f %f %f\n", point.x, point.y, point.z);
+	printf("color: %f %f %f\n", color.x, color.y, color.z);
+	printf("float: %f\n\n", radius);
+
 	return (RT_SUCCESS);
 }
 
-t_err	parse_plane(char **split_line)
+t_err	parse_plane(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
+	t_float3	point;
+	t_float3	color;
+	t_float3	normal;
+
 	if (array_2d_length(split_line) != 4)
 		return (parse_error(split_line));
+	if (!string_to_float3(split_line[1], &point))
+		return (parse_error(split_line));
+	if (!string_to_float3(split_line[2], &normal))
+		return (parse_error(split_line));
+	if (!string_to_float3(split_line[3], &color))
+		return (parse_error(split_line));
+
+	printf("plane\npoint: %f %f %f\n", point.x, point.y, point.z);
+	printf("color: %f %f %f\n", color.x, color.y, color.z);
+	printf("normal: %f %f %f\n\n", normal.x, normal.y, normal.z);
 	return (RT_SUCCESS);
 }
 
-t_err	parse_cylinder(char **split_line)
+t_err	parse_cylinder(__attribute__((unused)) t_ecs *ecs, char **split_line)
 {
+	t_float3	point;
+	t_float3	color;
+	t_float3	normal;
+	float		diameter;
+	float		height;
+
 	if (array_2d_length(split_line) != 6)
 		return (parse_error(split_line));
+	if (!string_to_float3(split_line[1], &point))
+		return (parse_error(split_line));
+	if (!string_to_float3(split_line[2], &normal))
+		return (parse_error(split_line));
+	if (!ft_is_float(split_line[3]))
+		return (parse_error(split_line));
+	diameter = ft_atof(split_line[3]);
+	if (!ft_is_float(split_line[4]))
+		return (parse_error(split_line));
+	height = ft_atof(split_line[4]);
+	if (!string_to_float3(split_line[5], &color))
+		return (parse_error(split_line));
+
+	printf("cylinder\npoint: %f %f %f\n", point.x, point.y, point.z);
+	printf("color: %f %f %f\n", color.x, color.y, color.z);
+	printf("normal: %f %f %f\n", normal.x, normal.y, normal.z);
+	printf("diameter: %f\n",diameter);
+	printf("height: %f\n\n",height);
 	return (RT_SUCCESS);
 }
 
-t_err	handle_line(char *line)
+t_err	handle_line(t_ecs *ecs, char *line)
 {
 	char **split_line;
 
 	split_line = ft_split(line, ' ');
+	if (!split_line)
+		return (RT_FAILURE);
 	if (!ft_strncmp(split_line[0], "A", 1))
 		printf("A\n");
 	else if (!ft_strncmp(split_line[0], "C", 1))
@@ -70,11 +101,11 @@ t_err	handle_line(char *line)
 	else if (!ft_strncmp(split_line[0], "L", 1))
 		printf("L\n");
 	else if (!ft_strncmp(split_line[0], "sp", 2))
-		return (parse_sphere(split_line));
+		return (parse_sphere(ecs, split_line));
 	else if (!ft_strncmp(split_line[0], "pl", 2))
-		return (parse_plane(split_line));
+		return (parse_plane(ecs, split_line));
 	else if (!ft_strncmp(split_line[0], "cy", 2))
-		return (parse_cylinder(split_line));
+		return (parse_cylinder(ecs, split_line));
 	else if (*split_line[0] != '\n')
 		return (parse_error(split_line));
 	ft_free_array(split_line);
@@ -82,7 +113,7 @@ t_err	handle_line(char *line)
 	return (RT_SUCCESS);
 }
 
-t_err	scene_parser(const char *file)
+t_err	scene_parser(t_ecs *ecs, const char *file)
 {
 	char	*line;
 	int		file_fd;
@@ -95,7 +126,7 @@ t_err	scene_parser(const char *file)
 		line = get_next_line(file_fd);
 		if (!line)
 			break;
-		if (!handle_line(line))
+		if (!handle_line(ecs, line))
 			return (RT_FAILURE);
 		free (line);
 	}

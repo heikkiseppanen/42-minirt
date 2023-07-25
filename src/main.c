@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "app/app.h"
+#include "scene/ecs.h"
 #include "parser/parser.h"
 #include "minirt.h"
 
@@ -23,6 +24,8 @@ int	main(int argc, char **argv)
 {
 	t_app	miniRT;
 
+	// if (!ecs_init(&ecs))
+	// 	return (1);
 	if (argc != 2)
 	{
 		ft_printf("Use: minirt <map_path>\n");
