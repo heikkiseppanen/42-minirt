@@ -6,13 +6,14 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 13:30:30 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:56:56 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/app.h"
 
 #include "window/window.h"
+#include "scene/ecs.h"
 
 #include <ft/io.h>
 #include <mlx.h>
@@ -47,11 +48,6 @@ int	app_terminate(t_app *instance, int exit_code)
 #define ARGB_NORD_BLUE 0x002E3440
 
 typedef unsigned int t_argb32;
-
-typedef char t_bool;
-
-#define TRUE 1
-#define FALSE 0
 
 typedef struct s_ray
 {
@@ -94,23 +90,6 @@ void framebuf_put_pixel(t_framebuf *output, t_float3 position, t_argb32 color)
 	*((unsigned int *)(output->color + offset)) = color;
 }
 
-typedef struct s_camera
-{
-	float		fov;
-	float		aspect;
-	float		near;
-	float		far;
-	t_float3	x;
-	t_float3	y;
-	t_float3	z;
-}	t_camera;
-
-t_camera	camera_create(float fov, float aspect_ratio, float near, float far)
-{
-	return (t_camera){fov, aspect_ratio, near, far, {}, {}, {}};
-	
-}
-
 void	camera_update(t_camera *camera, t_float3 position, t_float3 target)
 {
 	camera->z = ft_float3_sub(position, target);
@@ -125,7 +104,6 @@ int	app_loop(t_app *app)
 {
 	t_window *const	window = &app->window;
 	t_framebuf *out = &window->framebuffer;
-	const float aspect = (float)out->width / (float)out->height;
 
 	static t_float3 cam_pos = {0.0f, 1.0f, 0.1f};
 	static t_float3 cam_target = {};
@@ -142,9 +120,9 @@ int	app_loop(t_app *app)
 	static int init = 1;
 	if (init)
 	{
-		camera = camera_create(90.0f, aspect, 0.1f, 100.0f);
-		init = 0;
-	}
+		camera = (t_camera){90.0f, 10.0f, 200.0f, {}, {}, {}};
+		init = !init;
+	};
 
 	if (app->input.left_button)
 	{
@@ -191,7 +169,7 @@ int	app_loop(t_app *app)
 			t_float3 p;
 			p.x = ((float)x + 0.5f) / (float)out->width * 2 - 1;
 			p.y = ((float)y + 0.5f) / (float)out->height * 2 - 1;
-			p.x *= camera.aspect;
+			p.x *= (float)out->height / (float)out->width;
 			p.z = -1.0f;
 			p = ft_float3_normalize(p);
 

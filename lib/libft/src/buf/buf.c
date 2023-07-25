@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 10:10:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/19 12:57:54 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/21 10:04:24 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,28 +76,7 @@ int	ft_buf_pushback(t_buf *buf, void *type_data, size_t count)
 	return (1);
 }
 
-ssize_t	ft_buf_read(t_buf *buf, int fd, size_t bytes)
+void	*ft_buf_get(const t_buf *buf, size_t i)
 {
-	size_t			byte_cap;
-	size_t			byte_size;
-	ssize_t			read_size;
-	void			*dst;
-
-	byte_size = buf->size * buf->stride;
-	byte_cap = buf->cap * buf->stride;
-	while (byte_size + bytes > byte_cap)
-	{
-		if (ft_buf_resize(buf, 2 * buf->cap))
-		{
-			byte_size = buf->size * buf->stride;
-			byte_cap = buf->cap * buf->stride;
-		}
-		else
-			return (-1);
-	}
-	dst = (unsigned char *)buf->data + byte_size;
-	read_size = read(fd, dst, bytes);
-	if (read_size > 0)
-		buf->size += read_size;
-	return (read_size);
+	return (buf->data + (i * buf->stride));
 }

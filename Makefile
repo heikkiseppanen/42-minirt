@@ -17,11 +17,16 @@ INPUT_DIR := input
 INPUT_SRC :=\
 	input.c \
 
+SCENE_DIR := scene
+SCENE_SRC :=\
+	ecs.c \
+
 SRC :=\
 	main.c \
 	$(APP_SRC:%=$(APP_DIR)/%) \
 	$(WINDOW_SRC:%=$(WINDOW_DIR)/%) \
 	$(INPUT_SRC:%=$(INPUT_DIR)/%) \
+	$(SCENE_SRC:%=$(SCENE_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)

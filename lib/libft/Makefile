@@ -7,6 +7,7 @@ INCDIR := ./include
 BUF_DIR := buf
 BUF_SRC :=\
 	buf.c\
+	buf_io.c\
 
 STD_DIR := std
 STD_SRC :=\
