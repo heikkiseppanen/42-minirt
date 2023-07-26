@@ -44,7 +44,7 @@ ifeq ($(ARCH), Linux)
 else ifeq ($(ARCH), Windows)
 	MLX_LD += -lglfw3 -lopengl32 -lgdi32
 else ifeq ($(ARCH), Darwin)
-	MLX_LD += -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit
+	MLX_LD += -L /users/$(USER)/.brew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
 
 # Libft
