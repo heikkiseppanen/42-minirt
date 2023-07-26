@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 12:07:27 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/24 13:02:04 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:52:47 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include <ft/math.h>
 
-# define ARGB_RED 0x00FF0000
-# define ARGB_GREEN 0x0000FF00
-# define ARGB_BLUE 0x000000FF
+# define ARGB_RED 0xFF0000FF
+# define ARGB_GREEN 0x00FF00FF
+# define ARGB_BLUE 0x0000FFFF
 
 typedef t_float3 t_color;
 

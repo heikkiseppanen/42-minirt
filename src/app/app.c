@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 14:44:05 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:44:30 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,6 @@ void	app_close_hook(void *param)
 	ecs_del(&app->scene);
 }
 
-#define ARGB_RED 0xFF0000FF
-#define ARGB_GREEN 0x00FF00FF
-#define ARGB_BLUE 0x0000FFFF
-#define ARGB_NORD_RED 0xBF616AFF
-#define ARGB_NORD_GREEN 0xA3BE8CFF
-#define ARGB_NORD_BLUE 0x2E3440FF
 typedef struct s_ray
 {
 	t_float3 origin;
