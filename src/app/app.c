@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 14:44:30 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:45:11 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,13 +150,13 @@ void	app_loop_hook(void *param)
 		sphere_view_coord[i] = ft_float3_transform(&view, sphere_pos[i]);
 	}
 	t_float3 sphere_col[] = {
-		ft_float3_scalar(argb32_to_color(ARGB_RED), 1.00),
-		ft_float3_scalar(argb32_to_color(ARGB_GREEN), 0.18),
-		ft_float3_scalar(argb32_to_color(ARGB_BLUE), 0.18),
-		ft_float3_scalar((t_color){1.0f, 1.0f, 1.0f}, 0.18),
+		(t_color){0.75f, 0.1f, 0.1f},
+		(t_color){0.1f, 0.75f, 0.1f},
+		(t_color){0.1f, 0.1f, 0.75f},
+		ft_float3_scalar((t_color){1.0f, 1.0f, 1.0f}, 1.0f),
 	};
 
-	t_float3 light_dir = {1.0f, 0.0f, -1.0f};
+	t_float3 light_dir = {1.0f, 0.0f, 0.0};
 	light_dir = ft_float3_normalize(light_dir);
 	t_float3 light_color = {1.0f, 1.0f, 1.0f};
 	float light_intensity = 1.0f;
@@ -197,20 +197,31 @@ void	app_loop_hook(void *param)
 				normal = ft_float3_normalize(normal);
 
 				t_color diffuse = sphere_col[hit_index];
+				diffuse.x = powf(diffuse.x, 2.2f);
+				diffuse.y = powf(diffuse.y, 2.2f);
+				diffuse.z = powf(diffuse.z, 2.2f);
 
-				t_color dir_color = ft_float3_scalar(light_color, light_intensity);
+				t_color dir_color = light_color;
+				dir_color = ft_float3_scalar(dir_color, light_intensity);
+				dir_color.x = powf(dir_color.x, 2.2f);
+				dir_color.y = powf(dir_color.y, 2.2f);
+				dir_color.z = powf(dir_color.z, 2.2f);
+
 				float dir_light_intensity = ft_float3_dot(normal, ft_float3_scalar(light_dir, -1.0f));
 				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
 				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
 
-				t_color amb_light = (t_color){0.1f, 0.1f, 0.1f};
+				t_color amb_light = (t_color){0.25f, 0.25f, 0.25f};
+				amb_light.x = powf(amb_light.x, 2.2f);
+				amb_light.y = powf(amb_light.y, 2.2f);
+				amb_light.z = powf(amb_light.z, 2.2f);
 				 
 				t_color light_total = ft_float3_add(dir_color, amb_light);
 
 				t_float3 diff_color; 
-				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1 / 2.2f), 0.0f, 1.0f);
-				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1 / 2.2f), 0.0f, 1.0f);
-				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1 / 2.2f), 0.0f, 1.0f);
+				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1.1 / 2.2f), 0.0f, 1.0f);
+				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1.1 / 2.2f), 0.0f, 1.0f);
+				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1.1 / 2.2f), 0.0f, 1.0f);
 
 //				diff_color = ft_float3_scalar(diff_color, 2.2f);
 
