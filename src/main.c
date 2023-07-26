@@ -6,28 +6,28 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:28 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/07 09:49:18 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/25 14:18:37 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/app.h"
 
 #include <ft/io.h>
-#include <mlx.h>
+#include <MLX42/MLX42.h>
 
 int	main(int argc, char **argv)
 {
-	t_app	qub3d;
+	t_app	miniRT;
 
 	if (argc != 2)
 	{
 		ft_printf("Use: minirt <map_path>\n");
 		return (1);
 	}
-	if (!app_init(&qub3d, argc, argv))
+	if (app_init(&miniRT, argc, argv))
 	{
-		app_terminate(&qub3d, 1);
+		mlx_loop(miniRT.window);
 	}
-	mlx_loop(qub3d.window.handle);
+	app_close_hook(&miniRT);
 	return (1);
 }

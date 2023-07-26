@@ -6,46 +6,51 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/24 10:56:56 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/25 15:25:15 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/app.h"
 
-#include "window/window.h"
 #include "scene/ecs.h"
 
+#include <ft/cstr.h>
 #include <ft/io.h>
-#include <mlx.h>
 #include <stdlib.h>
 
-int	app_init(t_app *empty, int argc, char **argv)
+t_err	app_init(t_app *app, int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
-	if (!window_init(&empty->window, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT"))
+	*app = (t_app){};
+	app->window = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT", RT_FALSE);
+	app->framebuffer = mlx_new_image(app->window, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!app->window || !app->framebuffer)
 	{
-		return (0);
+		ft_fprintf(STDERR_FILENO, "MiniRT: %s\n", mlx_strerror(mlx_errno));
+		return (RT_FAILURE);
 	}
-	mlx_loop_hook(empty->window.handle, app_loop, empty);
-	mlx_hook(empty->window.window, ON_DESTROY, 0, app_terminate, empty);
-	input_init(&empty->input, empty->window.window);
+	mlx_image_to_window(app->window, app->framebuffer, 0, 0);
+	mlx_loop_hook(app->window, app_loop_hook, app);
+	mlx_close_hook(app->window, app_close_hook, app);
+	input_init(&app->input, app->window);
 	return (1);
 }
 
-int	app_terminate(t_app *instance, int exit_code)
+void	app_close_hook(void *param)
 {
-	window_del(&instance->window);
-	exit(exit_code);
-	return (1);
+	t_app *const app = param;
+
+	mlx_delete_image(app->window, app->framebuffer);
+	mlx_terminate(app->window);
 }
 
-#define ARGB_RED 0x00FF0000
-#define ARGB_GREEN 0x0000FF00
-#define ARGB_BLUE 0x000000FF
-#define ARGB_NORD_RED 0x00BF616A
-#define ARGB_NORD_GREEN 0x00A3BE8C
-#define ARGB_NORD_BLUE 0x002E3440
+#define ARGB_RED 0xFF0000FF
+#define ARGB_GREEN 0x00FF00FF
+#define ARGB_BLUE 0x0000FFFF
+#define ARGB_NORD_RED 0xBF616AFF
+#define ARGB_NORD_GREEN 0xA3BE8CFF
+#define ARGB_NORD_BLUE 0x2E3440FF
 
 typedef unsigned int t_argb32;
 
@@ -80,16 +85,6 @@ float	ray_sphere_intersect(const t_ray *ray, t_float3 center, float radius)
 	return ((-b - d) / a);
 }
 
-void framebuf_put_pixel(t_framebuf *output, t_float3 position, t_argb32 color)
-{
-	size_t offset;
-
-	position.y = output->height - position.y - 1;
-	offset = ((int)position.x + (int)position.y * output->width);
-	offset *= sizeof(color);
-	*((unsigned int *)(output->color + offset)) = color;
-}
-
 void	camera_update(t_camera *camera, t_float3 position, t_float3 target)
 {
 	camera->z = ft_float3_sub(position, target);
@@ -100,12 +95,12 @@ void	camera_update(t_camera *camera, t_float3 position, t_float3 target)
 	camera->y = ft_float3_cross(camera->z, camera->x);
 }
 
-int	app_loop(t_app *app)
+void	app_loop_hook(void *param)
 {
-	t_window *const	window = &app->window;
-	t_framebuf *out = &window->framebuffer;
+	t_app *const app = param;
+	mlx_image_t *const out = app->framebuffer;
 
-	static t_float3 cam_pos = {0.0f, 1.0f, 0.1f};
+	static t_float3 cam_pos = {0.0f, 1.0f, 1.0f};
 	static t_float3 cam_target = {};
 	static t_camera camera;
 
@@ -126,15 +121,16 @@ int	app_loop(t_app *app)
 
 	if (app->input.left_button)
 	{
-		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * 0.01f);
-		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * 0.01f);
+		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * app->window->delta_time);
+		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * app->window->delta_time);
 	}
 	if (app->input.right_button)
 	{
-		t_float3 offset_x = ft_float3_scalar(camera.x, app->input.mouse_movement.x * 0.005f);
-		t_float3 offset_y = ft_float3_scalar(camera.y, -app->input.mouse_movement.y * 0.005f);
+		t_float3 offset_x = ft_float3_scalar(camera.x, app->input.mouse_movement.x);
+		t_float3 offset_y = ft_float3_scalar(camera.y, -app->input.mouse_movement.y);
 		t_float3 total = ft_float3_add(offset_x, offset_y);
 
+		total = ft_float3_scalar(total, app->window->delta_time);
 		cam_pos = ft_float3_add(cam_pos, total);
 		cam_target = ft_float3_add(cam_target, total);
 	}
@@ -160,10 +156,10 @@ int	app_loop(t_app *app)
 	t_float3 light_color = {1.0f, 1.0f, 1.0f};
 	float light_intensity = 2.0f;
 
-	int y = 0;
+	unsigned int y = 0;
 	while (y < out->height)
 	{
-		int x = 0;
+		unsigned int x = 0;
 		while (x < out->width)
 		{
 			t_float3 p;
@@ -187,7 +183,7 @@ int	app_loop(t_app *app)
 				}
 			}
 
-			t_argb32 final_color = 0;
+			t_argb32 final_color = 0xFF;
 			if (hit_index != -1)
 			{
 				t_float3 normal = ft_float3_scalar(ray.direction, mul);
@@ -208,9 +204,9 @@ int	app_loop(t_app *app)
 				diff_color = ft_float3_scalar(diff_color, lambert);
 
 				final_color =
-					(unsigned int)(255.0f * diff_color.x) << 16 |
-					(unsigned int)(255.0f * diff_color.y) << 8 |
-					(unsigned int)(255.0f * diff_color.z);
+					(unsigned int)(255.0f * diff_color.x) << 24 |
+					(unsigned int)(255.0f * diff_color.y) << 16 |
+					(unsigned int)(255.0f * diff_color.z) << 8 | 0xFF;
 			}
 			
 			//hit.x = (hit.x + 1) * 0.5f;
@@ -218,17 +214,15 @@ int	app_loop(t_app *app)
 			//hit.z = (hit.z + 1) * 0.5f;
 			//col = (int)(hit.x * 255.0f) << 16 | (int)(hit.y * 255.0f) << 8 | (int)(hit.z * 255.0f);
 
-			framebuf_put_pixel(out, (t_float3){x, y, 0.0f}, final_color);
+			mlx_put_pixel(out, x, out->height - y - 1, final_color);
 
 			++x;
 		}
 		++y;
 	}
 
-	window_swap_buf(window);
 	if (app->input.exit)
 	{
-		app_terminate(app, 0);
+		mlx_close_window(app->window);
 	}
-	return (1);
 }
