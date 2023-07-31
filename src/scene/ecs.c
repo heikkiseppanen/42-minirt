@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:52:41 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/24 11:22:50 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/31 15:39:46 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static size_t	get_component_size(t_ecs_type type)
 {
 	static size_t	size_table[] = {
 		sizeof(t_ecs_list),
-		sizeof(t_transform),
+		sizeof(t_float3),
 		sizeof(t_camera),
 		sizeof(t_light),
 		sizeof(t_geometry),
