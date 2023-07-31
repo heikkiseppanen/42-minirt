@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/24 11:21:34 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/07/31 15:22:56 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef unsigned int t_id;
 typedef enum e_ecs_type
 {
 	ECS_LIST = 0,
-	ECS_TRANSFORM,
+	ECS_POSITION,
 	ECS_CAMERA,
 	ECS_LIGHT,
 	ECS_GEOMETRY,
@@ -38,33 +38,38 @@ typedef struct s_ecs_list
 	t_id	reference[ECS_TYPE_COUNT];
 }	t_ecs_list;
 
-typedef struct s_transform
-{
-	t_float3	position;
-}	t_transform;
+typedef t_float3	t_position;
 
 typedef struct s_camera
 {
 	float		fov;
-	float		near;
-	float		far;
-	t_float3	x;
-	t_float3	y;
-	t_float3	z;
+	t_float3	pivot;
+	t_float3	x; // 1 0 0
+	t_float3	y; // 0 1 0
+	t_float3	z; // 0 0 1
 }	t_camera;
 
 typedef struct s_light
 {
+	float		attenuation; // 1.0f
+	t_float3	color;
 }	t_light;
 
 typedef struct s_sphere
 {
-	float	diameter;
+	float	radius;
 }	t_sphere;
 
 typedef struct s_geometry
 {
-	t_sphere	sphere;
+	enum e_geo_type
+	{
+		GEO_SPHERE = 0,
+	} type;
+	union e_geo_data
+	{
+		t_sphere	sphere;
+	} data;
 }	t_geometry;
 
 typedef struct s_material
