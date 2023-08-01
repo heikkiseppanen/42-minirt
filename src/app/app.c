@@ -115,7 +115,7 @@ void	app_loop_hook(void *param)
 	static int init = 1;
 	if (init)
 	{
-		camera = (t_camera){90.0f, 10.0f, 200.0f, {}, {}, {}};
+		// camera = (t_camera){90.0f, 10.0f, 200.0f, {}, {}, {}};
 		init = !init;
 	};
 
