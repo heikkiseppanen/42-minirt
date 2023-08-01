@@ -18,7 +18,7 @@
 # include <ft/buf.h>
 # include <ft/math.h>
 
-typedef unsigned int t_id;
+typedef unsigned int	t_id;
 
 typedef enum e_ecs_type
 {

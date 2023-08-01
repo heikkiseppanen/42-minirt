@@ -41,7 +41,7 @@ t_err	string_to_float3(const char *str, t_float3 *float3)
 	while (str_split[i])
 	{
 		if (!ft_is_float(str_split[i]))
-			return(RT_FAILURE + ft_free_array(str_split));
+			return (RT_FAILURE + ft_free_array(str_split));
 		i++;
 	}
 	float3->x = ft_atof(str_split[0]);

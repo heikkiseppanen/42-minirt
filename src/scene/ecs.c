@@ -40,7 +40,7 @@ t_err	ecs_init(t_ecs *e)
 		{
 			ecs_del(e);
 			return (RT_FAILURE);
-		};
+		}
 		++type;
 	}
 	return (RT_SUCCESS);
