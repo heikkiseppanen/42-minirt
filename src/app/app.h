@@ -17,15 +17,6 @@
 # include "input/input.h"
 # include <ft/math.h>
 
-
-
-typedef struct s_plane
-{
-	t_float3	point;
-	t_float3	normal;
-}	t_plane;
-
-
 # include <MLX42/MLX42.h>
 
 # define WINDOW_WIDTH 1024
