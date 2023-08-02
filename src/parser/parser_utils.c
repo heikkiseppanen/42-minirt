@@ -79,18 +79,18 @@ t_bool	ft_is_float(const char *str)
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	if (str[i] == '.')
-		return (0);
+		return (RT_FALSE);
 	while (str[i])
 	{
 		if (str[i] == '.')
 		{
 			dot_count++;
 			if (dot_count > 1 || str[i + 1] == '\0')
-				return (0);
+				return (RT_FALSE);
 		}
 		else if (!ft_isdigit(str[i]) && str[i] != '\n')
-			return (0);
+			return (RT_FALSE);
 		i++;
 	}
-	return (1);
+	return (RT_TRUE);
 }

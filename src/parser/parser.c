@@ -24,17 +24,17 @@ t_err	handle_line(t_ecs *ecs, char *line)
 		return (RT_FAILURE);
 	if (!ft_strncmp(tokens[0], "A", sizeof(tokens[0])))
 		return (deserialize_ambient(ecs, tokens) + free_array(tokens));
-	else if (!ft_strncmp(tokens[0], "C", sizeof(tokens[0])))
+	if (!ft_strncmp(tokens[0], "C", sizeof(tokens[0])))
 		return (deserialize_camera(ecs, tokens) + free_array(tokens));
-	else if (!ft_strncmp(tokens[0], "L", sizeof(tokens[0])))
+	if (!ft_strncmp(tokens[0], "L", sizeof(tokens[0])))
 		return (deserialize_light(ecs, tokens) + free_array(tokens));
-	else if (!ft_strncmp(tokens[0], "sp", sizeof(tokens[0])))
+	if (!ft_strncmp(tokens[0], "sp", sizeof(tokens[0])))
 		return (deserialize_sphere(ecs, tokens) + free_array(tokens));
-	else if (!ft_strncmp(tokens[0], "pl", sizeof(tokens[0])))
+	if (!ft_strncmp(tokens[0], "pl", sizeof(tokens[0])))
 		return (deserialize_plane(ecs, tokens) + free_array(tokens));
-	else if (!ft_strncmp(tokens[0], "cy", sizeof(tokens[0])))
+	if (!ft_strncmp(tokens[0], "cy", sizeof(tokens[0])))
 		return (deserialize_cylinder(ecs, tokens) + free_array(tokens));
-	else if (*tokens[0] != '\n')
+	if (*tokens[0] != '\n')
 		return (parse_error(tokens) + free_array(tokens));
 	return (RT_SUCCESS + free_array(tokens));
 }
