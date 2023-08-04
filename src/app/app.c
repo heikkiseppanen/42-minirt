@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 14:45:26 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:45:39 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	app_loop_hook(void *param)
 		light_id = ecs_entity_create(&e);
 		t_light light = {
 			.attenuation = 1.0f,
-			.color = { 0.25, 1.0f, 1.0f }
+			.color = { 1.0f, 1.0f, 1.0f }
 		};
 		pos = (t_float3){ -5.0f, 0.0f, 0.0f };
 
@@ -210,8 +210,8 @@ void	app_loop_hook(void *param)
 				dir_color.y = powf(dir_color.y, 2.2f);
 				dir_color.z = powf(dir_color.z, 2.2f);
 
-				t_float3 to_light = ft_float3_sub(*light_pos, hit);
-				//printf("%f %f %f\n", sphere_pos.x, sphere_pos.y, sphere_pos.z);
+				t_float3 to_light = ft_float3_transform(&view, *light_pos);
+				to_light = ft_float3_sub(to_light, hit);
 				float dir_light_intensity = ft_float3_dot(normal, to_light);
 				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
 				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
@@ -228,7 +228,7 @@ void	app_loop_hook(void *param)
 				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1.1 / 2.2f), 0.0f, 1.0f);
 				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1.1 / 2.2f), 0.0f, 1.0f);
 
-				final_color = color_to_argb32(normal);
+				final_color = color_to_argb32(diff_color);
 			}
 
 			mlx_put_pixel(out, x, out->height - y - 1, final_color);
