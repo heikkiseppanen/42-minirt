@@ -32,6 +32,7 @@ PARSER_SRC :=\
 RENDERER_DIR := renderer
 RENDERER_SRC :=\
 	color.c \
+	ray.c \
 
 SRC :=\
 	main.c \
