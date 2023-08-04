@@ -36,4 +36,12 @@ int		free_array(char **arr);
 t_bool	ft_is_float(const char *str);
 t_err	string_to_float3(const char *str, t_float3 *float3);
 
+//utils2
+t_bool	color_valid(t_float3 *color);
+t_bool	light_ratio_valid(float *ratio);
+t_bool	normal_valid(t_float3 *normal);
+
+
+
+
 #endif

@@ -78,7 +78,7 @@ t_bool	ft_is_float(const char *str)
 	dot_count = 0;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
-	if (str[i] == '.')
+	if (str[i] == '.' || !str[i])
 		return (RT_FALSE);
 	while (str[i])
 	{

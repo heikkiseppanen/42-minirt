@@ -97,6 +97,10 @@ typedef struct s_ecs
 {
 	t_id	id_accumulator;
 	t_buf	components[ECS_TYPE_COUNT];
+	t_id	light;
+	t_id	camera;
+	t_id	ambient;
+	t_buf	renderables;
 }	t_ecs;
 
 t_err	ecs_init(t_ecs *e);
