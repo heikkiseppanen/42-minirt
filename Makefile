@@ -27,7 +27,6 @@ PARSER_DIR := parser
 PARSER_SRC :=\
 	parser.c \
 	parser_utils.c \
-	parser_utils2.c \
 	deserialize/deserialize_geometry.c \
 	deserialize/deserialize_camera_light.c \
 

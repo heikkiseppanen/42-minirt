@@ -15,12 +15,6 @@
 #include <stdio.h>
 #include <parser/parser.h>
 
-t_err	parse_error(__attribute__ ((unused)) char **tokens)
-{
-	printf("Line error\n");
-	return (RT_FAILURE);
-}
-
 int	array_2d_length(char **array_2d)
 {
 	int	i;
@@ -33,19 +27,22 @@ int	array_2d_length(char **array_2d)
 	return (i);
 }
 
-int	free_array(char **arr)
+t_bool	color_valid(t_float3 *color)
 {
-	int	i;
-
-	i = 0;
-	while (arr && arr[i] != NULL)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-	return (0);
+	if ((color->x < 0.0 || color->x > 255.0)
+		|| (color->y < 0.0 || color->y > 255)
+		|| (color->z < 0.0 || color->z > 255.0))
+		return (RT_FALSE);
+	return (RT_SUCCESS);
 }
+
+t_bool	normal_valid(t_float3 *normal)
+{
+	if (!normal->x && !normal->y && !normal->z)
+		return (RT_FAILURE);
+	return (RT_SUCCESS);
+}
+
 
 t_err	string_to_float3(const char *str, t_float3 *float3)
 {
@@ -55,17 +52,23 @@ t_err	string_to_float3(const char *str, t_float3 *float3)
 	i = 0;
 	str_split = ft_split(str, ',');
 	if (!str_split || array_2d_length(str_split) != 3)
-		return (RT_FAILURE + free_array(str_split));
+	{
+		ft_strarr_del(str_split);
+		return (RT_FAILURE);
+	}
 	while (str_split[i])
 	{
 		if (!ft_is_float(str_split[i]))
-			return (RT_FAILURE + free_array(str_split));
+		{
+			ft_strarr_del(str_split);
+			return (RT_FAILURE);
+		}
 		i++;
 	}
 	float3->x = ft_atof(str_split[0]);
 	float3->y = ft_atof(str_split[1]);
 	float3->z = ft_atof(str_split[2]);
-	free_array(str_split);
+	ft_strarr_del(str_split);
 	return (RT_SUCCESS);
 }
 

@@ -18,25 +18,28 @@
 t_err	handle_line(t_ecs *ecs, char *line)
 {
 	char	**tokens;
+	t_err	status;
 
 	tokens = ft_split(line, ' ');
+	status = RT_SUCCESS;
 	if (!tokens)
-		return (RT_FAILURE);
-	if (!ft_strncmp(tokens[0], "A", sizeof(tokens[0])))
-		return (deserialize_ambient(ecs, tokens) + free_array(tokens));
-	if (!ft_strncmp(tokens[0], "C", sizeof(tokens[0])))
-		return (deserialize_camera(ecs, tokens) + free_array(tokens));
-	if (!ft_strncmp(tokens[0], "L", sizeof(tokens[0])))
-		return (deserialize_light(ecs, tokens) + free_array(tokens));
-	if (!ft_strncmp(tokens[0], "sp", sizeof(tokens[0])))
-		return (deserialize_sphere(ecs, tokens) + free_array(tokens));
-	if (!ft_strncmp(tokens[0], "pl", sizeof(tokens[0])))
-		return (deserialize_plane(ecs, tokens) + free_array(tokens));
-	if (!ft_strncmp(tokens[0], "cy", sizeof(tokens[0])))
-		return (deserialize_cylinder(ecs, tokens) + free_array(tokens));
-	if (*tokens[0] != '\n')
-		return (parse_error(tokens) + free_array(tokens));
-	return (RT_SUCCESS + free_array(tokens));
+		status = RT_FAILURE;
+	else if (!ft_strncmp(tokens[0], "A", sizeof(tokens[0])))
+		status = deserialize_ambient(ecs, tokens);
+	else if (!ft_strncmp(tokens[0], "C", sizeof(tokens[0])))
+		status = deserialize_camera(ecs, tokens);
+	else if (!ft_strncmp(tokens[0], "L", sizeof(tokens[0])))
+		status = deserialize_light(ecs, tokens);
+	else if (!ft_strncmp(tokens[0], "sp", sizeof(tokens[0])))
+		status = deserialize_sphere(ecs, tokens);
+	else if (!ft_strncmp(tokens[0], "pl", sizeof(tokens[0])))
+		status = deserialize_plane(ecs, tokens);
+	else if (!ft_strncmp(tokens[0], "cy", sizeof(tokens[0])))
+		status = deserialize_cylinder(ecs, tokens);
+	else if (*tokens[0] != '\n')
+		status = RT_FAILURE;
+	ft_strarr_del(tokens);
+	return (status);
 }
 
 t_err	scene_parser(t_ecs *ecs, const char *file)

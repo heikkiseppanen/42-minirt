@@ -20,18 +20,18 @@ t_err	deserialize_ambient(t_ecs *ecs, char **tokens)
 	t_light	ambient;
 
 	if (ecs->ambient)
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	if (array_2d_length(tokens) != 3
 		|| !ft_is_float(tokens[1])
 		|| !string_to_float3(tokens[2], &ambient.color)
 		|| !color_valid(&ambient.color))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	ambient.attenuation = ft_atof(tokens[1]);
 	ecs->ambient = ecs_entity_create(ecs);
 	if (!ecs->ambient
 		|| (ambient.attenuation < 0.0 || ambient.attenuation > 1.0)
 		|| !ecs_add_component(ecs, ecs->ambient, &ambient, ECS_LIGHT))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	return (RT_SUCCESS);
 }
 
@@ -41,20 +41,20 @@ t_err	deserialize_light(t_ecs *ecs, char **tokens)
 	t_light		light;
 
 	if (ecs->light)
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !ft_is_float(tokens[2])
 		|| !string_to_float3(tokens[3], &light.color)
 		|| !color_valid(&light.color))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	light.attenuation = ft_atof(tokens[2]);
 	ecs->light = ecs_entity_create(ecs);
 	if (!ecs->light
 		|| (light.attenuation < 0.0 || light.attenuation > 1.0)
 		|| !ecs_add_component(ecs, ecs->light, &point, ECS_POSITION)
 		|| !ecs_add_component(ecs, ecs->light, &light, ECS_LIGHT))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	return (RT_SUCCESS);
 }
 
@@ -64,7 +64,7 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	t_camera	camera;
 
 	if (ecs->camera)
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	ft_memset(&camera, 0, sizeof(camera));
 	camera.x.x = 1;
 	camera.y.y = 1;
@@ -73,7 +73,7 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &camera.pivot)
 		|| !ft_is_float(tokens[3]))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	ft_float3_normalize(camera.pivot);
 	camera.fov = ft_atof(tokens[3]);
 	ecs->camera = ecs_entity_create(ecs);
@@ -82,6 +82,6 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		|| !normal_valid(&camera.pivot)
 		|| !ecs_add_component(ecs, ecs->camera, &point, ECS_POSITION)
 		|| !ecs_add_component(ecs, ecs->camera, &camera, ECS_CAMERA))
-		return (parse_error(tokens));
+		return (RT_FAILURE);
 	return (RT_SUCCESS);
 }
