@@ -26,7 +26,7 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[3], &material.color)
 		|| !color_valid(&material.color))
 		return (RT_FAILURE);
-	geometry.data.sphere.radius = 2 / ft_atof(tokens[2]);
+	geometry.data.sphere.radius = ft_atof(tokens[2]) / 2;
 	entity = ecs_entity_create(ecs);
 	if (!entity
 		|| !ecs_add_component(ecs, entity, &point, ECS_POSITION)
