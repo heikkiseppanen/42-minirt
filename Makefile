@@ -29,6 +29,7 @@ PARSER_SRC :=\
 	parser_utils.c \
 	deserialize/deserialize_geometry.c \
 	deserialize/deserialize_camera_light.c \
+
 RENDERER_DIR := renderer
 RENDERER_SRC :=\
 	color.c \
