@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 14:45:51 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:34:10 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 #include "scene/ecs.h"
 #include "parser/parser.h"
-#include "window/window.h"
 #include "renderer/color.h"
 #include "renderer/ray.h"
 
@@ -73,65 +72,13 @@ void	camera_update(t_camera *camera, t_float3 position)
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
+	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
-
-	static t_ecs	e;
-	static t_id		camera_id;
-	static t_id		sphere_id;
-	static t_id		light_id;
-
-	static int init = 1;
-	if (init)
-	{
-		ecs_init(&e);
-		sphere_id = ecs_entity_create(&e);
-
-		t_float3	pos = {0.0f, 0.0f, 0.0f};
-		t_geometry geo = {
-			.type = GEO_SPHERE,
-			.data = {
-				.sphere = { 0.2f }
-			}
-		};
-		t_material mat = {
-			.color = { 0.75f, 0.15f, 0.15f }
-		};
-
-		ecs_add_component(&e, sphere_id, &geo, ECS_GEOMETRY);
-		ecs_add_component(&e, sphere_id, &pos, ECS_POSITION);
-		ecs_add_component(&e, sphere_id, &mat, ECS_MATERIAL);
-
-		camera_id = ecs_entity_create(&e);
-
-		pos.z = 2.0f;
-		t_camera cam = {
-			.fov = 90.f,
-			.pivot = {},
-			.x = {1.0f, 0.0f, 0.0f},
-			.y = {0.0f, 1.0f, 0.0f},
-			.z = {0.0f, 0.0f, -1.0f}
-		};
-
-		ecs_add_component(&e, camera_id, &pos, ECS_POSITION);
-		ecs_add_component(&e, camera_id, &cam, ECS_CAMERA);
-
-		light_id = ecs_entity_create(&e);
-		t_light light = {
-			.attenuation = 0.5f,
-			.color = { 1.0f, 1.0f, 1.0f }
-		};
-		pos = (t_float3){ -5.0f, 0.0f, 0.0f };
-
-		ecs_add_component(&e, light_id, &light, ECS_LIGHT);
-		ecs_add_component(&e, light_id, &pos, ECS_POSITION);
-
-		init = !init;
-	};
 
 	// Update camera
 
-	t_float3 cam_pos = *(t_float3 *)ecs_get_component(&e, camera_id, ECS_POSITION);
-	t_camera camera = *(t_camera *)ecs_get_component(&e, camera_id, ECS_CAMERA);
+	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
+	t_camera camera = *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
 
 	if (app->input.left_button)
 	{
@@ -155,14 +102,16 @@ void	app_loop_hook(void *param)
 
 	t_float4x4 view = ft_float4x4_view(cam_pos, camera.x, camera.y, camera.z);
 
-	*(t_float3 *)ecs_get_component(&e, camera_id, ECS_POSITION) = cam_pos;
-	*(t_camera *)ecs_get_component(&e, camera_id, ECS_CAMERA) = camera;
+	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
+	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
-	t_float3 sphere_pos = *(t_float3 *)ecs_get_component(&e, sphere_id, ECS_POSITION);
+	t_id	sphere = *(t_id *)ft_buf_get(&ecs->renderables, 0);
+	t_float3 sphere_pos = *(t_float3 *)ecs_get_component(ecs, sphere, ECS_POSITION);
 	sphere_pos = ft_float3_transform(&view, sphere_pos);
 
-	t_float3 *light_pos = ecs_get_component(&e, light_id, ECS_POSITION);
-	t_light *light = ecs_get_component(&e, light_id, ECS_LIGHT);
+	t_id	light_id = ecs->light;
+	t_float3 *light_pos = ecs_get_component(ecs, light_id, ECS_POSITION);
+	t_light *light = ecs_get_component(ecs, light_id, ECS_LIGHT);
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -179,8 +128,8 @@ void	app_loop_hook(void *param)
 			ray.direction.z = -1.0f;
 			ray.direction = ft_float3_normalize(ray.direction);
 
-			t_geometry *geo = ecs_get_component(&e, sphere_id, ECS_GEOMETRY);
-			t_material *mat = ecs_get_component(&e, sphere_id, ECS_MATERIAL);
+			t_geometry *geo = ecs_get_component(ecs, sphere, ECS_GEOMETRY);
+			t_material *mat = ecs_get_component(ecs, sphere, ECS_MATERIAL);
 			int hit= 0;
 			float mul = 500.0f;
 			float m = ray_sphere_intersect(&ray, sphere_pos, geo->data.sphere.radius);
