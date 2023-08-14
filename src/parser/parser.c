@@ -62,6 +62,7 @@ t_err	scene_parser(t_ecs *ecs, const char *file)
 		}
 		free (line);
 	}
+	// TODO confirm that necessary entities have been created (1 cam, 1 light, 1 ambient, min 1 geo)
 	close (file_fd);
 	return (RT_SUCCESS);
 }
