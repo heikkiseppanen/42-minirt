@@ -6,13 +6,14 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/25 15:25:15 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 13:50:23 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/app.h"
 
 #include "scene/ecs.h"
+#include "parser/parser.h"
 
 #include <ft/cstr.h>
 #include <ft/io.h>
@@ -21,28 +22,39 @@
 t_err	app_init(t_app *app, int argc, char **argv)
 {
 	(void)argc;
-	(void)argv;
 	*app = (t_app){};
+	if (!ecs_init(&app->scene) || !scene_parser(&app->scene, argv[1]))
+	{
+		ft_fprintf(STDERR_FILENO, "Error\nScene init failed\n");
+		return (RT_FAILURE);
+	}
 	app->window = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT", RT_FALSE);
 	app->framebuffer = mlx_new_image(app->window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (!app->window || !app->framebuffer)
 	{
-		ft_fprintf(STDERR_FILENO, "MiniRT: %s\n", mlx_strerror(mlx_errno));
+		ft_fprintf(STDERR_FILENO, "Error\nMLX: %s\n", mlx_strerror(mlx_errno));
 		return (RT_FAILURE);
 	}
 	mlx_image_to_window(app->window, app->framebuffer, 0, 0);
 	mlx_loop_hook(app->window, app_loop_hook, app);
 	mlx_close_hook(app->window, app_close_hook, app);
 	input_init(&app->input, app->window);
-	return (1);
+	return (RT_SUCCESS);
 }
 
 void	app_close_hook(void *param)
 {
 	t_app *const app = param;
 
-	mlx_delete_image(app->window, app->framebuffer);
-	mlx_terminate(app->window);
+	if (app->framebuffer)
+	{
+		mlx_delete_image(app->window, app->framebuffer);
+	}
+	if (app->window)
+	{
+		mlx_terminate(app->window);
+	}
+	ecs_del(&app->scene);
 }
 
 #define ARGB_RED 0xFF0000FF

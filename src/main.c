@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:28 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/25 14:18:37 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/14 13:48:00 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_printf("Use: minirt <map_path>\n");
+		// TODO Add proper argument validation
+		ft_printf("Use: miniRT <scene_path>\n");
 		return (1);
 	}
 	if (app_init(&miniRT, argc, argv))
