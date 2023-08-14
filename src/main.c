@@ -11,9 +11,14 @@
 /* ************************************************************************** */
 
 #include "app/app.h"
+#include "scene/ecs.h"
+#include "parser/parser.h"
+#include "minirt.h"
 
 #include <ft/io.h>
 #include <MLX42/MLX42.h>
+
+#include <ft/std.h>
 
 int	main(int argc, char **argv)
 {

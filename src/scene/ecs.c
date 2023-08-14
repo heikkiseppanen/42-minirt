@@ -30,17 +30,19 @@ static size_t	get_component_size(t_ecs_type type)
 
 t_err	ecs_init(t_ecs *e)
 {
-	t_ecs_type type;
+	t_ecs_type	type;
 
 	*e = (t_ecs){};
 	type = 0;
+	if (!ft_buf_init(&e->renderables, 1, sizeof(t_id)))
+		return (RT_FAILURE);
 	while (type < ECS_TYPE_COUNT)
 	{
 		if (!ft_buf_init(&e->components[type], 1, get_component_size(type)))
 		{
 			ecs_del(e);
 			return (RT_FAILURE);
-		};
+		}
 		++type;
 	}
 	return (RT_SUCCESS);
@@ -51,6 +53,7 @@ void	ecs_del(t_ecs *e)
 	t_ecs_type	type;
 
 	type = 0;
+	ft_buf_del(&e->renderables);
 	while (type < ECS_TYPE_COUNT)
 	{
 		ft_buf_del(e->components + type);

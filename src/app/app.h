@@ -15,6 +15,7 @@
 
 # include "minirt.h"
 # include "input/input.h"
+# include <ft/math.h>
 
 # include <MLX42/MLX42.h>
 

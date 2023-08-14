@@ -11,6 +11,7 @@ BUF_SRC :=\
 
 STD_DIR := std
 STD_SRC :=\
+	ft_atof.c \
 	ft_atoi.c \
 	ft_calloc.c \
 	ft_itoa.c \

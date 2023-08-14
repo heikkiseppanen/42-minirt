@@ -23,12 +23,20 @@ SCENE_DIR := scene
 SCENE_SRC :=\
 	ecs.c \
 
+PARSER_DIR := parser
+PARSER_SRC :=\
+	parser.c \
+	parser_utils.c \
+	deserialize/deserialize_geometry.c \
+	deserialize/deserialize_camera_light.c \
+
 SRC :=\
 	main.c \
 	$(APP_SRC:%=$(APP_DIR)/%) \
 	$(WINDOW_SRC:%=$(WINDOW_DIR)/%) \
 	$(INPUT_SRC:%=$(INPUT_DIR)/%) \
 	$(SCENE_SRC:%=$(SCENE_DIR)/%) \
+	$(PARSER_SRC:%=$(PARSER_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)

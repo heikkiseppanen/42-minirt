@@ -18,7 +18,7 @@
 # include <ft/buf.h>
 # include <ft/math.h>
 
-typedef unsigned int t_id;
+typedef unsigned int	t_id;
 
 typedef enum e_ecs_type
 {
@@ -60,15 +60,31 @@ typedef struct s_sphere
 	float	radius;
 }	t_sphere;
 
+typedef struct s_plane
+{
+	t_float3	normal;
+}	t_plane;
+
+typedef struct s_cylinder
+{
+	t_float3	normal;
+	float		radius;
+	float		height;
+}	t_cylinder;
+
 typedef struct s_geometry
 {
 	enum e_geo_type
 	{
 		GEO_SPHERE = 0,
+		GEO_PLANE,
+		GEO_CYLINDER,
 	} type;
 	union e_geo_data
 	{
 		t_sphere	sphere;
+		t_plane		plane;
+		t_cylinder	cylinder;
 	} data;
 }	t_geometry;
 
@@ -81,6 +97,10 @@ typedef struct s_ecs
 {
 	t_id	id_accumulator;
 	t_buf	components[ECS_TYPE_COUNT];
+	t_id	light;
+	t_id	camera;
+	t_id	ambient;
+	t_buf	renderables;
 }	t_ecs;
 
 t_err	ecs_init(t_ecs *e);
