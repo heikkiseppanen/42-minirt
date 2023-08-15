@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/04 11:42:16 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/15 11:06:27 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,20 @@
 //	return 0;
 //}
 
-t_bool	ray_hit(t_ray *r, t_geometry *geo, t_float3 *pos, t_hit *result)
+t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result)
 {
-	(void)r;
-	(void)geo;
-	(void)pos;
-	(void)result;
+	size_t	i;
+	float	distance;
+
+	i = 0;
+	while (i < scene->renderables.size)
+	{
+		t_id	geo_id = *(int *)ft_buf_get(&scene->renderables, i);
+		t_geometry *geo = ecs_get_component(scene, geo_id, ECS_GEOMETRY);
+		t_float3 *pos = ecs_get_component(scene, geo_id, ECS_GEOMETRY);
+		distance = ray_sphere_intersect(r, *pos, geo->data.sphere.radius);
+	}
+	result->position = ft_float3_add(r->origin, ft_float3_scalar(r->direction, distance));
 	return RT_TRUE;
 }
 
