@@ -30,6 +30,11 @@ PARSER_SRC :=\
 	deserialize/deserialize_geometry.c \
 	deserialize/deserialize_camera_light.c \
 
+RENDERER_DIR := renderer
+RENDERER_SRC :=\
+	color.c \
+	ray.c \
+
 SRC :=\
 	main.c \
 	$(APP_SRC:%=$(APP_DIR)/%) \
@@ -37,6 +42,7 @@ SRC :=\
 	$(INPUT_SRC:%=$(INPUT_DIR)/%) \
 	$(SCENE_SRC:%=$(SCENE_DIR)/%) \
 	$(PARSER_SRC:%=$(PARSER_DIR)/%) \
+	$(RENDERER_SRC:%=$(RENDERER_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)
@@ -72,6 +78,10 @@ LDFLAGS := -lm $(MLX_LD) $(FT_LD)
 
 all: $(NAME)
 
+release: CFLAGS+= -O3 -march=native
+release: LDFLAGS+= -O2
+release: $(NAME)
+
 debug: CFLAGS+= -g -fsanitize=address,undefined
 debug: LDFLAGS+= -g -fsanitize=address,undefined
 debug: $(NAME)
@@ -102,4 +112,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re debug release
