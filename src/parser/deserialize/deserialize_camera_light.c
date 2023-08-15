@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/01 18:28:37 by ttalvenh         ###   ########.fr       */
+/*   Updated: 2023/08/15 12:48:15 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[2], &camera.pivot)
 		|| !ft_is_float(tokens[3]))
 		return (RT_FAILURE);
-	camera.pivot = ft_float3_normalize(camera.pivot);
+	camera.pivot = ft_float3_add(point, ft_float3_normalize(camera.pivot));
 	camera.fov = ft_atof(tokens[3]);
 	ecs->camera = ecs_entity_create(ecs);
 	if (!ecs->camera
