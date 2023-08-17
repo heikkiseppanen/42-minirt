@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/15 11:05:17 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/17 12:14:32 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef struct s_hit
 // If the ray hits, returns true and stores collision info into result.
 t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result);
 
-float	ray_sphere_intersect(const t_ray *ray, t_float3 center, float radius);
+float	ray_sphere_intersect(
+	const t_ray *ray,
+	const t_sphere *sp,
+	const t_float3 *pos);
 
 #endif
