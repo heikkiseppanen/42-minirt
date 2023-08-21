@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/17 12:14:32 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/21 09:39:35 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_ray
 
 typedef struct s_hit
 {
+	t_id		entity;
 	t_float3 	position;
 	t_float3 	normal;
 }	t_hit;

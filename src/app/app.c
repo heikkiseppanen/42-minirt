@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/14 15:34:10 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/21 09:52:25 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,6 @@ void	app_loop_hook(void *param)
 	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
 	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
-	t_id	sphere = *(t_id *)ft_buf_get(&ecs->renderables, 0);
-	t_float3 sphere_pos = *(t_float3 *)ecs_get_component(ecs, sphere, ECS_POSITION);
-	sphere_pos = ft_float3_transform(&view, sphere_pos);
-
 	t_id	light_id = ecs->light;
 	t_float3 *light_pos = ecs_get_component(ecs, light_id, ECS_POSITION);
 	t_light *light = ecs_get_component(ecs, light_id, ECS_LIGHT);
@@ -128,25 +124,11 @@ void	app_loop_hook(void *param)
 			ray.direction.z = -1.0f;
 			ray.direction = ft_float3_normalize(ray.direction);
 
-			t_geometry *geo = ecs_get_component(ecs, sphere, ECS_GEOMETRY);
-			t_material *mat = ecs_get_component(ecs, sphere, ECS_MATERIAL);
-			int hit= 0;
-			float mul = 500.0f;
-			float m = ray_sphere_intersect(&ray, sphere_pos, geo->data.sphere.radius);
-			if (m < mul && m > 0)
-			{
-				mul = m;
-				hit= 1;
-			}
-
 			t_argb32 final_color = 0xFF;
-			if (hit)
+			t_hit	hit = {};
+			if (ray_cast(&ray, ecs, &hit))
 			{
-				t_float3 hit = ft_float3_scalar(ray.direction, mul);
-				t_float3 normal = hit;
-				normal = ft_float3_add(ray.origin, normal); 
-				normal = ft_float3_sub(normal, sphere_pos);
-				normal = ft_float3_normalize(normal);
+				t_material *mat = ecs_get_component(ecs, hit.entity, ECS_MATERIAL);
 
 				t_color diffuse = mat->color;
 				diffuse.x = powf(diffuse.x, 2.2f);
@@ -160,8 +142,8 @@ void	app_loop_hook(void *param)
 				dir_color = ft_float3_scalar(dir_color, light->attenuation);
 
 				t_float3 to_light = ft_float3_transform(&view, *light_pos);
-				to_light = ft_float3_sub(to_light, hit);
-				float dir_light_intensity = ft_float3_dot(normal, to_light);
+				to_light = ft_float3_sub(to_light, hit.position);
+				float dir_light_intensity = ft_float3_dot(hit.normal, to_light);
 				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
 				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
 
