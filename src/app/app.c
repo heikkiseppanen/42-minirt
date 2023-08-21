@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/21 09:52:25 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:31:23 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,24 @@ void	app_loop_hook(void *param)
 		camera.pivot = ft_float3_add(camera.pivot, total);
 	}
 	camera_update(&camera, cam_pos);
+
+	static t_float3 pix_00;
+	static t_float3 u;
+	static t_float3 v;
+
+	float aspect_ratio = (float)out->height / (float)out->width;
+	float dx = tanf(ft_rad(camera.fov / 2));
+	float dy = dx * aspect_ratio;
+
+	u = ft_float3_scalar(camera.x, -dx);
+	v = ft_float3_scalar(camera.y, -dy);
+
+	pix_00 = ft_float3_sub(cam_pos, camera.z);
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.x, dx));
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.y, dy));
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(u, 0.5f));
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(v, 0.5f));
+
 	app->input.mouse_movement = (t_float2){};
 
 	// Calculate view matrix
@@ -116,13 +134,15 @@ void	app_loop_hook(void *param)
 		while (x < out->width)
 		{
 			t_ray ray = {};
-			//ray.origin = *(t_float3 *)ecs_get_component(&e, camera_id, ECS_POSITION);
+			ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 
-			ray.direction.x = ((float)x + 0.5f) / (float)out->width * 2 - 1;
-			ray.direction.y = ((float)y + 0.5f) / (float)out->height * 2 - 1;
-			ray.direction.x *= (float)out->height / (float)out->width;
-			ray.direction.z = -1.0f;
+			t_float3 pixel = pix_00; 
+			pixel = ft_float3_add(pixel, ft_float3_scalar(u, x));
+			pixel = ft_float3_add(pixel, ft_float3_scalar(v, y));
+
+			ray.direction = ft_float3_sub(pixel, ray.origin);
 			ray.direction = ft_float3_normalize(ray.direction);
+			printf("%f %f %f\n", ray.direction.x, ray.direction.y, ray.direction.z);
 
 			t_argb32 final_color = 0xFF;
 			t_hit	hit = {};

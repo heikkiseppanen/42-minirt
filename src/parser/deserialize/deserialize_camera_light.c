@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/15 12:48:15 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/17 09:24:16 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	ecs->camera = ecs_entity_create(ecs);
 	if (!ecs->camera
 		|| (camera.fov < 0.0 || camera.fov > 180.0)
-		|| !normal_valid(&camera.pivot)
 		|| !ecs_add_component(ecs, ecs->camera, &point, ECS_POSITION)
 		|| !ecs_add_component(ecs, ecs->camera, &camera, ECS_CAMERA))
 		return (RT_FAILURE);
