@@ -17,6 +17,8 @@
 #include "renderer/color.h"
 #include "renderer/light.h"
 #include "renderer/ray.h"
+#include "app/app.h"
+#include "camera/camera.h"
 
 #include <ft/cstr.h>
 #include <ft/io.h>
@@ -77,6 +79,7 @@ void	app_loop_hook(void *param)
 	mlx_image_t *const out = app->framebuffer;
 
 	// Update camera
+	update_camera_pos(app, ecs_get_component(ecs, ecs->camera, ECS_POSITION));
 
 	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	t_camera camera = *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA);

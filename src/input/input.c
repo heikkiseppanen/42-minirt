@@ -23,6 +23,30 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 	{
 		input->exit = (keydata.action == MLX_PRESS);
 	}
+	if (keydata.key == MLX_KEY_W)
+	{
+		input->w = (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_A)
+	{
+		input->a = (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_S)
+	{
+		input->s = (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_D)
+	{
+		input->d = (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_SPACE)
+	{
+		input->space = (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_LEFT_CONTROL)
+	{
+		input->ctrl = (keydata.action == MLX_PRESS);
+	}
 }
 
 static void	cursor_hook(double x, double y, void *param)

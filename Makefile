@@ -36,6 +36,10 @@ RENDERER_SRC :=\
 	ray.c \
 	light.c \
 
+CAMERA_DIR := camera
+CAMERA_SRC :=\
+	camera.c \
+
 SRC :=\
 	main.c \
 	$(APP_SRC:%=$(APP_DIR)/%) \
@@ -44,6 +48,7 @@ SRC :=\
 	$(SCENE_SRC:%=$(SCENE_DIR)/%) \
 	$(PARSER_SRC:%=$(PARSER_DIR)/%) \
 	$(RENDERER_SRC:%=$(RENDERER_DIR)/%) \
+	$(CAMERA_SRC:%=$(CAMERA_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)

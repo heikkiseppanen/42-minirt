@@ -21,6 +21,12 @@ typedef struct s_input
 	char		exit;
 	char		left_button;
 	char		right_button;
+	char		w;
+	char		s;
+	char		a;
+	char		d;
+	char		ctrl;
+	char		space;
 	t_float2	mouse_position;
 	t_float2	mouse_movement;
 }	t_input;
