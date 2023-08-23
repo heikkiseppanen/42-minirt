@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/21 15:31:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/23 13:09:13 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,35 +97,30 @@ void	app_loop_hook(void *param)
 	}
 	camera_update(&camera, cam_pos);
 
-	static t_float3 pix_00;
-	static t_float3 u;
-	static t_float3 v;
+	static t_float3 pix_00; // SHOULD BE ADDED TO CAMERA
+	static t_float3 u;      // SHOULD BE ADDED TO CAMERA
+	static t_float3 v;      // SHOULD BE ADDED TO CAMERA
 
 	float aspect_ratio = (float)out->height / (float)out->width;
 	float dx = tanf(ft_rad(camera.fov / 2));
 	float dy = dx * aspect_ratio;
 
-	u = ft_float3_scalar(camera.x, -dx);
-	v = ft_float3_scalar(camera.y, -dy);
+	u = ft_float3_scalar(camera.x, 2 * dx / out->width);
+	v = ft_float3_scalar(camera.y, -2 * dy / out->height);
 
 	pix_00 = ft_float3_sub(cam_pos, camera.z);
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.x, dx));
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.x, -dx));
 	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.y, dy));
 	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(u, 0.5f));
 	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(v, 0.5f));
 
 	app->input.mouse_movement = (t_float2){};
 
-	// Calculate view matrix
-
-	t_float4x4 view = ft_float4x4_view(cam_pos, camera.x, camera.y, camera.z);
-
 	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
 	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
-	t_id	light_id = ecs->light;
-	t_float3 *light_pos = ecs_get_component(ecs, light_id, ECS_POSITION);
-	t_light *light = ecs_get_component(ecs, light_id, ECS_LIGHT);
+	t_float3 *light_pos = ecs_get_component(ecs, ecs->light, ECS_POSITION);
+	t_light *light = ecs_get_component(ecs, ecs->light, ECS_LIGHT);
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -142,7 +137,6 @@ void	app_loop_hook(void *param)
 
 			ray.direction = ft_float3_sub(pixel, ray.origin);
 			ray.direction = ft_float3_normalize(ray.direction);
-			printf("%f %f %f\n", ray.direction.x, ray.direction.y, ray.direction.z);
 
 			t_argb32 final_color = 0xFF;
 			t_hit	hit = {};
@@ -161,8 +155,7 @@ void	app_loop_hook(void *param)
 				dir_color.z = powf(dir_color.z, 2.2f);
 				dir_color = ft_float3_scalar(dir_color, light->attenuation);
 
-				t_float3 to_light = ft_float3_transform(&view, *light_pos);
-				to_light = ft_float3_sub(to_light, hit.position);
+				t_float3 to_light = ft_float3_sub(*light_pos, hit.position);
 				float dir_light_intensity = ft_float3_dot(hit.normal, to_light);
 				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
 				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
@@ -182,7 +175,7 @@ void	app_loop_hook(void *param)
 				final_color = color_to_argb32(diff_color);
 			}
 
-			mlx_put_pixel(out, x, out->height - y - 1, final_color);
+			mlx_put_pixel(out, x, y, final_color);
 
 			++x;
 		}
