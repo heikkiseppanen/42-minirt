@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:08:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 11:36:37 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:07:14 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 # include <MLX42/MLX42.h>
 
-# define WINDOW_WIDTH 1024
-# define WINDOW_HEIGHT 1024
+# define WINDOW_WIDTH 1280
+# define WINDOW_HEIGHT 720
 
 typedef struct s_app
 {

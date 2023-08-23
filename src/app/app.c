@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 13:09:13 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/23 14:43:12 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,9 +168,9 @@ void	app_loop_hook(void *param)
 				t_color light_total = ft_float3_add(dir_color, amb_light);
 
 				t_float3 diff_color; 
-				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1.1 / 2.2f), 0.0f, 1.0f);
-				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1.1 / 2.2f), 0.0f, 1.0f);
-				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1.1 / 2.2f), 0.0f, 1.0f);
+				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1.0 / 2.2f), 0.0f, 1.0f);
+				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1.0 / 2.2f), 0.0f, 1.0f);
+				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1.0 / 2.2f), 0.0f, 1.0f);
 
 				final_color = color_to_argb32(diff_color);
 			}
