@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 13:39:18 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/24 14:03:40 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "scene/ecs.h"
 #include "parser/parser.h"
 #include "renderer/color.h"
+#include "renderer/light.h"
 #include "renderer/ray.h"
 
 #include <ft/cstr.h>
