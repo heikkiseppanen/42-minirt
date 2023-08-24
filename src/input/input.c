@@ -25,27 +25,27 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 	if (keydata.key == MLX_KEY_W)
 	{
-		input->w = (keydata.action == MLX_PRESS);
+		input->w = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_A)
 	{
-		input->a = (keydata.action == MLX_PRESS);
+		input->a = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_S)
 	{
-		input->s = (keydata.action == MLX_PRESS);
+		input->s = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_D)
 	{
-		input->d = (keydata.action == MLX_PRESS);
+		input->d = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_SPACE)
 	{
-		input->space = (keydata.action == MLX_PRESS);
+		input->space = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_LEFT_CONTROL)
 	{
-		input->ctrl = (keydata.action == MLX_PRESS);
+		input->ctrl = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
 }
 
