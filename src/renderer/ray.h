@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/21 09:39:35 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:31:19 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 # include <ft/math.h>
 
-# define RAY_MIN 0.1
-# define RAY_MAX 5000
+# define RAY_MIN 0.000001f
+# define RAY_MAX 5000.0f
 
 typedef struct s_ray
 {
@@ -38,8 +38,13 @@ typedef struct s_hit
 // If the ray hits, returns true and stores collision info into result.
 t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result);
 
+float	ray_scene_intersect(
+	const t_ray *self,
+	const t_ecs *scene,
+	t_id	*opt_entity_hit);
+
 float	ray_sphere_intersect(
-	const t_ray *ray,
+	const t_ray *self,
 	const t_sphere *sp,
 	const t_float3 *pos);
 

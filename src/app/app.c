@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 14:43:12 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:39:18 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ void	app_loop_hook(void *param)
 	}
 	camera_update(&camera, cam_pos);
 
+	// Canvas?
+
 	static t_float3 pix_00; // SHOULD BE ADDED TO CAMERA
 	static t_float3 u;      // SHOULD BE ADDED TO CAMERA
 	static t_float3 v;      // SHOULD BE ADDED TO CAMERA
@@ -119,8 +121,6 @@ void	app_loop_hook(void *param)
 	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
 	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
-	t_float3 *light_pos = ecs_get_component(ecs, ecs->light, ECS_POSITION);
-	t_light *light = ecs_get_component(ecs, ecs->light, ECS_LIGHT);
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -145,32 +145,39 @@ void	app_loop_hook(void *param)
 				t_material *mat = ecs_get_component(ecs, hit.entity, ECS_MATERIAL);
 
 				t_color diffuse = mat->color;
-				diffuse.x = powf(diffuse.x, 2.2f);
-				diffuse.y = powf(diffuse.y, 2.2f);
-				diffuse.z = powf(diffuse.z, 2.2f);
 
-				t_color dir_color = light->color;
-				dir_color.x = powf(dir_color.x, 2.2f);
-				dir_color.y = powf(dir_color.y, 2.2f);
-				dir_color.z = powf(dir_color.z, 2.2f);
-				dir_color = ft_float3_scalar(dir_color, light->attenuation);
+				t_float3 *light_pos = ecs_get_component(ecs, ecs->light, ECS_POSITION);
+				t_light *light = ecs_get_component(ecs, ecs->light, ECS_LIGHT);
+				t_light *ambient = ecs_get_component(ecs, ecs->ambient, ECS_LIGHT);
+
+				t_color dir_light = ft_float3_scalar(light->color, light->attenuation);
+				t_color amb_light = ft_float3_scalar(ambient->color, ambient->attenuation);
 
 				t_float3 to_light = ft_float3_sub(*light_pos, hit.position);
-				float dir_light_intensity = ft_float3_dot(hit.normal, to_light);
-				dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
-				dir_color = ft_float3_scalar(dir_color, dir_light_intensity);
+				float distance_to_light = ft_float3_len(to_light);
 
-				t_color amb_light = (t_color){0.25f, 0.25f, 0.25f};
-				amb_light.x = powf(amb_light.x, 2.2f);
-				amb_light.y = powf(amb_light.y, 2.2f);
-				amb_light.z = powf(amb_light.z, 2.2f);
+				to_light = ft_float3_normalize(to_light);
+
+				float dir_light_intensity;
+
+				dir_light_intensity = 0;
+				t_ray ray_to_light = {hit.position, to_light};
+				float scene_depth = ray_scene_intersect(&ray_to_light, ecs, NULL);
+				if (!scene_depth || distance_to_light < scene_depth)
+				{
+					dir_light_intensity = ft_float3_dot(hit.normal, to_light);
+					dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
+				}
+
+				dir_light = ft_float3_scalar(dir_light, dir_light_intensity);
 				 
-				t_color light_total = ft_float3_add(dir_color, amb_light);
+				t_color light_total = ft_float3_add(dir_light, amb_light);
 
 				t_float3 diff_color; 
-				diff_color.x = ft_clamp(powf(diffuse.x * light_total.x, 1.0 / 2.2f), 0.0f, 1.0f);
-				diff_color.y = ft_clamp(powf(diffuse.y * light_total.y, 1.0 / 2.2f), 0.0f, 1.0f);
-				diff_color.z = ft_clamp(powf(diffuse.z * light_total.z, 1.0 / 2.2f), 0.0f, 1.0f);
+				diff_color.x = diffuse.x * light_total.x;
+				diff_color.y = diffuse.y * light_total.y;
+				diff_color.z = diffuse.z * light_total.z;
+				diff_color = saturate(linear_to_srgb(diff_color));
 
 				final_color = color_to_argb32(diff_color);
 			}
