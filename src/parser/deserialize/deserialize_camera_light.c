@@ -6,14 +6,15 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/17 09:24:16 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/24 12:45:56 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser/parser.h"
+#include "renderer/color.h"
+
 #include <ft/cstr.h>
 #include <ft/std.h>
-#include <parser/parser.h>
-
 
 t_err	deserialize_ambient(t_ecs *ecs, char **tokens)
 {
@@ -26,6 +27,7 @@ t_err	deserialize_ambient(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[2], &ambient.color)
 		|| !color_valid(&ambient.color))
 		return (RT_FAILURE);
+	ambient.color = srgb_to_linear(ambient.color);
 	ambient.attenuation = ft_atof(tokens[1]);
 	ecs->ambient = ecs_entity_create(ecs);
 	if (!ecs->ambient
@@ -48,6 +50,7 @@ t_err	deserialize_light(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[3], &light.color)
 		|| !color_valid(&light.color))
 		return (RT_FAILURE);
+	light.color = srgb_to_linear(light.color);
 	light.attenuation = ft_atof(tokens[2]);
 	ecs->light = ecs_entity_create(ecs);
 	if (!ecs->light

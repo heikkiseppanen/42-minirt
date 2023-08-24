@@ -6,12 +6,13 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:29 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/01 18:28:30 by ttalvenh         ###   ########.fr       */
+/*   Updated: 2023/08/24 12:41:39 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft/std.h>
 #include <parser/parser.h>
+#include <renderer/color.h>
 
 t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 {
@@ -26,6 +27,7 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[3], &material.color)
 		|| !color_valid(&material.color))
 		return (RT_FAILURE);
+	material.color = srgb_to_linear(material.color);
 	geometry.data.sphere.radius = ft_atof(tokens[2]) / 2;
 	entity = ecs_entity_create(ecs);
 	if (!entity
