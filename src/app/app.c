@@ -62,38 +62,17 @@ void	app_close_hook(void *param)
 	ecs_del(&app->scene);
 }
 
-void	camera_update(t_camera *camera, t_float3 position)
-{
-	camera->z = ft_float3_sub(position, camera->pivot);
-	camera->z = ft_float3_normalize(camera->z);
-	camera->y = (t_float3){0.0, 1.0, 0.0};
-	camera->x = ft_float3_cross(camera->y, camera->z);
-	camera->x = ft_float3_normalize(camera->x);
-	camera->y = ft_float3_cross(camera->z, camera->x);
-}
+
 
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
 	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
-
-	// Update camera
-	update_camera_pos(app, ecs);
-
-	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	t_camera camera = *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
-
-	if (app->input.left_button)
-	{
-		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * app->window->delta_time);
-		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * app->window->delta_time);
-	}
-	if (app->input.right_button)
-	{
-		t_float3 offset_x = ft_float3_scalar(camera.x, app->input.mouse_movement.x);
-		t_float3 offset_y = ft_float3_scalar(camera.y, -app->input.mouse_movement.y);
-		t_float3 total = ft_float3_add(offset_x, offset_y);
+	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
+	// Update camera
+	update_camera_pos(app, &camera, &cam_pos);
 
 		total = ft_float3_scalar(total, app->window->delta_time);
 		cam_pos = ft_float3_add(cam_pos, total);

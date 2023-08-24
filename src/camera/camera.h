@@ -4,5 +4,5 @@
 #include <scene/ecs.h>
 #include <app/app.h>
 
-void	update_camera_pos(t_app *app, t_ecs *ecs);
+void	update_camera_pos(t_app *app, t_camera *camera, t_float3 *cam_pos);
 #endif
