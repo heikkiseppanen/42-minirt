@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 14:03:40 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/25 11:51:11 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ void	app_loop_hook(void *param)
 	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
 	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
-
 	unsigned int y = 0;
 	while (y < out->height)
 	{
@@ -147,37 +146,12 @@ void	app_loop_hook(void *param)
 
 				t_color diffuse = mat->color;
 
-				t_float3 *light_pos = ecs_get_component(ecs, ecs->light, ECS_POSITION);
-				t_light *light = ecs_get_component(ecs, ecs->light, ECS_LIGHT);
-				t_light *ambient = ecs_get_component(ecs, ecs->ambient, ECS_LIGHT);
-
-				t_color dir_light = ft_float3_scalar(light->color, light->attenuation);
-				t_color amb_light = ft_float3_scalar(ambient->color, ambient->attenuation);
-
-				t_float3 to_light = ft_float3_sub(*light_pos, hit.position);
-				float distance_to_light = ft_float3_len(to_light);
-
-				to_light = ft_float3_normalize(to_light);
-
-				float dir_light_intensity;
-
-				dir_light_intensity = 0;
-				t_ray ray_to_light = {hit.position, to_light};
-				float scene_depth = ray_scene_intersect(&ray_to_light, ecs, NULL);
-				if (!scene_depth || distance_to_light < scene_depth)
-				{
-					dir_light_intensity = ft_float3_dot(hit.normal, to_light);
-					dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
-				}
-
-				dir_light = ft_float3_scalar(dir_light, dir_light_intensity);
-				 
-				t_color light_total = ft_float3_add(dir_light, amb_light);
+				t_color light = calculate_surface_light(&hit.position, &hit.normal, ecs);
 
 				t_float3 diff_color; 
-				diff_color.x = diffuse.x * light_total.x;
-				diff_color.y = diffuse.y * light_total.y;
-				diff_color.z = diffuse.z * light_total.z;
+				diff_color.x = diffuse.x * light.x;
+				diff_color.y = diffuse.y * light.y;
+				diff_color.z = diffuse.z * light.z;
 				diff_color = saturate(linear_to_srgb(diff_color));
 
 				final_color = color_to_argb32(diff_color);

@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 14:06:45 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 14:39:27 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/25 11:54:02 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,31 @@
 static t_color	calculate_point_light(
 	const t_float3 *position,
 	const t_float3 *normal,
-	const t_light *point,
-	const t_float3 *light_position)
+	const t_ecs *scene)
 {
-	t_float3	to_light;
-	t_ray		shadow_ray;
-	float		light_distance;
-	float		scene_distance;
-	float		light_intensity;
+	const t_light	*source = ecs_get_component(scene, scene->light, ECS_LIGHT);
+	t_ray			shadow_ray;
+	float			light_distance;
+	float			scene_distance;
+	float			light_intensity;
 
-	to_light = ft_float3_sub(*light_position, *position);
-	ft_float3_scalar(point->color, point->attenuation);
-	if (!scene_depth || distance_to_light < scene_depth)
+	shadow_ray = (t_ray){
+		.origin = *position,
+		.direction = ft_float3_sub(
+			*(t_float3 *)ecs_get_component(scene, scene->light, ECS_POSITION),
+			*position)
+	};
+	light_distance = ft_float3_len(shadow_ray.direction);
+	shadow_ray.direction = ft_float3_normalize(shadow_ray.direction);
+	scene_distance = ray_scene_intersect(&shadow_ray, scene, NULL);
+	if (!scene_distance || light_distance < scene_distance)
 	{
-		dir_light_intensity = ft_float3_dot(hit.normal, to_light);
-		dir_light_intensity = ft_maxf(0.0f, dir_light_intensity);
+		light_intensity = ft_float3_dot(*normal, shadow_ray.direction);
+		light_intensity = ft_maxf(0.0f, light_intensity);
+		light_intensity *= source->attenuation;
+		return (ft_float3_scalar(source->color, light_intensity));
 	}
-
+	return ((t_color){});
 }
 
 static t_color	calculate_ambient_light(t_light *ambient)
@@ -51,15 +59,14 @@ t_color	calculate_surface_light(
 	total_light = (t_color){};
 	if (scene->light)
 	{
-		total_light = ft_float3_add(total_light, calculate_point_light(
-			position, normal,
-			ecs_get_component(scene, scene->light, ECS_LIGHT),
-			ecs_get_component(scene, scene->light, ECS_POSITION)));
+		total_light = ft_float3_add(total_light,
+				calculate_point_light(position, normal, scene));
 	}
 	if (scene->ambient)
 	{
-		total_light = ft_float3_add(total_light, calculate_ambient_light(
-			ecs_get_component(scene, scene->ambient, ECS_LIGHT)));
+		total_light = ft_float3_add(total_light,
+				calculate_ambient_light(
+					ecs_get_component(scene, scene->ambient, ECS_LIGHT)));
 	}
 	return (total_light);
 }

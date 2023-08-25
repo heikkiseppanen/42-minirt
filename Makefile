@@ -34,6 +34,7 @@ RENDERER_DIR := renderer
 RENDERER_SRC :=\
 	color.c \
 	ray.c \
+	light.c \
 
 SRC :=\
 	main.c \

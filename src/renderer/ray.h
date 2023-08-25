@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 13:31:19 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/25 09:51:20 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ float	ray_scene_intersect(
 	const t_ray *self,
 	const t_ecs *scene,
 	t_id	*opt_entity_hit);
+
+float	ray_geometry_intersect(
+	const t_ray *self,
+	const t_geometry *geometry,
+	const t_float3 *position);
 
 float	ray_sphere_intersect(
 	const t_ray *self,
