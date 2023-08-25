@@ -79,7 +79,7 @@ LDFLAGS := -lm $(MLX_LD) $(FT_LD)
 
 all: $(NAME)
 
-release: CFLAGS+= -O3 -march=native
+release: CFLAGS+= -O2
 release: LDFLAGS+= -O2
 release: $(NAME)
 
