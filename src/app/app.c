@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/25 11:51:11 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/25 14:55:47 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,14 +144,12 @@ void	app_loop_hook(void *param)
 			{
 				t_material *mat = ecs_get_component(ecs, hit.entity, ECS_MATERIAL);
 
-				t_color diffuse = mat->color;
-
 				t_color light = calculate_surface_light(&hit.position, &hit.normal, ecs);
 
 				t_float3 diff_color; 
-				diff_color.x = diffuse.x * light.x;
-				diff_color.y = diffuse.y * light.y;
-				diff_color.z = diffuse.z * light.z;
+				diff_color.x = mat->color.x * light.x;
+				diff_color.y = mat->color.y * light.y;
+				diff_color.z = mat->color.z * light.z;
 				diff_color = saturate(linear_to_srgb(diff_color));
 
 				final_color = color_to_argb32(diff_color);
