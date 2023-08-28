@@ -6,13 +6,15 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:29 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/24 12:41:39 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/28 14:48:23 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser/parser.h"
+#include "renderer/color.h"
+#include "renderer/geometry.h"
+
 #include <ft/std.h>
-#include <parser/parser.h>
-#include <renderer/color.h>
 
 t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 {

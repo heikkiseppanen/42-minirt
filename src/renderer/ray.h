@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/25 09:51:20 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/28 14:02:42 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minirt.h"
 # include "scene/ecs.h"
+# include "renderer/geometry.h"
 
 # include <ft/math.h>
 
