@@ -2,7 +2,7 @@
 #include <scene/ecs.h>
 #include <ft/cstr.h>
 
-void	camera_update(t_camera *camera, __attribute__((unused))t_float3 position)
+void	camera_update(t_camera *camera)
 {
 	camera->z = ft_float3_scalar(camera->pivot, -1);
 	camera->z = ft_float3_normalize(camera->z);
@@ -43,6 +43,5 @@ void	update_camera_pos(t_app *app, t_camera *camera, t_float3 *cam_pos)
 	}
 	offset = ft_float3_scalar(offset, app->window->delta_time);
 	*cam_pos = ft_float3_add(*cam_pos, offset);
-	// camera->pivot = ft_float3_add(camera->pivot, offset);
-	camera_update(camera, *cam_pos);
+	camera_update(camera);
 }

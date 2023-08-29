@@ -69,17 +69,10 @@ void	app_loop_hook(void *param)
 	t_app *const app = param;
 	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
-	t_camera camera = *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
-	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
+	t_camera *camera = ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
+	t_float3 *cam_pos = ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	// Update camera
-	update_camera_pos(app, &camera, &cam_pos);
-
-		total = ft_float3_scalar(total, app->window->delta_time);
-		cam_pos = ft_float3_add(cam_pos, total);
-		camera.pivot = ft_float3_add(camera.pivot, total);
-	}
-	camera_update(&camera, cam_pos);
-
+	update_camera_pos(app, camera, cam_pos);
 	// Canvas?
 
 	static t_float3 pix_00; // SHOULD BE ADDED TO CAMERA
@@ -87,22 +80,22 @@ void	app_loop_hook(void *param)
 	static t_float3 v;      // SHOULD BE ADDED TO CAMERA
 
 	float aspect_ratio = (float)out->height / (float)out->width;
-	float dx = tanf(ft_rad(camera.fov / 2));
+	float dx = tanf(ft_rad(camera->fov / 2));
 	float dy = dx * aspect_ratio;
 
-	u = ft_float3_scalar(camera.x, 2 * dx / out->width);
-	v = ft_float3_scalar(camera.y, -2 * dy / out->height);
+	u = ft_float3_scalar(camera->x, 2 * dx / out->width);
+	v = ft_float3_scalar(camera->y, -2 * dy / out->height);
 
-	pix_00 = ft_float3_sub(cam_pos, camera.z);
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.x, -dx));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.y, dy));
+	pix_00 = ft_float3_sub(*cam_pos, camera->z);
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera->x, -dx));
+	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera->y, dy));
 	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(u, 0.5f));
 	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(v, 0.5f));
 
 	app->input.mouse_movement = (t_float2){};
 
-	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
-	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
+	// *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
+	// *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
 	unsigned int y = 0;
 	while (y < out->height)

@@ -36,4 +36,5 @@ t_err	app_init(t_app *app, int argc, char **argv);
 void	app_close_hook(void *param);
 void	app_loop_hook(void *param);
 
+
 #endif
