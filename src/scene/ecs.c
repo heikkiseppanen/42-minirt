@@ -6,11 +6,13 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:52:41 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/31 15:39:46 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/28 14:06:32 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene/ecs.h"
+
+#include "renderer/geometry.h"
 
 #include <ft/math.h>
 
@@ -93,9 +95,5 @@ void	*ecs_get_component(const t_ecs* e, t_id entity, t_ecs_type type)
 
 	list = ft_buf_get(&e->components[ECS_LIST], entity - 1);
 	id = list->reference[type];
-	if (!id)
-	{
-		return (NULL);
-	}
 	return (ft_buf_get(&e->components[type], id - 1));
 }

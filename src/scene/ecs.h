@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/31 15:33:26 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/28 14:06:19 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,38 +55,6 @@ typedef struct s_light
 	t_float3	color;
 }	t_light;
 
-typedef struct s_sphere
-{
-	float	radius;
-}	t_sphere;
-
-typedef struct s_plane
-{
-	t_float3	normal;
-}	t_plane;
-
-typedef struct s_cylinder
-{
-	t_float3	normal;
-	float		radius;
-	float		height;
-}	t_cylinder;
-
-typedef struct s_geometry
-{
-	enum e_geo_type
-	{
-		GEO_SPHERE = 0,
-		GEO_PLANE,
-		GEO_CYLINDER,
-	} type;
-	union e_geo_data
-	{
-		t_sphere	sphere;
-		t_plane		plane;
-		t_cylinder	cylinder;
-	} data;
-}	t_geometry;
 
 typedef struct s_material
 {

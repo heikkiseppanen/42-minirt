@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/25 15:21:51 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/23 11:27:22 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_input *const	input = param;
 
-	ft_printf("key: %i\n", keydata.key);
 	if (keydata.key == MLX_KEY_ESCAPE)
 	{
 		input->exit = (keydata.action == MLX_PRESS);
@@ -31,7 +30,6 @@ static void	cursor_hook(double x, double y, void *param)
 	t_input *const	input = param;
 	const t_float2	new_pos = {x, y};
 
-	printf("%f %f\n", x, y);
 	input->mouse_movement = ft_float2_sub(input->mouse_position, new_pos);
 	input->mouse_position = new_pos;
 }
