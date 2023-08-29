@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:29 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/28 14:48:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/29 12:50:26 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 	t_material	material;
 	t_geometry	geometry;
 
+	geometry.type = GEO_SPHERE;
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !ft_is_float(tokens[2])
@@ -49,6 +50,7 @@ t_err	deserialize_plane(t_ecs *ecs, char **tokens)
 	t_material	material;
 	t_geometry	geometry;
 
+	geometry.type = GEO_PLANE;
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &geometry.data.plane.normal)
@@ -74,6 +76,7 @@ t_err	deserialize_cylinder(t_ecs *ecs, char **tokens)
 	t_material	material;
 	t_geometry	geometry;
 
+	geometry.type = GEO_CYLINDER;
 	if (array_2d_length(tokens) != 6
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &geometry.data.cylinder.normal)
