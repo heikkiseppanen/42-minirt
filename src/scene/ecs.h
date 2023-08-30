@@ -43,6 +43,7 @@ typedef t_float3	t_position;
 typedef struct s_camera
 {
 	float		fov;
+	float		pitch;
 	t_float3	pivot;
 	t_float3	x; // 1 0 0
 	t_float3	y; // 0 1 0
