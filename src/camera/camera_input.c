@@ -36,7 +36,7 @@ void	camera_keyboard_input(t_app *app, t_camera *camera, t_float3 *cam_pos)
 {
 	float	speed;
 
-	speed = camera->speed;
+	speed = camera->speed * app->window->delta_time;
 	if (app->input.w)
 		*cam_pos = ft_float3_sub(*cam_pos, ft_float3_scalar(camera->z, speed));
 	if (app->input.s)
@@ -56,19 +56,21 @@ void	camera_mouse_input(t_app *app, t_camera *camera, t_float3 *pos)
 	t_float2	input;
 	float		max_speed;
 	float		min_speed;
+	double		delta_time;
 
-	max_speed = 6;
-	min_speed = 0.1;
+	max_speed = 10;
+	min_speed = 1;
+	delta_time = app->window->delta_time;
 	if (camera->speed < max_speed && app->input.scroll > 0.0)
-		camera->speed += 0.05;
+		camera->speed += 0.5;
 	if (camera->speed > min_speed && app->input.scroll < 0.0)
-		camera->speed -= 0.05;
+		camera->speed -= 0.5;
 	if (app->input.left_button)
 		update_camera_rot(app, camera);
 	if (app->input.right_button)
 	{
-		input.x = app->input.mouse_movement.x * camera->speed;
-		input.y = app->input.mouse_movement.y * camera->speed;
+		input.x = -app->input.mouse_movement.x * 0.1 * delta_time;
+		input.y = app->input.mouse_movement.y * 0.1 * delta_time;
 		*pos = ft_float3_add(*pos, ft_float3_scalar(camera->x, input.x));
 		*pos = ft_float3_add(*pos, ft_float3_scalar(camera->y, input.y));
 	}
