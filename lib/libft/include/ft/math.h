@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 09:59:59 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/14 12:38:07 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 09:30:48 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ float		ft_deg(float rad);
 
 t_float2	ft_float2_add(t_float2 l, t_float2 r);
 t_float2	ft_float2_sub(t_float2 l, t_float2 r);
+t_float3	ft_float3_mul(t_float3 l, t_float3 r);
 t_float2	ft_float2_scalar(t_float2 l, float multiplier);
 t_float2	ft_float2_lerp(t_float2 start, t_float2 end, float factor);
 t_float2	ft_float2_normalize(t_float2 vec);
