@@ -1,6 +1,6 @@
 # Meta
 
-NAME := minirt
+NAME := miniRT
 
 ifeq ($(OS), Windows_NT)
 	ARCH := Windows
