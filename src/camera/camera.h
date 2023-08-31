@@ -4,6 +4,6 @@
 #include <scene/ecs.h>
 #include <app/app.h>
 
-void	update_camera_pos(t_app *app, t_camera *camera, t_float3 *cam_pos);
-void	camera_update(t_camera *camera);
+void	update_camera(t_app *app, t_camera *camera, t_float3 *cam_pos);
+void	reorient_camera(t_camera *camera);
 #endif

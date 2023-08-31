@@ -62,8 +62,6 @@ void	app_close_hook(void *param)
 	ecs_del(&app->scene);
 }
 
-
-
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
@@ -72,25 +70,7 @@ void	app_loop_hook(void *param)
 	t_camera *camera = ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
 	t_float3 *cam_pos = ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	// Update camera
-	update_camera_pos(app, camera, cam_pos);
-	// Canvas?
-
-	static t_float3 pix_00; // SHOULD BE ADDED TO CAMERA
-	static t_float3 u;      // SHOULD BE ADDED TO CAMERA
-	static t_float3 v;      // SHOULD BE ADDED TO CAMERA
-
-	float aspect_ratio = (float)out->height / (float)out->width;
-	float dx = tanf(ft_rad(camera->fov / 2));
-	float dy = dx * aspect_ratio;
-
-	u = ft_float3_scalar(camera->x, 2 * dx / out->width);
-	v = ft_float3_scalar(camera->y, -2 * dy / out->height);
-
-	pix_00 = ft_float3_sub(*cam_pos, camera->z);
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera->x, -dx));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera->y, dy));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(u, 0.5f));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(v, 0.5f));
+	update_camera(app, camera, cam_pos);
 
 	app->input.mouse_movement = (t_float2){};
 
@@ -106,9 +86,9 @@ void	app_loop_hook(void *param)
 			t_ray ray = {};
 			ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 
-			t_float3 pixel = pix_00; 
-			pixel = ft_float3_add(pixel, ft_float3_scalar(u, x));
-			pixel = ft_float3_add(pixel, ft_float3_scalar(v, y));
+			t_float3 pixel = camera->pix_00; 
+			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->u, x));
+			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->v, y));
 
 			ray.direction = ft_float3_sub(pixel, ray.origin);
 			ray.direction = ft_float3_normalize(ray.direction);

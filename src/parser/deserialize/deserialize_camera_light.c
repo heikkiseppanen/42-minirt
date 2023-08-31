@@ -85,6 +85,6 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		|| !ecs_add_component(ecs, ecs->camera, &point, ECS_POSITION)
 		|| !ecs_add_component(ecs, ecs->camera, &camera, ECS_CAMERA))
 		return (RT_FAILURE);
-	camera_update(&camera);
+	reorient_camera(&camera);
 	return (RT_SUCCESS);
 }
