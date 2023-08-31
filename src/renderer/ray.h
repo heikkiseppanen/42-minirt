@@ -25,14 +25,14 @@
 typedef struct s_ray
 {
 	t_float3	origin;
-	t_float3 	direction;
+	t_float3	direction;
 }	t_ray;
 
 typedef struct s_hit
 {
 	t_id		entity;
-	t_float3 	position;
-	t_float3 	normal;
+	t_float3	position;
+	t_float3	normal;
 }	t_hit;
 
 // Casts a given ray against given scene data.
@@ -40,18 +40,18 @@ typedef struct s_hit
 t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result);
 
 float	ray_scene_intersect(
-	const t_ray *self,
-	const t_ecs *scene,
-	t_id	*opt_entity_hit);
+			const t_ray *self,
+			const t_ecs *scene,
+			t_id	*opt_entity_hit); 
 
 float	ray_geometry_intersect(
-	const t_ray *self,
-	const t_geometry *geometry,
-	const t_float3 *position);
+			const t_ray *self,
+			const t_geometry *geometry,
+			const t_float3 *position);
 
 float	ray_sphere_intersect(
-	const t_ray *self,
-	const t_sphere *sp,
-	const t_float3 *pos);
+			const t_ray *self,
+			const t_sphere *sp,
+			const t_float3 *pos);
 
 #endif
