@@ -25,6 +25,7 @@ typedef struct s_input
 	char		s;
 	char		a;
 	char		d;
+	float		scroll;
 	char		ctrl;
 	char		space;
 	t_float2	mouse_position;

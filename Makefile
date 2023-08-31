@@ -39,6 +39,7 @@ RENDERER_SRC :=\
 CAMERA_DIR := camera
 CAMERA_SRC :=\
 	camera.c \
+	camera_input.c \
 
 SRC :=\
 	main.c \

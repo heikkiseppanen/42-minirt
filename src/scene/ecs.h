@@ -44,6 +44,7 @@ typedef struct s_camera
 {
 	float		fov;
 	float		pitch;
+	float		speed;
 	t_float3	pix_00;
 	t_float3	u;
 	t_float3	v;
