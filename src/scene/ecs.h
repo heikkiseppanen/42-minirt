@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/28 14:06:19 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 12:55:15 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,10 @@ typedef enum e_ecs_type
 	ECS_TYPE_COUNT
 }	t_ecs_type;
 
-// PLACEHOLDER COMPONENTS
-
 typedef struct s_ecs_list
 {
 	t_id	reference[ECS_TYPE_COUNT];
 }	t_ecs_list;
-
-typedef t_float3	t_position;
 
 typedef struct s_camera
 {
@@ -49,14 +45,14 @@ typedef struct s_camera
 	t_float3	u;
 	t_float3	v;
 	t_float3	pivot;
-	t_float3	x; // 1 0 0
-	t_float3	y; // 0 1 0
-	t_float3	z; // 0 0 1
+	t_float3	x;
+	t_float3	y;
+	t_float3	z;
 }	t_camera;
 
 typedef struct s_light
 {
-	float		attenuation; // 1.0f
+	float		attenuation;
 	t_float3	color;
 }	t_light;
 

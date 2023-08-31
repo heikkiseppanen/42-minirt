@@ -6,41 +6,54 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:46:26 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/21 09:40:31 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 13:28:02 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "renderer/renderer.h"
 
-typedef struct s_ray
-{
-	t_float3 origin;
-	t_float3 direction;
-} t_ray;
+#include "renderer/color.h"
+#include "renderer/light.h"
+#include "renderer/ray.h"
 
-typedef struct s_ray_hit
+void	renderer_init(t_renderer *self)
 {
-	t_float3 position;
-	t_float3 normal;
-} t_ray_hit;
-
-t_err	render_state_init(t_render_state *rs, t_ecs *scene_data, int width, int height)
-{
-
+	(void)self;
 }
 
-void	render_state_clear(t_render_state *rs);
-
-void	render_pass(t_render_state *state, t_ecs *scene_data, mlx_image_t *out)
+void	renderer_pass(t_renderer *self, const t_ecs *scene, mlx_image_t *out)
 {
-	int	x;
-	int	y;
-
-	while (y < (int)out->height)
+	unsigned int y = 0;
+	while (y < out->height)
 	{
-		while (x < (int)out->width)
+		unsigned int x = 0;
+		while (x < out->width)
 		{
+			t_float3 pixel = pix_00; 
+			pixel = ft_float3_add(pixel, ft_float3_scalar(u, x));
+			pixel = ft_float3_add(pixel, ft_float3_scalar(v, y));
 
+			ray.direction = ft_float3_sub(pixel, ray.origin);
+			ray.direction = ft_float3_normalize(ray.direction);
+
+			t_rgba32 color = RGBA_BLACK;
+			t_hit	hit = {};
+			if (ray_cast(&ray, ecs, &hit))
+			{
+				t_material *mat = ecs_get_component(ecs, hit.entity, ECS_MATERIAL);
+
+				t_color light = calculate_surface_light(&hit.position, &hit.normal, ecs);
+
+				t_color diff_color = ft_float3_mul(mat->color, light); 
+				diff_color = saturate(linear_to_srgb(diff_color));
+
+				color = color_to_rgba32(diff_color);
+			}
+
+			mlx_put_pixel(out, x, y, color);
+
+			++x;
 		}
+		++y;
 	}
 }

@@ -6,11 +6,14 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 12:03:07 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 12:55:15 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "renderer/ray.h"
+
+
+#include <stdio.h>
 
 static float	ray_entity_intersect(
 	const t_ray *self,
@@ -20,7 +23,11 @@ static float	ray_entity_intersect(
 	t_geometry const	*geo = ecs_get_component(scene, entity, ECS_GEOMETRY);
 	t_float3 const		*pos = ecs_get_component(scene, entity, ECS_POSITION);
 
-	return (ray_sphere_intersect(self, &geo->data.sphere, pos));
+	if (geo->type == GEO_SPHERE)
+	{
+		return (ray_sphere_intersect(self, &geo->data.sphere, pos));
+	}
+	return (0.0f);
 }
 
 float	ray_scene_intersect(
@@ -89,9 +96,3 @@ t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)
 	out->normal = ft_float3_normalize(out->normal);
 	return (RT_TRUE);
 }
-
-//static float	quadratic_solver(float a, float half_b, float c)
-//{
-//	const float d = (half_b * half_b) - (a * c);
-//}
-

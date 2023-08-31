@@ -6,21 +6,21 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 13:03:13 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/24 12:27:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 12:55:15 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "renderer/color.h"
 
-t_argb32	color_to_argb32(t_color c)
+t_rgba32	color_to_rgba32(t_color c)
 {
 	return (
-		(t_argb32)(255.0f * c.x) << 24 |
-		(t_argb32)(255.0f * c.y) << 16 |
-		(t_argb32)(255.0f * c.z) << 8  | 0xFF);
+		(t_rgba32)(255.0f * c.x) << 24 |
+		(t_rgba32)(255.0f * c.y) << 16 |
+		(t_rgba32)(255.0f * c.z) << 8 | 0xFF);
 }
 
-t_color		argb32_to_color(t_argb32 c)
+t_color		rgba32_to_color(t_rgba32 c)
 {
 	return ((t_color){
 		(float)(c >> 24 & 0xFF) / 255.0f,
