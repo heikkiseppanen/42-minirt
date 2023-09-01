@@ -23,6 +23,31 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 	{
 		input->exit = (keydata.action == MLX_PRESS);
 	}
+	if (keydata.key == MLX_KEY_W)
+	{
+		input->w = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_A)
+	{
+		input->a = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_S)
+	{
+		input->s = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_D)
+	{
+		input->d = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_SPACE)
+	{
+		input->space = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	if (keydata.key == MLX_KEY_LEFT_CONTROL)
+	{
+		input->ctrl = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
+	}
+	
 }
 
 static void	cursor_hook(double x, double y, void *param)
@@ -41,7 +66,6 @@ static void	mouse_hook(
 	void *param)
 {
 	t_input *const	input = param;
-
 	(void)mods;
 	if (button == MLX_MOUSE_BUTTON_LEFT)
 	{
@@ -53,10 +77,23 @@ static void	mouse_hook(
 	}
 }
 
+#include <stdio.h>
+
+static void	scroll_hook(
+	double xdelta,
+	double ydelta,
+	void *param)
+{
+	t_input *const	input = param;
+	(void)xdelta;
+	input->scroll = ydelta;
+}
+
 void	input_init(t_input *input, mlx_t *window)
 {
 	*input = (t_input){};
 	mlx_mouse_hook(window, mouse_hook, input);
 	mlx_cursor_hook(window, cursor_hook, input);
 	mlx_key_hook(window, key_hook, input);
+	mlx_scroll_hook(window, scroll_hook, input);
 }

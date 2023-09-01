@@ -17,6 +17,8 @@
 #include "renderer/color.h"
 #include "renderer/light.h"
 #include "renderer/ray.h"
+#include "app/app.h"
+#include "camera/camera.h"
 
 #include <ft/cstr.h>
 #include <ft/io.h>
@@ -60,67 +62,20 @@ void	app_close_hook(void *param)
 	ecs_del(&app->scene);
 }
 
-void	camera_update(t_camera *camera, t_float3 position)
-{
-	camera->z = ft_float3_sub(position, camera->pivot);
-	camera->z = ft_float3_normalize(camera->z);
-	camera->y = (t_float3){0.0, 1.0, 0.0};
-	camera->x = ft_float3_cross(camera->y, camera->z);
-	camera->x = ft_float3_normalize(camera->x);
-	camera->y = ft_float3_cross(camera->z, camera->x);
-}
-
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
 	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
-
+	t_camera *camera = ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
+	t_float3 *cam_pos = ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	// Update camera
-
-	t_float3 cam_pos = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
-	t_camera camera = *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
-
-	if (app->input.left_button)
-	{
-		cam_pos = ft_float3_rot_y(cam_pos, app->input.mouse_movement.x * app->window->delta_time);
-		cam_pos = ft_float3_rot_axis(cam_pos, camera.x, app->input.mouse_movement.y * app->window->delta_time);
-	}
-	if (app->input.right_button)
-	{
-		t_float3 offset_x = ft_float3_scalar(camera.x, app->input.mouse_movement.x);
-		t_float3 offset_y = ft_float3_scalar(camera.y, -app->input.mouse_movement.y);
-		t_float3 total = ft_float3_add(offset_x, offset_y);
-
-		total = ft_float3_scalar(total, app->window->delta_time);
-		cam_pos = ft_float3_add(cam_pos, total);
-		camera.pivot = ft_float3_add(camera.pivot, total);
-	}
-	camera_update(&camera, cam_pos);
-
-	// Canvas?
-
-	static t_float3 pix_00; // SHOULD BE ADDED TO CAMERA
-	static t_float3 u;      // SHOULD BE ADDED TO CAMERA
-	static t_float3 v;      // SHOULD BE ADDED TO CAMERA
-
-	float aspect_ratio = (float)out->height / (float)out->width;
-	float dx = tanf(ft_rad(camera.fov / 2));
-	float dy = dx * aspect_ratio;
-
-	u = ft_float3_scalar(camera.x, 2 * dx / out->width);
-	v = ft_float3_scalar(camera.y, -2 * dy / out->height);
-
-	pix_00 = ft_float3_sub(cam_pos, camera.z);
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.x, -dx));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(camera.y, dy));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(u, 0.5f));
-	pix_00 = ft_float3_add(pix_00, ft_float3_scalar(v, 0.5f));
+	update_camera(app, camera, cam_pos);
 
 	app->input.mouse_movement = (t_float2){};
 
-	*(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
-	*(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
+	// *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
+	// *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
 	unsigned int y = 0;
 	while (y < out->height)
@@ -131,9 +86,9 @@ void	app_loop_hook(void *param)
 			t_ray ray = {};
 			ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 
-			t_float3 pixel = pix_00; 
-			pixel = ft_float3_add(pixel, ft_float3_scalar(u, x));
-			pixel = ft_float3_add(pixel, ft_float3_scalar(v, y));
+			t_float3 pixel = camera->pix_00; 
+			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->u, x));
+			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->v, y));
 
 			ray.direction = ft_float3_sub(pixel, ray.origin);
 			ray.direction = ft_float3_normalize(ray.direction);

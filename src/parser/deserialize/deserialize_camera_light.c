@@ -12,7 +12,7 @@
 
 #include "parser/parser.h"
 #include "renderer/color.h"
-
+#include "camera/camera.h"
 #include <ft/cstr.h>
 #include <ft/std.h>
 
@@ -72,11 +72,13 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	camera.x.x = 1;
 	camera.y.y = 1;
 	camera.z.z = 1;
+	camera.speed = 3;
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &camera.pivot)
 		|| !ft_is_float(tokens[3]))
 		return (RT_FAILURE);
+	camera.pivot = ft_float3_normalize(camera.pivot);
 	camera.fov = ft_atof(tokens[3]);
 	ecs->camera = ecs_entity_create(ecs);
 	if (!ecs->camera
@@ -84,5 +86,6 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		|| !ecs_add_component(ecs, ecs->camera, &point, ECS_POSITION)
 		|| !ecs_add_component(ecs, ecs->camera, &camera, ECS_CAMERA))
 		return (RT_FAILURE);
+	reorient_camera(&camera);
 	return (RT_SUCCESS);
 }
