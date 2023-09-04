@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:35:20 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/31 13:26:59 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/04 14:33:04 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ typedef struct s_renderer
 	int		pass;
 	int		start_height;
 }	t_renderer;
+
+typedef struct s_pass
+{
+	int	initial_offset;
+	int	stride;
+}	t_pass;
 
 void	renderer_init(t_renderer *self);
 

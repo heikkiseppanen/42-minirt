@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/04 09:00:48 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:08:24 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,46 @@ void	app_close_hook(void *param)
 	ecs_del(&app->scene);
 }
 
+void	render_scanline(t_ecs *scene, int y, t_pass pass, mlx_image_t *out)
+{
+	t_camera *camera = ecs_get_component(scene, scene->camera, ECS_CAMERA);
+	unsigned int x;
+	unsigned int chunk_end;
+
+	x = pass.initial_offset;
+	while (x < out->width)
+	{
+		t_ray ray = {};
+		ray.origin = *(t_float3 *)ecs_get_component(scene, scene->camera, ECS_POSITION);
+
+		t_float3 pixel = camera->pix_00; 
+		pixel = ft_float3_add(pixel, ft_float3_scalar(camera->u, x));
+		pixel = ft_float3_add(pixel, ft_float3_scalar(camera->v, y));
+
+		ray.direction = ft_float3_sub(pixel, ray.origin);
+		ray.direction = ft_float3_normalize(ray.direction);
+
+		t_rgba32 final_color = RGBA_BLACK;
+		t_hit	hit = {};
+		if (ray_cast(&ray, scene, &hit))
+		{
+			t_material *mat = ecs_get_component(scene, hit.entity, ECS_MATERIAL);
+
+			t_color light = calculate_surface_light(&hit.position, &hit.normal, scene);
+
+			t_color diff_color = ft_float3_mul(mat->color, light); 
+			diff_color = saturate(linear_to_srgb(diff_color));
+
+			final_color = color_to_rgba32(diff_color);
+		}
+		chunk_end = x + pass.stride;
+		if (chunk_end > out->width)
+			chunk_end = out->width;
+		while (x < chunk_end)
+			mlx_put_pixel(out, x++, y, final_color);
+	}
+}
+
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
@@ -72,53 +112,67 @@ void	app_loop_hook(void *param)
 	// Update camera
 	update_camera(app, camera, cam_pos);
 
-	app->input.mouse_movement = (t_float2){};
-
-	// *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
-	// *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
-
-	t_ray ray = {};
-
-	ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
-	unsigned int y = 0;
-	while (y < out->height)
-	{
-		unsigned int x = 0;
-		while (x < out->width)
-		{
-			t_ray ray = {};
-			ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
-
-			t_float3 pixel = camera->pix_00; 
-			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->u, x));
-			pixel = ft_float3_add(pixel, ft_float3_scalar(camera->v, y));
-
-			ray.direction = ft_float3_sub(pixel, ray.origin);
-			ray.direction = ft_float3_normalize(ray.direction);
-
-			t_rgba32 final_color = RGBA_BLACK;
-			t_hit	hit = {};
-			if (ray_cast(&ray, ecs, &hit))
-			{
-				t_material *mat = ecs_get_component(ecs, hit.entity, ECS_MATERIAL);
-
-				t_color light = calculate_surface_light(&hit.position, &hit.normal, ecs);
-
-				t_color diff_color = ft_float3_mul(mat->color, light); 
-				diff_color = saturate(linear_to_srgb(diff_color));
-
-				final_color = color_to_rgba32(diff_color);
-			}
-
-			mlx_put_pixel(out, x, y, final_color);
-
-			++x;
-		}
-		++y;
-	}
-
 	if (app->input.exit)
 	{
 		mlx_close_window(app->window);
 	}
+
+	app->input.mouse_movement = (t_float2){};
+
+	static int stride = 16;
+	static int initial_offset = 0;
+
+	if (app->input.w || 
+		app->input.a ||
+		app->input.s ||
+		app->input.d ||
+		app->input.space ||
+		app->input.ctrl ||
+		app->input.right_button ||
+		app->input.left_button)
+	{
+		stride = 16;
+		initial_offset = 0;
+	}
+
+	if (stride == 1)
+		return;
+
+	t_ray ray = {};
+	ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
+	unsigned int y = initial_offset;
+	while (y < out->height - 1)
+	{
+		render_scanline(ecs, y,      (t_pass){8, 16}, out);
+
+		t_rgba32 *line = (t_rgba32 *)out->pixels + (y * out->width);
+		unsigned int end = y + 8 + 16;
+		if (end > out->height)
+			end = out->height;
+		while (++y < end)
+		{
+			t_rgba32 *next = line + out->width;
+			ft_memcpy(next, line, out->width * sizeof(t_rgba32));
+			line = next;
+		}
+
+		if (y >= out->height)
+			break ;
+
+		render_scanline(ecs, y, (t_pass){0, 8 }, out);
+
+		line = (t_rgba32 *)out->pixels + (y * out->width);
+		end = y + 8;
+		if (end > out->height)
+			end = out->height;
+		while (++y < end)
+		{
+			t_rgba32 *next = line + out->width;
+			ft_memcpy(next, line, out->width * sizeof(t_rgba32));
+			line = next;
+		}
+		y += 32;
+	}
+	stride /= 2;
+	initial_offset = stride;
 }
