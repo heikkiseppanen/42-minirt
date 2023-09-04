@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:35:20 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 11:31:48 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:49:03 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ typedef struct s_renderer
 {
 	int	chunk_size;
 }	t_renderer;
+
+typedef struct s_pass
+{
+	int	initial_offset;
+	int	stride;
+}	t_pass;
 
 void	renderer_init(t_renderer *self);
 

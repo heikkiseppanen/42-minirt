@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 11:48:28 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:48:52 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,52 @@ void	app_terminate(void *param)
 	ecs_del(&app->scene);
 }
 
+void	render_scanline(t_ecs *scene, int y, t_pass pass, mlx_image_t *out)
+{
+	t_camera *camera = ecs_get_component(scene, scene->camera, ECS_CAMERA);
+	unsigned int x;
+	unsigned int chunk_end;
+
+	x = pass.initial_offset;
+	while (x < out->width)
+	{
+		t_ray ray = {};
+		ray.origin = *(t_float3 *)ecs_get_component(scene, scene->camera, ECS_POSITION);
+
+		t_float3 pixel = camera->pix_00; 
+		pixel = ft_float3_add(pixel, ft_float3_scalar(camera->u, x));
+		pixel = ft_float3_add(pixel, ft_float3_scalar(camera->v, y));
+
+		ray.direction = ft_float3_sub(pixel, ray.origin);
+		ray.direction = ft_float3_normalize(ray.direction);
+
+		t_rgba32 final_color = RGBA_BLACK;
+		t_hit	hit = {};
+		if (ray_cast(&ray, scene, &hit))
+		{
+			t_material *mat = ecs_get_component(scene, hit.entity, ECS_MATERIAL);
+
+			t_color light = calculate_surface_light(&hit.position, &hit.normal, scene);
+
+			t_color diff_color = ft_float3_mul(mat->color, light); 
+			diff_color = saturate(linear_to_srgb(diff_color));
+
+			final_color = color_to_rgba32(diff_color);
+		}
+		chunk_end = x + pass.stride;
+		if (chunk_end > out->width)
+			chunk_end = out->width;
+		while (x < chunk_end)
+			mlx_put_pixel(out, x++, y, final_color);
+	}
+}
+
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
 	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
+<<<<<<< HEAD
 
 	if (app->input.exit)
 	{
