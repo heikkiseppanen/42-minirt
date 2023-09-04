@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:35:20 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/27 10:47:45 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 13:26:59 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,24 @@
 
 typedef struct s_renderer
 {
-	int		chunk_size;
-	t_buf	rays;
+	int		pass;
+	int		start_height;
 }	t_renderer;
 
-t_err	renderer_init(
-			t_renderer *r,
-			const t_ecs *scene,
-			const mlx_image_t *target
-		);
+void	renderer_init(t_renderer *self);
 
-void	renderer_del(t_renderer *r);
-
-void	render_pass(t_renderer *r, const t_ecs *scene, mlx_image_t *out);
+void	renderer_pass(t_renderer *self, const t_ecs *scene, mlx_image_t *out);
 
 #endif
+
+// 0, 0, 8
+//1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+//
+// 1, 4, 8
+//1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 
+//
+//2, 4 
+//1 0 1 0 1 0 1 0 1 0 0 0 1 0 0 0 
+//
+//1, 2
+//1 0 1 0 1 0 1 0 1 0 0 0 1 0 0 0 

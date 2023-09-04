@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/25 14:55:47 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/04 09:00:48 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ void	app_loop_hook(void *param)
 	// *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION) = cam_pos;
 	// *(t_camera *)ecs_get_component(ecs, ecs->camera, ECS_CAMERA) = camera;
 
+	t_ray ray = {};
+
+	ray.origin = *(t_float3 *)ecs_get_component(ecs, ecs->camera, ECS_POSITION);
 	unsigned int y = 0;
 	while (y < out->height)
 	{
@@ -93,7 +96,7 @@ void	app_loop_hook(void *param)
 			ray.direction = ft_float3_sub(pixel, ray.origin);
 			ray.direction = ft_float3_normalize(ray.direction);
 
-			t_argb32 final_color = 0xFF;
+			t_rgba32 final_color = RGBA_BLACK;
 			t_hit	hit = {};
 			if (ray_cast(&ray, ecs, &hit))
 			{
@@ -101,13 +104,10 @@ void	app_loop_hook(void *param)
 
 				t_color light = calculate_surface_light(&hit.position, &hit.normal, ecs);
 
-				t_float3 diff_color; 
-				diff_color.x = mat->color.x * light.x;
-				diff_color.y = mat->color.y * light.y;
-				diff_color.z = mat->color.z * light.z;
+				t_color diff_color = ft_float3_mul(mat->color, light); 
 				diff_color = saturate(linear_to_srgb(diff_color));
 
-				final_color = color_to_argb32(diff_color);
+				final_color = color_to_rgba32(diff_color);
 			}
 
 			mlx_put_pixel(out, x, y, final_color);

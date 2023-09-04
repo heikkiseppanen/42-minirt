@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 09:26:30 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/06 10:17:48 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/08/31 09:29:01 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ t_float3	ft_float3_transform(const t_float4x4 *l, t_float3 r)
 		out.z /= out_w;
 	}
 	return (out);
+}
+
+float	ft_float3_len(t_float3 vec)
+{
+	return (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
 }
 
 t_float3	ft_float3_normalize(t_float3 vector)
