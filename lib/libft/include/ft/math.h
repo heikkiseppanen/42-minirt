@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 09:59:59 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/31 09:30:48 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:48:31 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define MATH_H
 
 # include <math.h>
+
+typedef struct s_int2
+{
+	int	x;
+	int	y;
+}	t_int2;
 
 typedef struct s_float2
 {
@@ -43,6 +49,9 @@ typedef struct s_float4x4
 	t_float4	c;
 	t_float4	d;
 }	t_float4x4;
+
+int			ft_maxi(int a, int b);
+int			ft_mini(int a, int b);
 
 float		ft_minf(float a, float b);
 float		ft_maxf(float a, float b);

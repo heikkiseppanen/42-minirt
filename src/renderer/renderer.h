@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:35:20 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/04 14:33:04 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:52:06 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ typedef struct s_renderer
 	int		start_height;
 }	t_renderer;
 
-typedef struct s_pass
+typedef struct s_chunk
 {
-	int	initial_offset;
-	int	stride;
-}	t_pass;
+	int	x;
+	int	y;
+	int	size;
+}	t_chunk;
 
 void	renderer_init(t_renderer *self);
 
@@ -48,4 +49,9 @@ void	renderer_pass(t_renderer *self, const t_ecs *scene, mlx_image_t *out);
 //1 0 1 0 1 0 1 0 1 0 0 0 1 0 0 0 
 //
 //1, 2
-//1 0 1 0 1 0 1 0 1 0 0 0 1 0 0 0 
+// 1 1 1 1 R C C C 1 1 1 1 R C C C 
+// 1 1 1 1 2 2 2 2 1 1 1 1 2 2 2 2 
+//
+// 1 1 R C 2 2 R C 1 1 1 1 2 2 2 2 
+// 1 1 3 3 2 2 3 3 1 1 1 1 2 2 2 2 
+//
