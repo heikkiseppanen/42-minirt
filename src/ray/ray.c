@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "renderer/ray.h"
+#include "ray/ray.h"
 
 
 #include <stdio.h>
@@ -26,6 +26,11 @@ static float	ray_entity_intersect(
 	if (geo->type == GEO_SPHERE)
 	{
 		return (ray_sphere_intersect(self, &geo->data.sphere, pos));
+	}
+
+	if (geo->type == GEO_PLANE)
+	{
+		return (ray_plane_intersect(self, &geo->data.plane, pos));
 	}
 	return (0.0f);
 }
@@ -79,6 +84,22 @@ float	ray_sphere_intersect(
 	}
 	d = sqrtf(d);
 	return ((-b - d) / a);
+}
+
+float ray_plane_intersect(
+    const t_ray *self,
+    const t_plane *pl,
+    const t_float3 *pos)
+{
+    float    denom;
+    float    t;
+    denom = ft_float3_dot(pl->normal, self->direction);
+    if (denom > 1e-6)
+    {
+        t = ft_float3_dot(ft_float3_sub(*pos, self->origin), pl->normal) / denom;
+        return (t);
+    }
+    return (0.0f);
 }
 
 t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)

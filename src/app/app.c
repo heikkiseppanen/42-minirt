@@ -16,7 +16,7 @@
 #include "parser/parser.h"
 #include "renderer/color.h"
 #include "renderer/light.h"
-#include "renderer/ray.h"
+#include "ray/ray.h"
 #include "app/app.h"
 #include "camera/camera.h"
 

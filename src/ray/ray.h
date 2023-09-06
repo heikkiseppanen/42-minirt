@@ -54,4 +54,9 @@ float	ray_sphere_intersect(
 			const t_sphere *sp,
 			const t_float3 *pos);
 
+float ray_plane_intersect(
+    const t_ray *self,
+    const t_plane *pl,
+    const t_float3 *pos);
+
 #endif

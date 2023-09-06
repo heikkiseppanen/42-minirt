@@ -34,13 +34,16 @@ RENDERER_DIR := renderer
 RENDERER_SRC :=\
 	renderer.c \
 	color.c \
-	ray.c \
 	light.c \
 
 CAMERA_DIR := camera
 CAMERA_SRC :=\
 	camera.c \
 	camera_input.c \
+
+RAY_DIR := ray
+RAY_SRC :=\
+	ray.c \
 
 SRC :=\
 	main.c \
@@ -51,6 +54,7 @@ SRC :=\
 	$(PARSER_SRC:%=$(PARSER_DIR)/%) \
 	$(RENDERER_SRC:%=$(RENDERER_DIR)/%) \
 	$(CAMERA_SRC:%=$(CAMERA_DIR)/%) \
+	$(RAY_SRC:%=$(RAY_DIR)/%) \
 
 OBJ := $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 DEP := $(OBJ:%.o=%.d)

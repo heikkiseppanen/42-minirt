@@ -13,7 +13,7 @@
 #include "renderer/renderer.h"
 #include "renderer/color.h"
 #include "renderer/light.h"
-#include "renderer/ray.h"
+#include "ray/ray.h"
 
 #include "camera/camera.h"
 

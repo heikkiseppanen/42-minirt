@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "renderer/light.h"
-#include "renderer/ray.h"
 #include "renderer/color.h"
+#include "ray/ray.h"
 
 static t_color	calculate_point_light(
 	const t_float3 *position,
