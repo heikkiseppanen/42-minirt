@@ -102,6 +102,22 @@ float ray_plane_intersect(
     return (0.0f);
 }
 
+void	calc_surface_normal(const t_ecs *scene, t_hit *out)
+{
+	t_geometry const	*geo = ecs_get_component(scene, out->entity, ECS_GEOMETRY);
+
+	if (geo->type == GEO_PLANE)
+	{
+		out->normal = ft_float3_scalar(geo->data.plane.normal, -1);
+	}
+	if (geo->type == GEO_SPHERE)
+	{
+		out->normal = *(t_float3 *)ecs_get_component(scene, out->entity, ECS_POSITION);
+		out->normal = ft_float3_sub(out->position, out->normal);
+		out->normal = ft_float3_normalize(out->normal);
+	}
+}
+
 t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)
 {
 	const float depth = ray_scene_intersect(self, scene, &out->entity);
@@ -112,8 +128,7 @@ t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)
 	}
 	out->position = ft_float3_scalar(self->direction, depth);
 	out->position = ft_float3_add(self->origin, out->position);
-	out->normal = *(t_float3 *)ecs_get_component(scene, out->entity, ECS_POSITION);
-	out->normal = ft_float3_sub(out->position, out->normal);
-	out->normal = ft_float3_normalize(out->normal);
+	calc_surface_normal(scene, out);
+
 	return (RT_TRUE);
 }
