@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 11:50:23 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:51:08 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,34 +71,19 @@ void	app_terminate(void *param)
 	ecs_del(&app->scene);
 }
 
-void	draw_quad(t_int2 pos, int size, t_rgba32 color, mlx_image_t *out)
-{
-	const int	x_min = pos.x;
-	const int	x_max = ft_mini(pos.x + size, out->width);
-	const int	y_max = ft_mini(pos.y + size, out->height);
 
-	while (pos.y < y_max)
-	{
-		pos.x = x_min;
-		while (pos.x < x_max)
-		{
-			mlx_put_pixel(out, pos.x, pos.y, color);
-			++pos.x;
-		}
-		++pos.y;
-	}
-}
-
-#define PREVIEW_CHUNK_SIZE 8
 
 void	app_loop_hook(void *param)
 {
 	t_app *const app = param;
 	t_ecs *const ecs = &app->scene;
 	mlx_image_t *const out = app->framebuffer;
-	t_camera *camera = ecs_get_component(ecs, ecs->camera, ECS_CAMERA);
-	t_float3 *cam_pos = ecs_get_component(ecs, ecs->camera, ECS_POSITION);
-	// Update camera
+
+	if (app->input.exit)
+	{
+		mlx_close_window(app->window);
+		return ;
+	}
 	if (app->input.left_button || app->input.right_button)
 	{
 		mlx_set_cursor_mode(app->window, MLX_MOUSE_DISABLED);

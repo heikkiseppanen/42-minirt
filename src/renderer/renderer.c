@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:46:26 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/11 13:14:19 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:52:40 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 #include "renderer/color.h"
 #include "renderer/light.h"
 #include "ray/ray.h"
+
+#include "camera/camera.h"
+
+static void	draw_quad(t_int2 pos, int size, t_rgba32 color, mlx_image_t *out)
+{
+	const int	x_min = pos.x;
+	const int	x_max = ft_mini(pos.x + size, out->width);
+	const int	y_max = ft_mini(pos.y + size, out->height);
+
+	while (pos.y < y_max)
+	{
+		pos.x = x_min;
+		while (pos.x < x_max)
+		{
+			mlx_put_pixel(out, pos.x, pos.y, color);
+			++pos.x;
+		}
+		++pos.y;
+	}
+}
 
 #include "camera/camera.h"
 
