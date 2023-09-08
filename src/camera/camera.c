@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:18 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/31 14:51:20 by ttalvenh         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:30:04 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,17 @@ void	update_camera(t_app *app, t_camera *camera, t_float3 *cam_pos)
 	camera_mouse_input(app, camera, cam_pos);
 	reorient_camera(camera);
 	calc_canvas(app->framebuffer, camera, cam_pos);
+}
+
+t_ray	camera_get_pixel_ray(t_camera *self, t_float3 *position, int x, int y)
+{
+	t_ray ray;
+
+	ray.origin = *position;
+	ray.direction = self->pix_00; 
+	ray.direction = ft_float3_add(ray.direction, ft_float3_scalar(self->u, x));
+	ray.direction = ft_float3_add(ray.direction, ft_float3_scalar(self->v, y));
+	ray.direction = ft_float3_sub(ray.direction, ray.origin);
+	ray.direction = ft_float3_normalize(ray.direction);
+	return (ray);
 }
