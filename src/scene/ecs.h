@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/31 12:55:15 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:46:02 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,6 @@ typedef struct s_ecs_list
 	t_id	reference[ECS_TYPE_COUNT];
 }	t_ecs_list;
 
-typedef struct s_camera
-{
-	float		fov;
-	float		pitch;
-	float		speed;
-	t_float3	pix_00;
-	t_float3	u;
-	t_float3	v;
-	t_float3	pivot;
-	t_float3	x;
-	t_float3	y;
-	t_float3	z;
-}	t_camera;
 
 typedef struct s_light
 {

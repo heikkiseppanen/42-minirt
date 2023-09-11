@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:28 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 11:44:37 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:57:39 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ int	main(int argc, char **argv)
 	{
 		mlx_loop(miniRT.window);
 	}
-	app_close_hook(&miniRT);
+	app_terminate(&miniRT);
 	return (1);
 }
