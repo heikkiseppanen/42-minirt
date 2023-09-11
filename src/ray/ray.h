@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/28 14:02:42 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/11 15:50:12 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,17 @@ float	ray_geometry_intersect(
 
 float	ray_sphere_intersect(
 			const t_ray *self,
-			const t_sphere *sp,
-			const t_float3 *pos);
+			const t_float3 *pos,
+			const float radius);
 
-float ray_plane_intersect(
-    const t_ray *self,
-    const t_plane *pl,
-    const t_float3 *pos);
+float	ray_plane_intersect(
+			const t_ray *self,
+			const t_float3 *pos,
+			const t_float3 *normal);
 
-float ray_cylinder_intersect(
-    const t_ray *self,
-    const t_cylinder *cl,
-    const t_float3 *pos);
+float	ray_cylinder_intersect(
+			const t_ray *self,
+			const t_float3 *pos,
+			const t_cylinder *cl);
 
 #endif
