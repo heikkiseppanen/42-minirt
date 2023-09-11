@@ -59,4 +59,9 @@ float ray_plane_intersect(
     const t_plane *pl,
     const t_float3 *pos);
 
+float ray_cylinder_intersect(
+    const t_ray *self,
+    const t_cylinder *cl,
+    const t_float3 *pos);
+
 #endif

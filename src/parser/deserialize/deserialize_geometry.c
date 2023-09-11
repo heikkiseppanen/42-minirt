@@ -86,7 +86,7 @@ t_err	deserialize_cylinder(t_ecs *ecs, char **tokens)
 		|| !color_valid(&material.color))
 		return (RT_FAILURE);
 	ft_float3_normalize(geometry.data.cylinder.normal);
-	geometry.data.cylinder.radius = 2 / ft_atof(tokens[3]);
+	geometry.data.cylinder.radius = ft_atof(tokens[3]) / 2;
 	geometry.data.cylinder.height = ft_atof(tokens[4]);
 	entity = ecs_entity_create(ecs);
 	if (!entity
