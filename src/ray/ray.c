@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/11 16:08:52 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 09:55:13 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-static t_float3	ray_at(const t_ray *self, float d)
+t_float3	ray_at(const t_ray *self, float d)
 {
 	return (ft_float3_add(self->origin, ft_float3_scalar(self->direction, d)));
 }
@@ -101,7 +101,7 @@ float	ray_plane_intersect(
     float    denom;
     float    t;
     denom = ft_float3_dot(*normal, self->direction);
-    if (denom < -1e-6)
+    if (denom < -EPSILON)
     {
         t = ft_float3_dot(ft_float3_sub(*pos, self->origin), *normal) / denom;
         return (t);
@@ -118,7 +118,7 @@ float	ray_disk_intersect(
 	const float		depth = ray_plane_intersect(self, pos, normal);
 	const t_float3	intersection = ray_at(self, depth);
 
-	if (ft_float3_len(ft_float3_sub(intersection, *pos)) < radius)
+	if (ft_float3_len(ft_float3_sub(intersection, *pos)) > radius)
 		return (0.0f);
 	return depth;
 }
@@ -132,36 +132,58 @@ float	ray_disk_intersect(
 //	return 0.0f;
 //}
 
-float ray_cylinder_intersect(
+
+static float	ray_tube_intersect(
     const t_ray *self,
     const t_float3 *pos,
     const t_cylinder *cl)
 {
 	const t_float3	co = ft_float3_sub(self->origin, *pos);
-	t_float3		q;
+	float 			a;
+	float 			b;
+	float 			c;
 	float 			d;
-	float			axis_offset;
 
-	q.x = ft_float3_dot(self->direction, self->direction);
-	q.x	-= powf(ft_float3_dot(self->direction, cl->normal), 2.0f);
-	q.y = ft_float3_dot(self->direction, cl->normal);
-	q.y *= ft_float3_dot(co, cl->normal);
-	q.y = ft_float3_dot(self->direction, co) - q.y;
-	q.z = ft_float3_dot(co, co);
-	q.z -= powf(ft_float3_dot(co, cl->normal), 2.0f);
-	q.z -= cl->radius * cl->radius;
-	d = (q.y * q.y) - (q.x * q.z);
+	a = ft_float3_dot(self->direction, self->direction);
+	a	-= powf(ft_float3_dot(self->direction, cl->normal), 2.0f);
+	b = ft_float3_dot(self->direction, cl->normal);
+	b *= ft_float3_dot(co, cl->normal);
+	b = ft_float3_dot(self->direction, co) - b;
+	c = ft_float3_dot(co, co);
+	c -= powf(ft_float3_dot(co, cl->normal), 2.0f);
+	c -= cl->radius * cl->radius;
+	d = (b * b) - (a * c);
 	if (d < 0)
 	{
 		return (0.0f);
 	}
-	d = (-q.y - sqrtf(d)) / q.x;
-	axis_offset = ft_float3_dot(ft_float3_sub(ray_at(self, d), *pos),
-			ft_float3_scalar(cl->normal, cl->height));
-	q = ft_float3_add(*pos, ft_float3_scalar(cl->normal, cl->height));
-	if (axis_offset < 0.0f)
-		return (ray_disk_intersect(self, &q, &cl->normal, cl->radius));
-	return (d);
+	return ((-b - sqrtf(d)) / a);
+}
+
+float ray_cylinder_intersect(
+    const t_ray *self,
+    const t_float3 *pos,
+    const t_cylinder *cl)
+{
+	const float	depth = ray_tube_intersect(self, pos, cl);
+	float		offset;
+	t_float3	cap_pos;
+	t_float3	normal;
+
+	offset = ft_float3_dot(ft_float3_sub(ray_at(self, depth), *pos), cl->normal);
+	if (offset < 0.0f)
+	{
+		cap_pos = *pos;
+		normal = ft_float3_scalar(cl->normal, -1.0f);
+		return (ray_disk_intersect(self, &cap_pos, &normal, cl->radius));
+	}
+	if (offset > cl->height)
+	{
+		cap_pos = ft_float3_add(*pos, ft_float3_scalar(cl->normal, cl->height));
+		normal = cl->normal;
+		return (ray_disk_intersect(self, &cap_pos, &normal, cl->radius));
+	}
+	return (depth);
 
 }
 
@@ -180,14 +202,14 @@ t_float3	calc_surface_normal(t_geometry *geo, t_float3 *pos, t_float3 *hit)
 	if (geo->type == GEO_CYLINDER)
 	{
 		const t_cylinder	*cl = &geo->data.cylinder;
-		float axis_offset = ft_float3_dot(cl->normal, ft_float3_sub(*hit, *pos));
+		float offset = ft_float3_dot(ft_float3_sub(*hit, *pos), cl->normal);
 
-		if (axis_offset > cl->height)
+		if (offset > cl->height - EPSILON)
 			normal = cl->normal;
-		else if (axis_offset < 0)
+		else if (offset < EPSILON)
 			normal = ft_float3_scalar(cl->normal, -1.0f);
 		else
-			normal = ft_float3_normalize(ft_float3_sub(*hit, ft_float3_add(*pos, ft_float3_scalar(cl->normal, axis_offset))));
+			normal = ft_float3_normalize(ft_float3_sub(*hit, ft_float3_add(*pos, ft_float3_scalar(cl->normal, offset))));
 	}
 	return (normal);
 }
@@ -200,8 +222,7 @@ t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)
 	{
 		return (RT_FALSE);
 	}
-	out->position = ft_float3_scalar(self->direction, depth);
-	out->position = ft_float3_add(self->origin, out->position);
+	out->position = ray_at(self, depth);
 	out->normal = calc_surface_normal(
 		ecs_get_component(scene, out->entity, ECS_GEOMETRY),
 		ecs_get_component(scene, out->entity, ECS_POSITION),

@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/11 15:50:12 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 09:56:10 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 # include <ft/math.h>
 
-# define RAY_MIN 0.000001f
+# define EPSILON 1e-4
+# define RAY_MIN 1e-4
 # define RAY_MAX 5000.0f
 
 typedef struct s_ray
@@ -38,6 +39,8 @@ typedef struct s_hit
 // Casts a given ray against given scene data.
 // If the ray hits, returns true and stores collision info into result.
 t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result);
+
+t_float3	ray_at(const t_ray *self, float d);
 
 float	ray_scene_intersect(
 			const t_ray *self,
