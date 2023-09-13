@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/13 13:56:11 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:02:27 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ typedef struct s_hit
 	t_float3	normal;
 }	t_hit;
 
-t_bool		ray_cast(const t_ray *self, const t_ecs *scene, t_hit *result);
-
 t_float3	ray_at(const t_ray *self, float distance);
+
+t_bool		ray_cast(const t_ray *self, const t_ecs *scene, t_hit *result);
 
 float		ray_scene_intersect(
 				const t_ray *self,
 				const t_ecs *scene,
-				t_id	*opt_entity_hit); 
+				t_id *opt_entity_hit); 
 
 float		ray_sphere_intersect(
 				const t_ray *self,
