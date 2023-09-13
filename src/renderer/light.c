@@ -6,13 +6,13 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 14:06:45 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/25 11:54:02 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 10:00:50 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "renderer/light.h"
-#include "renderer/ray.h"
 #include "renderer/color.h"
+#include "ray/ray.h"
 
 static t_color	calculate_point_light(
 	const t_float3 *position,

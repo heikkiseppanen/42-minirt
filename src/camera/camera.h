@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:26 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/08 12:45:58 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/11 14:05:29 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "scene/ecs.h"
 # include "app/app.h"
-# include "renderer/ray.h"
+# include "ray/ray.h"
 
 typedef struct s_camera
 {

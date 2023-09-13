@@ -6,14 +6,11 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/31 12:55:15 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:51:33 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "renderer/ray.h"
-
-
-#include <stdio.h>
+#include "ray/ray.h"
 
 static float	ray_entity_intersect(
 	const t_ray *self,
@@ -25,9 +22,53 @@ static float	ray_entity_intersect(
 
 	if (geo->type == GEO_SPHERE)
 	{
-		return (ray_sphere_intersect(self, &geo->data.sphere, pos));
+		return (ray_sphere_intersect(self, pos, geo->data.sphere.radius));
+	}
+	if (geo->type == GEO_PLANE)
+	{
+		return (ray_plane_intersect(self, pos, &geo->data.plane.normal));
+	}
+	if (geo->type == GEO_CYLINDER)
+	{
+		return (ray_cylinder_intersect(self, pos, &geo->data.cylinder));
 	}
 	return (0.0f);
+}
+
+static t_float3	calculate_surface_normal(
+	const t_geometry *geo,
+	const t_float3 *pos,
+	const t_float3 *hit)
+{
+	const t_cylinder	*cl;
+	float				axis_offset;
+	t_float3			normal;
+
+	normal = (t_float3){};
+	if (geo->type == GEO_PLANE)
+		normal = geo->data.plane.normal;
+	else if (geo->type == GEO_SPHERE)
+		normal = ft_float3_normalize(ft_float3_sub(*hit, *pos));
+	else if (geo->type == GEO_CYLINDER)
+	{
+		cl = &geo->data.cylinder;
+		axis_offset = ft_float3_dot(ft_float3_sub(*hit, *pos), cl->normal);
+		if (axis_offset > cl->height - EPSILON)
+			normal = cl->normal;
+		else if (axis_offset < EPSILON)
+			normal = ft_float3_scalar(cl->normal, -1.0f);
+		else
+			normal = ft_float3_normalize(
+					ft_float3_sub(*hit,
+						ft_float3_add(*pos,
+							ft_float3_scalar(cl->normal, axis_offset))));
+	}
+	return (normal);
+}
+
+t_float3	ray_at(const t_ray *self, float d)
+{
+	return (ft_float3_add(self->origin, ft_float3_scalar(self->direction, d)));
 }
 
 float	ray_scene_intersect(
@@ -61,38 +102,18 @@ float	ray_scene_intersect(
 	return (min_depth);
 }
 
-float	ray_sphere_intersect(
-	const t_ray *self,
-	const t_sphere *sp,
-	const t_float3 *pos)
-{
-	const t_float3	oc = ft_float3_sub(self->origin, *pos);
-	const float		a = ft_float3_dot(self->direction, self->direction);
-	const float		b = ft_float3_dot(oc, self->direction);
-	const float		c = ft_float3_dot(oc, oc) - (sp->radius * sp->radius);
-	float d;
-
-	d = (b * b) - (a * c);
-	if (d < 0)
-	{
-		return (0.0f);
-	}
-	d = sqrtf(d);
-	return ((-b - d) / a);
-}
-
 t_bool	ray_cast(const t_ray *self, const t_ecs *scene, t_hit *out)
 {
-	const float depth = ray_scene_intersect(self, scene, &out->entity);
-	
+	const float	depth = ray_scene_intersect(self, scene, &out->entity);
+
 	if (!depth)
 	{
 		return (RT_FALSE);
 	}
-	out->position = ft_float3_scalar(self->direction, depth);
-	out->position = ft_float3_add(self->origin, out->position);
-	out->normal = *(t_float3 *)ecs_get_component(scene, out->entity, ECS_POSITION);
-	out->normal = ft_float3_sub(out->position, out->normal);
-	out->normal = ft_float3_normalize(out->normal);
+	out->position = ray_at(self, depth);
+	out->normal = calculate_surface_normal(
+			ecs_get_component(scene, out->entity, ECS_GEOMETRY),
+			ecs_get_component(scene, out->entity, ECS_POSITION),
+			&out->position);
 	return (RT_TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/08 15:10:32 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 11:48:28 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,9 @@
 
 #include "scene/ecs.h"
 #include "parser/parser.h"
-#include "renderer/color.h"
-#include "renderer/light.h"
-#include "renderer/ray.h"
-#include "app/app.h"
 #include "camera/camera.h"
 
-#include <ft/cstr.h>
 #include <ft/io.h>
-#include <stdlib.h>
 
 static void	app_close_hook(void *param)
 {
@@ -69,8 +63,6 @@ void	app_terminate(void *param)
 	}
 	ecs_del(&app->scene);
 }
-
-
 
 void	app_loop_hook(void *param)
 {

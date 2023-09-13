@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/28 14:02:42 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:02:27 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 # include <ft/math.h>
 
-# define RAY_MIN 0.000001f
+# define EPSILON 1e-5
+# define RAY_MIN 1e-5
 # define RAY_MAX 5000.0f
 
 typedef struct s_ray
@@ -35,23 +36,28 @@ typedef struct s_hit
 	t_float3	normal;
 }	t_hit;
 
-// Casts a given ray against given scene data.
-// If the ray hits, returns true and stores collision info into result.
-t_bool	ray_cast(const t_ray *r, const t_ecs *scene, t_hit *result);
+t_float3	ray_at(const t_ray *self, float distance);
 
-float	ray_scene_intersect(
-			const t_ray *self,
-			const t_ecs *scene,
-			t_id	*opt_entity_hit); 
+t_bool		ray_cast(const t_ray *self, const t_ecs *scene, t_hit *result);
 
-float	ray_geometry_intersect(
-			const t_ray *self,
-			const t_geometry *geometry,
-			const t_float3 *position);
+float		ray_scene_intersect(
+				const t_ray *self,
+				const t_ecs *scene,
+				t_id *opt_entity_hit); 
 
-float	ray_sphere_intersect(
-			const t_ray *self,
-			const t_sphere *sp,
-			const t_float3 *pos);
+float		ray_sphere_intersect(
+				const t_ray *self,
+				const t_float3 *pos,
+				const float radius);
+
+float		ray_plane_intersect(
+				const t_ray *self,
+				const t_float3 *pos,
+				const t_float3 *normal);
+
+float		ray_cylinder_intersect(
+				const t_ray *self,
+				const t_float3 *pos,
+				const t_cylinder *cl);
 
 #endif

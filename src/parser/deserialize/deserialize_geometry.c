@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:29 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/29 12:50:26 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/11 14:15:04 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ t_err	deserialize_cylinder(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[5], &material.color)
 		|| !color_valid(&material.color))
 		return (RT_FAILURE);
-	ft_float3_normalize(geometry.data.cylinder.normal);
-	geometry.data.cylinder.radius = 2 / ft_atof(tokens[3]);
+	geometry.data.cylinder.normal = ft_float3_normalize(geometry.data.cylinder.normal);
+	geometry.data.cylinder.radius = ft_atof(tokens[3]) / 2;
 	geometry.data.cylinder.height = ft_atof(tokens[4]);
 	entity = ecs_entity_create(ecs);
 	if (!entity

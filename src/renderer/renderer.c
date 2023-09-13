@@ -6,14 +6,14 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:46:26 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/08 15:18:48 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/11 13:14:19 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "renderer/renderer.h"
 #include "renderer/color.h"
 #include "renderer/light.h"
-#include "renderer/ray.h"
+#include "ray/ray.h"
 
 #include "camera/camera.h"
 
