@@ -44,6 +44,7 @@ CAMERA_SRC :=\
 RAY_DIR := ray
 RAY_SRC :=\
 	ray.c \
+	intersect.c \
 
 SRC :=\
 	main.c \
