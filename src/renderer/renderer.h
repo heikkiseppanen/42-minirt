@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:35:20 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 09:44:20 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 11:31:48 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 # include <MLX42/MLX42.h>
 
-# define PREVIEW_CHUNK_SIZE 16
+# define PREVIEW_CHUNK_SIZE 8
 
 typedef struct s_renderer
 {

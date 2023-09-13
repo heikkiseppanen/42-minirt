@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 14:06:45 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 09:55:30 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 10:00:50 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static t_color	calculate_point_light(
 			*(t_float3 *)ecs_get_component(scene, scene->light, ECS_POSITION),
 			*position)
 	};
-	shadow_ray.origin = ray_at(&shadow_ray, EPSILON);
 	light_distance = ft_float3_len(shadow_ray.direction);
 	shadow_ray.direction = ft_float3_normalize(shadow_ray.direction);
 	scene_distance = ray_scene_intersect(&shadow_ray, scene, NULL);

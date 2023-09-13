@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 09:55:13 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 09:59:41 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ float	ray_disk_intersect(
 	const float		depth = ray_plane_intersect(self, pos, normal);
 	const t_float3	intersection = ray_at(self, depth);
 
-	if (ft_float3_len(ft_float3_sub(intersection, *pos)) > radius)
+	if (ft_float3_len(ft_float3_sub(intersection, *pos)) > radius + EPSILON)
 		return (0.0f);
 	return depth;
 }

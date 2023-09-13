@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 10:12:38 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 09:56:10 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/12 10:01:33 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 # include <ft/math.h>
 
-# define EPSILON 1e-4
-# define RAY_MIN 1e-4
+# define EPSILON 1e-5
+# define RAY_MIN 1e-5
 # define RAY_MAX 5000.0f
 
 typedef struct s_ray
