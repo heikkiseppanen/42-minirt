@@ -47,6 +47,9 @@ t_err	scene_parser(t_ecs *ecs, const char *file)
 	char	*line;
 	int		file_fd;
 
+	if (ft_strlen(file) >= 3
+		&& ft_strncmp(file + (ft_strlen(file) - 3), ".rt", 3))
+		return (RT_FAILURE);
 	file_fd = open(file, O_RDONLY);
 	if (file_fd <= 0)
 		return (RT_FAILURE);
@@ -62,7 +65,8 @@ t_err	scene_parser(t_ecs *ecs, const char *file)
 		}
 		free (line);
 	}
-	// TODO confirm that necessary entities have been created (1 cam, 1 light, 1 ambient, min 1 geo)
+	if (!ecs->camera)
+		return (RT_FAILURE);
 	close (file_fd);
 	return (RT_SUCCESS);
 }
