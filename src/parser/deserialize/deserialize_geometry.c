@@ -16,6 +16,15 @@
 
 #include <ft/std.h>
 
+t_err	get_color(char *token, t_material *material)
+{
+	if(!string_to_float3(token, &material->color)
+	|| !color_valid(&material->color))
+		return (RT_FAILURE);
+	material->color = srgb_to_linear(material->color);
+	return (RT_SUCCESS);
+}
+
 t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 {
 	t_id		entity;
@@ -27,10 +36,8 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !ft_is_float(tokens[2])
-		|| !string_to_float3(tokens[3], &material.color)
-		|| !color_valid(&material.color))
+		|| !get_color(tokens[3], &material))
 		return (RT_FAILURE);
-	material.color = srgb_to_linear(material.color);
 	geometry.data.sphere.radius = ft_atof(tokens[2]) / 2;
 	entity = ecs_entity_create(ecs);
 	if (!entity
@@ -39,7 +46,6 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 		|| !ecs_add_component(ecs, entity, &material, ECS_MATERIAL)
 		|| !ft_buf_pushback(&ecs->renderables, &entity, 1))
 		return (RT_FAILURE);
-
 	return (RT_SUCCESS);
 }
 
@@ -54,8 +60,7 @@ t_err	deserialize_plane(t_ecs *ecs, char **tokens)
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &geometry.data.plane.normal)
-		|| !string_to_float3(tokens[3], &material.color)
-		|| !color_valid(&material.color))
+		|| !get_color(tokens[3], &material))
 		return (RT_FAILURE);
 	ft_float3_normalize(geometry.data.plane.normal);
 	entity = ecs_entity_create(ecs);
@@ -82,8 +87,7 @@ t_err	deserialize_cylinder(t_ecs *ecs, char **tokens)
 		|| !string_to_float3(tokens[2], &geometry.data.cylinder.normal)
 		|| !ft_is_float(tokens[3])
 		|| !ft_is_float(tokens[4])
-		|| !string_to_float3(tokens[5], &material.color)
-		|| !color_valid(&material.color))
+		|| !get_color(tokens[5], &material))
 		return (RT_FAILURE);
 	geometry.data.cylinder.normal = ft_float3_normalize(geometry.data.cylinder.normal);
 	geometry.data.cylinder.radius = ft_atof(tokens[3]) / 2;
