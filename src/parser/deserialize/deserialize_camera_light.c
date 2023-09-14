@@ -69,7 +69,7 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	camera.y.y = 1.0f;
 	camera.z.z = 1.0f;
 	camera.speed = 3.0f;
-	if (array_2d_length(tokens) != 4.0
+	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
 		|| !string_to_float3(tokens[2], &camera.pivot)
 		|| !ft_is_float(tokens[3]))
