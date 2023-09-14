@@ -22,6 +22,7 @@ INPUT_SRC :=\
 SCENE_DIR := scene
 SCENE_SRC :=\
 	ecs.c \
+	component.c \
 
 PARSER_DIR := parser
 PARSER_SRC :=\
