@@ -29,6 +29,13 @@ t_err	deserialize_ambient(t_ecs *ecs, char **tokens);
 t_err	deserialize_camera(t_ecs *ecs, char **tokens);
 t_err	deserialize_light(t_ecs *ecs, char **tokens);
 
+//deserialize_component
+t_err	get_point(char *token, t_float3 *point);
+t_err	get_color(char *token, t_float3 *color);
+t_err	get_normal(char *token, t_float3 *normal);
+t_err	get_radius(char *token, float *radius);
+t_err	get_height(char *token, float *height);
+
 //utils
 t_err	parse_error(char **tokens);
 int		array_2d_length(char **array_2d);
@@ -40,8 +47,5 @@ t_err	string_to_float3(const char *str, t_float3 *float3);
 t_bool	color_valid(t_float3 *color);
 t_bool	light_ratio_valid(float *ratio);
 t_bool	normal_valid(t_float3 *normal);
-
-
-
 
 #endif
