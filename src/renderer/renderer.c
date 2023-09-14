@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:46:26 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 11:52:40 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 14:17:29 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,28 @@ static void	draw_quad(t_int2 pos, int size, t_rgba32 color, mlx_image_t *out)
 	}
 }
 
-#include "camera/camera.h"
+#include <stdio.h>
 
-static void	draw_quad(t_int2 pos, int size, t_rgba32 color, mlx_image_t *out)
+static t_rgba32	raytrace_pixel(const t_ecs *scene, t_int2 pixel)
 {
-	const int	x_min = pos.x;
-	const int	x_max = ft_mini(pos.x + size, out->width);
-	const int	y_max = ft_mini(pos.y + size, out->height);
+	t_material	*material;
+	t_hit		hit;
+	t_ray		ray;
+	t_color		color;
 
-	while (pos.y < y_max)
+	ray = camera_get_pixel_ray(
+			ecs_get_component(scene, scene->camera, ECS_CAMERA),
+			ecs_get_component(scene, scene->camera, ECS_POSITION),
+			pixel.x, pixel.y);
+	if (!ray_cast(&ray, scene, &hit))
 	{
-		pos.x = x_min;
-		while (pos.x < x_max)
-		{
-			mlx_put_pixel(out, pos.x, pos.y, color);
-			++pos.x;
-		}
-		++pos.y;
+		return (RGBA_BLACK);
 	}
+	material = ecs_get_component(scene, hit.entity, ECS_MATERIAL);
+	color = calculate_surface_light(&hit.position, &hit.normal, scene);
+	color = ft_float3_mul(material->color, color); 
+	color = linear_to_srgb(saturate(color));
+	return (color_to_rgba32(color));
 }
 
 void	renderer_init(t_renderer *self)
@@ -62,11 +66,9 @@ void	renderer_init(t_renderer *self)
 
 void	renderer_pass(t_renderer *self, const t_ecs *scene, mlx_image_t *out)
 {
-	t_camera *camera = ecs_get_component(scene, scene->camera, ECS_CAMERA);
-	t_float3 *position = ecs_get_component(scene, scene->camera, ECS_POSITION);
-	t_ray	ray;
-	t_int2	pixel;
-	t_bool	is_sample_row;
+	t_rgba32	color;
+	t_int2		pixel;
+	t_bool		is_sample_row;
 
 	if (self->chunk_size == 0)
 		return ;
@@ -74,28 +76,13 @@ void	renderer_pass(t_renderer *self, const t_ecs *scene, mlx_image_t *out)
 	pixel = (t_int2){};
 	while (pixel.y < (int)out->height)
 	{
+		pixel.x = 0;
 		if (is_sample_row && self->chunk_size < PREVIEW_CHUNK_SIZE)
-			pixel.x = self->chunk_size;
-		else
-			pixel.x = 0;
+			pixel.x += self->chunk_size;
 		while (pixel.x < (int)out->width)
 		{
-			ray = camera_get_pixel_ray(camera, position, pixel.x, pixel.y);
-
-			t_rgba32 final_color = RGBA_BLACK;
-			t_hit	hit = {};
-			if (ray_cast(&ray, scene, &hit))
-			{
-				t_material *mat = ecs_get_component(scene, hit.entity, ECS_MATERIAL);
-
-				t_color light = calculate_surface_light(&hit.position, &hit.normal, scene);
-
-				t_color diff_color = ft_float3_mul(mat->color, light); 
-				diff_color = saturate(linear_to_srgb(diff_color));
-
-				final_color = color_to_rgba32(diff_color);
-			}
-			draw_quad(pixel, self->chunk_size, final_color, out);
+			color = raytrace_pixel(scene, pixel);
+			draw_quad(pixel, self->chunk_size, color, out);
 			pixel.x += self->chunk_size;
 			if (is_sample_row && self->chunk_size < PREVIEW_CHUNK_SIZE)
 				pixel.x += self->chunk_size;

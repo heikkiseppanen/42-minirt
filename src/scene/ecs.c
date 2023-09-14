@@ -6,13 +6,14 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:52:41 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 11:35:50 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:21:16 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene/ecs.h"
 
 #include "renderer/geometry.h"
+#include "renderer/light.h"
 #include "camera/camera.h"
 
 #include <ft/math.h>

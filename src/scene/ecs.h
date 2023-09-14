@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:51:25 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 11:45:38 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:22:30 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,6 @@ typedef struct s_ecs_list
 {
 	t_id	reference[ECS_TYPE_COUNT];
 }	t_ecs_list;
-
-typedef struct s_light
-{
-	float		attenuation;
-	t_float3	color;
-}	t_light;
-
-typedef struct s_material
-{
-	t_float3	color;
-}	t_material;
 
 typedef struct s_ecs
 {

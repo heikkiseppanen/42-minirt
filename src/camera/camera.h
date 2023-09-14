@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:26 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/14 11:52:07 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:54:14 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,7 @@
 
 # include "scene/ecs.h"
 # include "app/app.h"
-<<<<<<< HEAD
 # include "ray/ray.h"
-=======
-# include "renderer/ray.h"
->>>>>>> Renderer refactor
-
 typedef struct s_camera
 {
 	float		fov;

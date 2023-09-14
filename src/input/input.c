@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 11:27:22 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:41:08 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 
 	if (keydata.key == MLX_KEY_ESCAPE)
 	{
-		input->exit = (keydata.action == MLX_PRESS);
+		input->escape = (keydata.action == MLX_PRESS);
 	}
 	if (keydata.key == MLX_KEY_W)
 	{
@@ -47,7 +47,6 @@ static void	key_hook(mlx_key_data_t keydata, void *param)
 	{
 		input->ctrl = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
 	}
-	
 }
 
 static void	cursor_hook(double x, double y, void *param)

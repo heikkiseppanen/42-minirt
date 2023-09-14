@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 12:42:13 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/13 12:48:36 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:03:32 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ float	ray_sphere_intersect(
 	const float radius)
 {
 	const t_float3	oc = ft_float3_sub(self->origin, *pos);
-	const float		a = ft_float3_dot(self->direction, self->direction);
+	const float		a = 1.0f;
 	const float		b = ft_float3_dot(oc, self->direction);
 	const float		c = ft_float3_dot(oc, oc) - (radius * radius);
 	float			d;
@@ -58,7 +58,7 @@ float	ray_disk_intersect(
 	const float		depth = ray_plane_intersect(self, pos, normal);
 	const t_float3	intersection = ray_at(self, depth);
 
-	if (ft_float3_len(ft_float3_sub(intersection, *pos)) > radius + EPSILON)
+	if (ft_float3_len(ft_float3_sub(intersection, *pos)) > radius)
 		return (0.0f);
 	return (depth);
 }
@@ -74,8 +74,7 @@ static float	ray_tube_intersect(
 	float			c;
 	float			d;
 
-	a = ft_float3_dot(self->direction, self->direction);
-	a -= powf(ft_float3_dot(self->direction, cl->normal), 2.0f);
+	a = 1.0f - powf(ft_float3_dot(self->direction, cl->normal), 2.0f);
 	b = ft_float3_dot(self->direction, cl->normal);
 	b *= ft_float3_dot(po, cl->normal);
 	b = ft_float3_dot(self->direction, po) - b;
@@ -86,6 +85,10 @@ static float	ray_tube_intersect(
 	if (d < 0)
 	{
 		return (0.0f);
+	}
+	if (a == 0.0f)
+	{
+		a += EPSILON;
 	}
 	return ((-b - sqrtf(d)) / a);
 }
