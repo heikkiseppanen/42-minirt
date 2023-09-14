@@ -59,7 +59,7 @@ t_err	scene_parser(t_ecs *ecs, const char *file)
 		if (!line)
 			break ;
 		if (!handle_line(ecs, line))
-		{	
+		{
 			free (line);
 			return (RT_FAILURE);
 		}
