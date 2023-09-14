@@ -27,7 +27,7 @@ t_err	deserialize_sphere(t_ecs *ecs, char **tokens)
 	if (array_2d_length(tokens) != 4
 		|| !get_point(tokens[1], &point)
 		|| !get_radius(tokens[2], &geometry.data.sphere.radius)
-		|| !get_color(tokens[3], &material))
+		|| !get_color(tokens[3], &material.color))
 		return (RT_FAILURE);
 	entity = ecs_entity_create(ecs);
 	if (!entity
@@ -50,7 +50,7 @@ t_err	deserialize_plane(t_ecs *ecs, char **tokens)
 	if (array_2d_length(tokens) != 4
 		|| !get_point(tokens[1], &point)
 		|| !get_normal(tokens[2], &geometry.data.plane.normal)
-		|| !get_color(tokens[3], &material))
+		|| !get_color(tokens[3], &material.color))
 		return (RT_FAILURE);
 	entity = ecs_entity_create(ecs);
 	if (!entity
@@ -75,7 +75,7 @@ t_err	deserialize_cylinder(t_ecs *ecs, char **tokens)
 		|| !get_normal(tokens[2], &geometry.data.plane.normal)
 		|| !get_radius(tokens[3], &geometry.data.cylinder.radius)
 		|| !get_height(tokens[4], &geometry.data.cylinder.height)
-		|| !get_color(tokens[5], &material))
+		|| !get_color(tokens[5], &material.color))
 		return (RT_FAILURE);
 	entity = ecs_entity_create(ecs);
 	if (!entity

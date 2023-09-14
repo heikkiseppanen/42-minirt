@@ -16,12 +16,15 @@
 
 #include <ft/std.h>
 
-t_err	get_color(char *token, t_material *material)
+t_err	get_color(char *token, t_float3 *color)
 {
-	if (!string_to_float3(token, &material->color)
-		|| !color_valid(&material->color))
+	if (!string_to_float3(token, color)
+		|| !color_valid(color))
 		return (RT_FAILURE);
-	material->color = srgb_to_linear(material->color);
+	color->x = color->x / 255.0f;
+	color->y = color->y / 255.0f;
+	color->z = color->z / 255.0f;
+	*color = srgb_to_linear(*color);
 	return (RT_SUCCESS);
 }
 
@@ -38,7 +41,7 @@ t_err	get_radius(char *token, float *radius)
 {
 	if (!ft_is_float(token))
 		return (RT_FAILURE);
-	*radius = ft_atof(token) / 2;
+	*radius = ft_atof(token) / 2.0f;
 	return (RT_SUCCESS);
 }
 

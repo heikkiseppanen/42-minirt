@@ -31,7 +31,7 @@ t_err	deserialize_light(t_ecs *ecs, char **tokens);
 
 //deserialize_component
 t_err	get_point(char *token, t_float3 *point);
-t_err	get_color(char *token, t_material *material);
+t_err	get_color(char *token, t_float3 *color);
 t_err	get_normal(char *token, t_float3 *normal);
 t_err	get_radius(char *token, float *radius);
 t_err	get_height(char *token, float *height);

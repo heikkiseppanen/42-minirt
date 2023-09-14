@@ -23,10 +23,10 @@ void	calc_canvas(mlx_image_t *const out, t_camera *camera, t_float3 *cam_pos)
 	float	dy;
 
 	aspect_ratio = (float)out->height / (float)out->width;
-	dx = tanf(ft_rad(camera->fov / 2));
+	dx = tanf(ft_rad(camera->fov / 2.0f));
 	dy = dx * aspect_ratio;
-	camera->u = ft_float3_scalar(camera->x, 2 * dx / out->width);
-	camera->v = ft_float3_scalar(camera->y, -2 * dy / out->height);
+	camera->u = ft_float3_scalar(camera->x, 2.0f * dx / out->width);
+	camera->v = ft_float3_scalar(camera->y, -2.0f * dy / out->height);
 	camera->pix_00 = ft_float3_sub(*cam_pos, camera->z);
 	camera->pix_00 = ft_float3_add(
 			camera->pix_00,
@@ -44,18 +44,18 @@ void	calc_canvas(mlx_image_t *const out, t_camera *camera, t_float3 *cam_pos)
 
 void	reorient_camera(t_camera *camera)
 {
-	camera->z = ft_float3_scalar(camera->pivot, -1);
+	camera->z = ft_float3_scalar(camera->pivot, -1.0f);
 	camera->z = ft_float3_normalize(camera->z);
-	if (camera->pivot.x == 0 && camera->pivot.z == 0)
+	if (camera->pivot.x == 0.0f && camera->pivot.z == 0.0f)
 	{
-		if (camera->pivot.y < 0)
-			camera->pitch = ft_rad(-90 + EPSILON);
+		if (camera->pivot.y < 0.0f)
+			camera->pitch = ft_rad(-90.0f + EPSILON);
 		else
-			camera->pitch = ft_rad(90 - EPSILON);
-		camera->y = (t_float3){0.0, 0.0, -1.0};
+			camera->pitch = ft_rad(90.0f - EPSILON);
+		camera->y = (t_float3){0.0f, 0.0f, -1.0f};
 	}
 	else 
-		camera->y = (t_float3){0.0, 1.0, 0.0};
+		camera->y = (t_float3){0.0f, 1.0f, 0.0f};
 	camera->x = ft_float3_cross(camera->y, camera->z);
 	camera->x = ft_float3_normalize(camera->x);
 	camera->y = ft_float3_cross(camera->z, camera->x);
