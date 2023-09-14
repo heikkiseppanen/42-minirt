@@ -48,7 +48,4 @@ t_bool	color_valid(t_float3 *color);
 t_bool	light_ratio_valid(float *ratio);
 t_bool	normal_valid(t_float3 *normal);
 
-
-
-
 #endif

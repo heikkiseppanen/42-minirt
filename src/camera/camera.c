@@ -46,7 +46,16 @@ void	reorient_camera(t_camera *camera)
 {
 	camera->z = ft_float3_scalar(camera->pivot, -1);
 	camera->z = ft_float3_normalize(camera->z);
-	camera->y = (t_float3){0.0, 1.0, 0.0};
+	if (camera->pivot.x == 0 && camera->pivot.z == 0)
+	{
+		if (camera->pivot.y < 0)
+			camera->pitch = ft_rad(-90 + EPSILON);
+		else
+			camera->pitch = ft_rad(90 - EPSILON);
+		camera->y = (t_float3){0.0, 0.0, -1.0};
+	}
+	else 
+		camera->y = (t_float3){0.0, 1.0, 0.0};
 	camera->x = ft_float3_cross(camera->y, camera->z);
 	camera->x = ft_float3_normalize(camera->x);
 	camera->y = ft_float3_cross(camera->z, camera->x);
@@ -62,7 +71,7 @@ void	update_camera(t_app *app, t_camera *camera, t_float3 *cam_pos)
 
 t_ray	camera_get_pixel_ray(t_camera *self, t_float3 *position, int x, int y)
 {
-	t_ray ray;
+	t_ray	ray;
 
 	ray.origin = *position;
 	ray.direction = self->pix_00; 

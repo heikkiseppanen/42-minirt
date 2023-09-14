@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "parser/parser.h"
 #include "renderer/color.h"
 #include "renderer/geometry.h"

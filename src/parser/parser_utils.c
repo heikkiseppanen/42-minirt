@@ -43,7 +43,6 @@ t_bool	normal_valid(t_float3 *normal)
 	return (RT_SUCCESS);
 }
 
-
 t_err	string_to_float3(const char *str, t_float3 *float3)
 {
 	int		i;
