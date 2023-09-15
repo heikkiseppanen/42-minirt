@@ -6,13 +6,15 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/24 13:12:39 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:21:38 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser/parser.h"
 #include "renderer/color.h"
+#include "renderer/light.h"
 #include "camera/camera.h"
+
 #include <ft/cstr.h>
 #include <ft/std.h>
 

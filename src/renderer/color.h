@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 12:07:27 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/31 13:01:52 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:30:08 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 
 # define GAMMA 2.2f
 
-typedef t_float3 t_color;
+typedef t_float3		t_color;
 
-typedef unsigned int t_rgba32;
+typedef unsigned int	t_rgba32;
 
 t_rgba32	color_to_rgba32(t_color c);
 t_color		rgba32_to_color(t_rgba32 c);

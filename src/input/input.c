@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:17 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/23 11:27:22 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:37:47 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,24 @@
 #include <MLX42/MLX42.h>
 #include <ft/io.h>
 
-static void	key_hook(mlx_key_data_t keydata, void *param)
+static void	key_hook(mlx_key_data_t data, void *param)
 {
-	t_input *const	input = param;
+	t_input *const	i = param;
 
-	if (keydata.key == MLX_KEY_ESCAPE)
-	{
-		input->exit = (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_W)
-	{
-		input->w = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_A)
-	{
-		input->a = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_S)
-	{
-		input->s = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_D)
-	{
-		input->d = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_SPACE)
-	{
-		input->space = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	if (keydata.key == MLX_KEY_LEFT_CONTROL)
-	{
-		input->ctrl = (keydata.action == MLX_REPEAT) || (keydata.action == MLX_PRESS);
-	}
-	
+	if (data.key == MLX_KEY_ESCAPE)
+		i->escape = (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_W)
+		i->w = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_A)
+		i->a = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_S)
+		i->s = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_D)
+		i->d = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_SPACE)
+		i->space = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
+	if (data.key == MLX_KEY_LEFT_CONTROL)
+		i->ctrl = (data.action == MLX_REPEAT) || (data.action == MLX_PRESS);
 }
 
 static void	cursor_hook(double x, double y, void *param)
@@ -66,18 +51,13 @@ static void	mouse_hook(
 	void *param)
 {
 	t_input *const	input = param;
+
 	(void)mods;
 	if (button == MLX_MOUSE_BUTTON_LEFT)
-	{
 		input->left_button = (action == MLX_PRESS);
-	}
 	else if (button == MLX_MOUSE_BUTTON_RIGHT)
-	{
 		input->right_button = (action == MLX_PRESS);
-	}
 }
-
-#include <stdio.h>
 
 static void	scroll_hook(
 	double xdelta,
@@ -85,8 +65,9 @@ static void	scroll_hook(
 	void *param)
 {
 	t_input *const	input = param;
-	(void)xdelta;
+
 	input->scroll = ydelta;
+	(void)xdelta;
 }
 
 void	input_init(t_input *input, mlx_t *window)

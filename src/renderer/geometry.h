@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 10:18:36 by hseppane          #+#    #+#             */
-/*   Updated: 2023/08/28 14:05:45 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:22:30 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,10 @@ typedef struct s_geometry
 	t_geo_type	type;
 	t_geo_data	data;
 }	t_geometry;
+
+typedef struct s_material
+{
+	t_float3	color;
+}	t_material;
 
 #endif

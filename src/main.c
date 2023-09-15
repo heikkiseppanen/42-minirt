@@ -6,34 +6,29 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:08:28 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/05 15:57:39 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:57:17 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/app.h"
-#include "scene/ecs.h"
-#include "parser/parser.h"
 #include "minirt.h"
 
-#include <ft/io.h>
 #include <MLX42/MLX42.h>
 
 #include <ft/std.h>
 
 int	main(int argc, char **argv)
 {
-	t_app	miniRT;
+	t_app	minirt;
+	t_err	status;
 
-	if (argc != 2)
+	status = app_init(&minirt, argc, argv);
+	if (status == RT_SUCCESS)
 	{
-		// TODO Add proper argument validation
-		ft_printf("Use: miniRT <scene_path>\n");
+		mlx_loop(minirt.window);
+	}
+	app_terminate(&minirt);
+	if (status == RT_FAILURE)
 		return (1);
-	}
-	if (app_init(&miniRT, argc, argv))
-	{
-		mlx_loop(miniRT.window);
-	}
-	app_terminate(&miniRT);
-	return (1);
+	return (0);
 }

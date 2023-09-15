@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/12 11:48:28 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:48:33 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,15 @@ static void	app_close_hook(void *param)
 
 t_err	app_init(t_app *app, int argc, char **argv)
 {
-	(void)argc;
+	if (argc != 2)
+	{
+		ft_fprintf(STDERR_FILENO, "Error\nInvalid arguments.\n");
+		return (RT_FAILURE);
+	}
 	*app = (t_app){};
 	if (!ecs_init(&app->scene) || !scene_parser(&app->scene, argv[1]))
 	{
-		ft_fprintf(STDERR_FILENO, "Error\nScene init failed\n");
+		ft_fprintf(STDERR_FILENO, "Error\nScene init failed.\n");
 		return (RT_FAILURE);
 	}
 	app->window = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT", RT_FALSE);
@@ -51,7 +55,7 @@ t_err	app_init(t_app *app, int argc, char **argv)
 
 void	app_terminate(void *param)
 {
-	t_app *const app = param;
+	t_app *const	app = param;
 
 	if (app->framebuffer)
 	{
@@ -66,36 +70,17 @@ void	app_terminate(void *param)
 
 void	app_loop_hook(void *param)
 {
-	t_app *const app = param;
-	t_ecs *const ecs = &app->scene;
-	mlx_image_t *const out = app->framebuffer;
+	t_app *const		app = param;
 
-	if (app->input.exit)
+	if (app->input.escape)
 	{
 		mlx_close_window(app->window);
 		return ;
 	}
-	if (app->input.left_button || app->input.right_button)
-	{
-		mlx_set_cursor_mode(app->window, MLX_MOUSE_DISABLED);
-	}
-	else
-	{
-		mlx_set_cursor_mode(app->window, MLX_MOUSE_NORMAL);
-	}
 	update_camera(
-			app,
-			ecs_get_component(ecs, ecs->camera, ECS_CAMERA),
-			ecs_get_component(ecs, ecs->camera, ECS_POSITION));
+		app,
+		ecs_get_component(&app->scene, app->scene.camera, ECS_CAMERA),
+		ecs_get_component(&app->scene, app->scene.camera, ECS_POSITION));
+	renderer_pass(&app->renderer, &app->scene, app->framebuffer);
 	app->input.mouse_movement = (t_float2){};
-
-	if (app->input.w || app->input.a || app->input.s || app->input.d ||
-		app->input.space ||
-		app->input.ctrl ||
-		app->input.right_button ||
-		app->input.left_button)
-	{
-		renderer_init(&app->renderer);
-	}
-	renderer_pass(&app->renderer, ecs, out);
 }

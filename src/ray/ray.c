@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 11:07:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/13 13:51:33 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:27:33 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ float	ray_scene_intersect(
 	while (it != end)
 	{
 		depth = ray_entity_intersect(self, scene, *it);
-		if (depth > RAY_MIN && depth < min_depth)
+		if (depth > 0.0f && depth < min_depth)
 		{
 			if (opt_entity_hit != NULL)
 			{

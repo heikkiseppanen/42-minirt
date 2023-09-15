@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:00 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/01 18:28:02 by ttalvenh         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:53:58 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,40 @@ t_err	handle_line(t_ecs *ecs, char *line)
 	return (status);
 }
 
+t_bool	path_has_extension(const char *path, const char *ext)
+{
+	const int	path_length = ft_strlen(path);
+	const int	ext_length = ft_strlen(ext);
+
+	if (path_length <= ext_length
+		|| ft_strncmp(path + path_length - ext_length, ext, ext_length) != 0)
+		return (RT_FALSE);
+	return (RT_TRUE);
+}
+
 t_err	scene_parser(t_ecs *ecs, const char *file)
 {
 	char	*line;
 	int		file_fd;
+	t_err	status;
 
-	if (ft_strlen(file) >= 3
-		&& ft_strncmp(file + (ft_strlen(file) - 3), ".rt", 3))
+	if (!path_has_extension(file, ".rt"))
 		return (RT_FAILURE);
 	file_fd = open(file, O_RDONLY);
 	if (file_fd <= 0)
 		return (RT_FAILURE);
-	while (1)
+	status = RT_SUCCESS;
+	while (status == RT_SUCCESS)
 	{
 		line = get_next_line(file_fd);
 		if (!line)
 			break ;
 		if (!handle_line(ecs, line))
-		{
-			free (line);
-			return (RT_FAILURE);
-		}
+			status = RT_FAILURE;
 		free (line);
 	}
 	if (!ecs->camera)
-		return (RT_FAILURE);
+		status = RT_FAILURE;
 	close (file_fd);
 	return (RT_SUCCESS);
 }

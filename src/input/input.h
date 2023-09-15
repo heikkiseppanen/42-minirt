@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 14:27:01 by hseppane          #+#    #+#             */
-/*   Updated: 2023/07/25 14:44:12 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:35:09 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 typedef struct s_input
 {
-	char		exit;
+	char		escape;
 	char		left_button;
 	char		right_button;
 	char		w;
