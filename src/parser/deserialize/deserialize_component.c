@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 11:09:18 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/14 15:46:47 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/15 12:04:56 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_err	get_height(char *token, float *height)
 {
 	if (!ft_is_float(token))
 		return (RT_FAILURE);
-	*height = ft_atof(token) + 0.0001f;
+	*height = ft_atof(token);
 	return (RT_SUCCESS);
 }
 
