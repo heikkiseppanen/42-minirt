@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:26 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/14 11:54:14 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:27:58 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "scene/ecs.h"
 # include "app/app.h"
 # include "ray/ray.h"
+
 typedef struct s_camera
 {
 	float		fov;

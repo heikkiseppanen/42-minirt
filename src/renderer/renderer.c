@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 08:46:26 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 14:17:29 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/14 14:43:39 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ static void	draw_quad(t_int2 pos, int size, t_rgba32 color, mlx_image_t *out)
 		++pos.y;
 	}
 }
-
-#include <stdio.h>
 
 static t_rgba32	raytrace_pixel(const t_ecs *scene, t_int2 pixel)
 {

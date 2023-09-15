@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:18 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/14 13:38:42 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:28:55 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	update_camera(t_app *app, t_camera *camera, t_float3 *cam_pos)
 	{
 		mlx_set_cursor_mode(app->window, MLX_MOUSE_NORMAL);
 	}
-	if (app->input.w || app->input.a || app->input.s || app->input.d ||
-		app->input.space || app->input.ctrl || app->input.right_button ||
-		app->input.left_button)
+	if (app->input.w || app->input.a || app->input.s || app->input.d
+		|| app->input.space || app->input.ctrl || app->input.right_button
+		|| app->input.left_button)
 	{
 		renderer_init(&app->renderer);
 	}
