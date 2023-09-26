@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:17 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/26 11:21:43 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:58:18 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_err	string_to_float3(const char *str, t_float3 *float3)
 
 	i = 0;
 	str_split = ft_split(str, ',');
-	if (!str_split || array_2d_length(str_split) != 3)
+	if (!str_split || !check_commas(str) || array_2d_length(str_split) != 3)
 	{
 		ft_strarr_del(str_split);
 		return (RT_FAILURE);
@@ -91,7 +91,7 @@ t_bool	ft_is_float(const char *str)
 		if (str[i] == '.')
 		{
 			dot_count++;
-			if (dot_count > 1 || !ft_isdigit(str[i + 1]))
+			if (dot_count > 1 || str[i + 1] == '\0')
 				return (RT_FALSE);
 		}
 		else if (!ft_isdigit(str[i]) && str[i] != '\n')
