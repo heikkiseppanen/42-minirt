@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/14 13:21:38 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:23:29 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	if (ecs->camera)
 		return (RT_FAILURE);
 	ft_memset(&camera, 0, sizeof(camera));
-	camera.x.x = 1.0f;
-	camera.y.y = 1.0f;
-	camera.z.z = 1.0f;
 	camera.speed = 3.0f;
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
@@ -78,6 +75,9 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 		return (RT_FAILURE);
 	camera.pivot = ft_float3_normalize(camera.pivot);
 	camera.fov = ft_atof(tokens[3]);
+	if (camera.fov == 180.0f)
+		camera.fov -= 1e-5f;
+	camera.fov = ft_rad(camera.fov);
 	ecs->camera = ecs_entity_create(ecs);
 	if (!ecs->camera
 		|| (camera.fov < 0.0f || camera.fov > 180.0f)

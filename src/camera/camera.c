@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:51:18 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/15 11:28:55 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:20:46 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	calc_canvas(mlx_image_t *const out, t_camera *camera, t_float3 *cam_pos)
 	float	dy;
 
 	aspect_ratio = (float)out->height / (float)out->width;
-	dx = tanf(ft_rad(camera->fov / 2.0f));
+	dx = tanf(camera->fov / 2.0f);
 	dy = dx * aspect_ratio;
 	camera->u = ft_float3_scalar(camera->x, 2.0f * dx / out->width);
 	camera->v = ft_float3_scalar(camera->y, -2.0f * dy / out->height);
