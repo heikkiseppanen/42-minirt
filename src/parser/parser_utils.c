@@ -91,7 +91,7 @@ t_bool	ft_is_float(const char *str)
 		if (str[i] == '.')
 		{
 			dot_count++;
-			if (dot_count > 1 || str[i + 1] == '\0')
+			if (dot_count > 1 || !ft_isdigit(str[i + 1]))
 				return (RT_FALSE);
 		}
 		else if (!ft_isdigit(str[i]) && str[i] != '\n')
