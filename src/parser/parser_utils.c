@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:17 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/08/01 18:28:20 by ttalvenh         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:49:29 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ t_bool	color_valid(t_float3 *color)
 t_bool	normal_valid(t_float3 *normal)
 {
 	if (!normal->x && !normal->y && !normal->z)
+		return (RT_FAILURE);
+	if ((normal->x < -1.0 && normal->x > 1.0)
+		|| (normal->y < -1.0 && normal->y > 1.0)
+		|| (normal->z < -1.0 && normal->z > 1.0))
 		return (RT_FAILURE);
 	return (RT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:35 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/26 10:23:29 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:50:04 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,9 @@ t_err	deserialize_camera(t_ecs *ecs, char **tokens)
 	camera.speed = 3.0f;
 	if (array_2d_length(tokens) != 4
 		|| !string_to_float3(tokens[1], &point)
-		|| !string_to_float3(tokens[2], &camera.pivot)
+		|| !get_normal(tokens[2], &camera.pivot)
 		|| !ft_is_float(tokens[3]))
 		return (RT_FAILURE);
-	camera.pivot = ft_float3_normalize(camera.pivot);
 	camera.fov = ft_atof(tokens[3]);
 	if (camera.fov == 180.0f)
 		camera.fov -= 1e-5f;
