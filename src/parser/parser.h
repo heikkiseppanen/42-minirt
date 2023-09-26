@@ -18,6 +18,7 @@
 # include <minirt.h>
 
 t_err	scene_parser(t_ecs *ecs, const char *file);
+t_err	check_commas(const char *line);
 
 //deserialize_geometry
 t_err	deserialize_sphere(t_ecs *ecs, char **tokens);

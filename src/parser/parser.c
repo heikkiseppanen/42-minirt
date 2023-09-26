@@ -15,6 +15,23 @@
 #include <fcntl.h>
 #include <parser/parser.h>
 
+t_err	check_commas(const char *line)
+{
+	int		i;
+	int		comma_count;
+
+	i = 0;
+	comma_count = 0;
+	while (line[i])
+	{
+		if (line[i++] == ',')
+			comma_count++;
+	}
+	if (comma_count != 2)
+		return (RT_FAILURE);
+	return (RT_SUCCESS);
+}
+
 t_err	handle_line(t_ecs *ecs, char *line)
 {
 	char	**tokens;
