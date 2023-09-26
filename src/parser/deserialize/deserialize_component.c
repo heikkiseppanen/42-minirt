@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 11:09:18 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/15 12:04:56 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 10:52:20 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_err	get_color(char *token, t_float3 *color)
 t_err	get_normal(char *token, t_float3 *normal)
 {
 	if (!string_to_float3(token, normal)
-		||!normal_valid(normal))
+		|| !normal_valid(normal))
 		return (RT_FAILURE);
 	*normal = ft_float3_normalize(*normal);
 	return (RT_SUCCESS);
