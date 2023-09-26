@@ -6,7 +6,7 @@
 /*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 18:28:00 by ttalvenh          #+#    #+#             */
-/*   Updated: 2023/09/15 11:53:58 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 09:50:43 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ t_err	handle_line(t_ecs *ecs, char *line)
 	status = RT_SUCCESS;
 	if (!tokens)
 		status = RT_FAILURE;
-	else if (!ft_strncmp(tokens[0], "A", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "A", 2))
 		status = deserialize_ambient(ecs, tokens);
-	else if (!ft_strncmp(tokens[0], "C", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "C", 2))
 		status = deserialize_camera(ecs, tokens);
-	else if (!ft_strncmp(tokens[0], "L", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "L", 2))
 		status = deserialize_light(ecs, tokens);
-	else if (!ft_strncmp(tokens[0], "sp", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "sp", 3))
 		status = deserialize_sphere(ecs, tokens);
-	else if (!ft_strncmp(tokens[0], "pl", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "pl", 3))
 		status = deserialize_plane(ecs, tokens);
-	else if (!ft_strncmp(tokens[0], "cy", sizeof(tokens[0])))
+	else if (!ft_strncmp(tokens[0], "cy", 3))
 		status = deserialize_cylinder(ecs, tokens);
 	else if (*tokens[0] != '\n')
 		status = RT_FAILURE;
@@ -77,5 +77,5 @@ t_err	scene_parser(t_ecs *ecs, const char *file)
 	if (!ecs->camera)
 		status = RT_FAILURE;
 	close (file_fd);
-	return (RT_SUCCESS);
+	return (status);
 }

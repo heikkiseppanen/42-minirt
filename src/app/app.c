@@ -6,7 +6,7 @@
 /*   By: hseppane <marvin@42.ft>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 12:09:03 by hseppane          #+#    #+#             */
-/*   Updated: 2023/09/14 13:48:33 by hseppane         ###   ########.fr       */
+/*   Updated: 2023/09/26 09:37:54 by hseppane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static void	app_close_hook(void *param)
 
 t_err	app_init(t_app *app, int argc, char **argv)
 {
+	*app = (t_app){};
 	if (argc != 2)
 	{
 		ft_fprintf(STDERR_FILENO, "Error\nInvalid arguments.\n");
 		return (RT_FAILURE);
 	}
-	*app = (t_app){};
 	if (!ecs_init(&app->scene) || !scene_parser(&app->scene, argv[1]))
 	{
 		ft_fprintf(STDERR_FILENO, "Error\nScene init failed.\n");
