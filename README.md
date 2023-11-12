@@ -10,7 +10,7 @@ The code is written in accordance to the 42 School [Norm](https://github.com/42S
 
 # Features
 - Diffuse lighting
-- Progressive sample rendering
+- Progressive resolution rendering
 - Free movement camera with preview image quality
 
 # Build (Linux & MacOS)
